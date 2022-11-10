@@ -1,0 +1,22 @@
+{
+    "player" : {
+        "email" : "",
+        "nickname" : "",
+        "password" : "",
+        "friends" : [],
+        "history": []
+    },
+    "lobby" : {
+        "players" : [],
+        "invited" : [],
+        "code" : "",
+        "events" : [],
+        "current_event" : "event"
+    },
+    "event" : {
+        "extra_targets" : [],
+        "executions" : [],
+        "blind_info" : "",
+        "details" : ""
+    }
+}
