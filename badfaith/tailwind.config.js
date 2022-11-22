@@ -3,13 +3,13 @@ module.exports = {
   content: ["./src/**/*.{html,js}"],
   theme: {
     extend: {
-   backgroundImage:{
-      'main': "url('/src/assets/images/JailDoor.jpg')",
-   },
-   fontFamily:{
-    'bloomberg': ['Bloomberg', 'sans-serif'],
-   }
-  },
-  plugins: [],
-}
+      backgroundImage: {
+        'main': "url('/src/assets/images/main.jpg')",
+      },
+      fontFamily: {
+        'bloomberg': ['Bloomberg', 'sans-serif'],
+      }
+    },
+    plugins: [],
+  }
 }

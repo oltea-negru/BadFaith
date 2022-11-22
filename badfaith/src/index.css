@@ -3,10 +3,70 @@
 @tailwind utilities;
 
 .slowAnim{
-    @apply hover:transition duration-500 ease-out;
+    @apply hover:transition duration-700 ease-in-out;
 }
 
 @font-face {
     font-family: "Bloomberg";
     src: url("../src/assets/fonts/Blomberg.otf");
 }
+
+:root {
+    --drop-height: 200px;
+    --logo-size: 48px;
+    --offset: 50px;
+    --shadow-height: 8px;
+    --duration: 0.5s;
+}
+
+
+.logo {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    position: absolute;
+    top: var(--offset);
+    left: calc(50% - var(--logo-size) / 2);
+    animation-name: bounce;
+    animation-duration: var(--duration);
+    animation-direction: alternate;
+    animation-timing-function: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+    animation-iteration-count: infinite;
+}
+
+.shadow {
+    width: var(--logo-size);
+    height: var(--shadow-height);
+    background: radial-gradient(50% 50%,
+            rgba(150, 150, 150, 1),
+            rgba(150, 150, 150, 0.05));
+    position: absolute;
+    top: calc(var(--offset) + var(--drop-height) + var(--logo-size) - 1.5 * var(--shadow-height));
+    left: calc(50% - var(--logo-size) / 2);
+
+    animation-name: grow;
+    animation-duration: var(--duration);
+    animation-direction: alternate;
+    animation-timing-function: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+    animation-iteration-count: infinite;
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        transform: translateY(var(--drop-height)) scale(1, 0.7);
+    }
+}
+
+@keyframes grow {
+    from {
+        transform: scale(0.2, 0.5);
+    }
+
+    to {
+        transform: scale(1.5, 0.8);
+    }
+}
+
