@@ -1,22 +1,31 @@
 {
-    "player" : {
-        "email" : "",
-        "nickname" : "",
-        "password" : "",
-        "friends" : [],
-        "history": []
+    "player": {
+        "id": "",
+        "email": "",
+        "nickname": "",
+        "password": "",
+        "friends": [],
+        "stats": {
+            "events": "",
+            "win": "",
+            "lose": ""
+        }
     },
-    "lobby" : {
-        "players" : [],
-        "invited" : [],
-        "code" : "",
-        "events" : [],
-        "current_event" : "event"
+    "lobby": {
+        "id": "",
+        "players": [],
+        "invited": [],
+        "host": "",
+        "code": "",
+        "events": [],
+        "current_event": "event"
     },
-    "event" : {
-        "extra_targets" : [],
-        "executions" : [],
-        "blind_info" : "",
-        "details" : ""
+    "event": {
+        "id": "",
+        "player": "",
+        "extra_players": [],
+        "executions": [],
+        "blind__info": "",
+        "details": ""
     }
 }
