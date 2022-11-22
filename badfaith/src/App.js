@@ -7,13 +7,14 @@ import
 	Routes,
 	Navigate,
 } from "react-router-dom";
+import WaitingRoom from "./pages/WaitingRoom";
 
 
 function App() {
   return (
    <Router>
 				<Routes>
-					<Route path="/" element={<First/>} />
+					<Route path="/" element={<WaitingRoom/>} />
 					<Route path="/second" element={<Second/>} />
 				</Routes>
 		</Router>
