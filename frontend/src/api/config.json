@@ -1,0 +1,4 @@
+{
+    "playerRegister": "/player/register/",
+    "apiEndpoint": "www.azurething.com/olteasCosmosDB"
+}
