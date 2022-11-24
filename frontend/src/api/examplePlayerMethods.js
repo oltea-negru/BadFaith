@@ -4,8 +4,8 @@
 // 'localhost:8080' or something similar.
 import {apiEndpoint, playerRegister} from config.json
 
-// We aren't exporting this because it's just for use in this file.
-// The underscore can indicate it (doesn't break if you don't use it)
+// We aren't exporting this function because it's just for use in this file.
+// The underscore can indicate that it's internal too (just convention though)
 // async is because the `fetch` command is async and any function that 
 // has `await` in it requires the function to have `async` added to it.
 const _handlePlayerRegister = async(email, username, password) => {
