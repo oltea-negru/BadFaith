@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PlayerWaiting from "../components/player_waiting";
+import PlayerWaiting from "./components/player_waiting";
 
 export default function WaitingRoom()
 {
