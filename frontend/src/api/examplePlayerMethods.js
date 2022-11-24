@@ -2,23 +2,22 @@
 // For example, when we're testing the frontend with dummy data from our
 // mock server, we'd want to change the API endpoint to be set as
 // 'localhost:8080' or something similar.
-import {apiEndpoint, playerRegister} from config.json
+import {playerRegister} from './config.json'
+import handleFetch from './fetchWrapper'
 
 // We aren't exporting this function because it's just for use in this file.
 // The underscore can indicate that it's internal too (just convention though)
 // async is because the `fetch` command is async and any function that 
 // has `await` in it requires the function to have `async` added to it.
 const _handlePlayerRegister = async(email, username, password) => {
-    // fetch is like the `requests.` function in our python tests for azure
-    const response = await fetch(apiEndpoint + playerRegister, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            password: password
-        })
-    })
+    // The reason we're "not assigning values" is because the name of the property is the 
+    // same as the variable that has the value for it in it. 
+    body = {
+        email,
+        username,
+        password
+    }
+    const response = await handleFetch(playerRegister, body, 'POST')
     
     // If the request returns an error, it'll throw (python raise exception equivalent) 
     // the error text instead of trying to get the response body (Most likely because
