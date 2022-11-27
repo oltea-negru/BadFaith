@@ -7,7 +7,7 @@ import
 	Routes,
 	Navigate,
 } from "react-router-dom";
-import WaitingRoom from "./pages/WaitingRoom";
+import WaitingRoom from "./pages/WaitingRoom/WaitingRoom.js";
 
 
 function App() {
