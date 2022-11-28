@@ -52,14 +52,36 @@ class TestFunction(unittest.TestCase):
                 'username' : "Mr DEEP",
                 "password" : "spec4356#?"
             }
+
+        #invalid dictionary format
+        input4 = {
+                'usernam' : "Mr DEEP",
+                "password" : "spec4356#?"
+            }
+
+        #invalid dictionary format
+        input5 = {
+                'username' : "Mr DEEP"
+            }
+
         resp = requests.get(
             'http://localhost:7071/api/login',
 
-            json=input3
+            json=input1
             )
         
+        #input1
         #checking for a working login
-        #self.assertEqual(resp.json()["msg"], "OK")
+        self.assertEqual(resp.json()["msg"], "OK")
 
+        #input2 and input3
         #checking for an incorrect username or password/failed login
-        self.assertEqual(resp.json()["msg"], "Username or password incorrect")
+        #self.assertEqual(resp.json()["msg"], "Username or password incorrect")
+
+        #input4
+        #checking for an incorrectly formatted json dictionary missing the username field
+        #self.assertEqual(resp.json()["msg"], "No username provided")
+
+        #input5
+        #checking for an incorrectly formatted json dictionary missing the password field
+        #self.assertEqual(resp.json()["msg"], "No password provided")

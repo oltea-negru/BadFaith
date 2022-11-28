@@ -41,25 +41,34 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     player_container = db_client.get_container_client(player_cont)
 
     player = req.get_json()
-    player['id'] = player["username"]
 
-    user = []
-    logging.info("empty user list")
+    if "username" in player:
 
-    for item in player_container.query_items(query='SELECT * FROM player p WHERE p.id=\'{}\''.format(player['id']), enable_cross_partition_query=True):
-        user.append(json.dumps(item))
-        logging.info("user dumped and appended")
+        player['id'] = player["username"]
 
-    logging.info("entering if")
-    if len(user) > 0:
-        logging.info("user exists")
-        onlyUser = json.loads(user[0])
-        if onlyUser['password'] == player['password']:
-            logging.info("password matches")
-            return func.HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}))
+        if "password" in player:
+            user = []
+            logging.info("empty user list")
+
+            for item in player_container.query_items(query='SELECT * FROM player p WHERE p.id=\'{}\''.format(player['id']), enable_cross_partition_query=True):
+                user.append(json.dumps(item))
+                logging.info("user dumped and appended")
+
+            logging.info("entering if")
+            if len(user) > 0:
+                logging.info("user exists")
+                onlyUser = json.loads(user[0])
+                if onlyUser['password'] == player['password']:
+                    logging.info("password matches")
+                    return func.HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}))
+                else:
+                    logging.info("password is incorrect")
+                    return func.HttpResponse(body=json.dumps({"result": False , "msg": "Username or password incorrect"}))
+            else:
+                logging.info("username not there")
+                return func.HttpResponse(body=json.dumps({"result": False , "msg": "Username or password incorrect"}))
         else:
-            logging.info("password is incorrect")
-            return func.HttpResponse(body=json.dumps({"result": False , "msg": "Username or password incorrect"}))
+            return func.HttpResponse(body = json.dumps({"result": False , "msg": "No password provided"}))
+    
     else:
-        logging.info("username not there")
-        return func.HttpResponse(body=json.dumps({"result": False , "msg": "Username or password incorrect"}))
+        return func.HttpResponse(body = json.dumps({"result": False , "msg": "No username provided"}))
