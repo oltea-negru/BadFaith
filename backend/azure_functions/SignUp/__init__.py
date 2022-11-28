@@ -42,19 +42,24 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         playerToAdd["id"] = playerToAdd["username"]
         del playerToAdd["username"]
         username = playerToAdd["id"]
-        password = playerToAdd["password"]
-         
-        if len(username) < 4 or len(username) > 10:
-            return func.HttpResponse(json.dumps(invalid_uname_msg))
-        
-        elif len(password) < 8 or len(password) > 30:
-            return func.HttpResponse(json.dumps(invalid_pwd_msg))
-        try:
-            usersContainer.create_item(playerToAdd)
-            return func.HttpResponse(json.dumps(uname_ok_msg))
-        except exceptions.CosmosHttpResponseError: 
-            logging.info("Duplicate user exists!")
-            return func.HttpResponse(json.dumps(uname_alreadyExists_msg))
+
+        if "password" in playerToAdd:
+            password = playerToAdd["password"]
+            
+            if len(username) < 4 or len(username) > 10:
+                return func.HttpResponse(json.dumps(invalid_uname_msg))
+            
+            elif len(password) < 8 or len(password) > 30:
+                return func.HttpResponse(json.dumps(invalid_pwd_msg))
+            try:
+                usersContainer.create_item(playerToAdd)
+                return func.HttpResponse(json.dumps(uname_ok_msg))
+            except exceptions.CosmosHttpResponseError: 
+                logging.info("Duplicate user exists!")
+                return func.HttpResponse(json.dumps(uname_alreadyExists_msg))
+            
+        else:
+            return func.HttpResponse(body = json.dumps({"result": False , "msg": "No password provided"}))
+    
     else:
-        invalid_usr_msg1 = {"result" : False, "msg" : "Username is less than 4 characters or more than 10 characters!"}
-        return func.HttpResponse(json.dumps(invalid_usr_msg1), status_code=200)
+        return func.HttpResponse(body = json.dumps({"result": False , "msg": "No username provided"}))

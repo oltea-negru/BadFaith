@@ -61,14 +61,14 @@ class TestFunction(unittest.TestCase):
                #'https://comp3207cw1-ap2g20.azurewebsites.net/api/registerplayer' ,
                'http://localhost:7071/api/SignUp'   ,                   
                                                                         
-                json = input5
+                json = input1
          )
 
 
 
         #input1
         # Checking for a short username
-        # self.assertEqual(resp.json()["msg"], "The username is less than 4 characters or more than 10 characters")
+        self.assertEqual(resp.json()["msg"], "The username is less than 4 characters or more than 10 characters")
 
         #input2
         # Checking for long username
@@ -88,4 +88,12 @@ class TestFunction(unittest.TestCase):
 
         #input5 again
         #Checking for duplicate players
-        self.assertEqual(resp.json()["msg"], "The username already exists!")
+        # self.assertEqual(resp.json()["msg"], "The username already exists!")
+
+        #input6 
+        #Checking for missing username field in incorrectly formatted json dictionary
+        # self.assertEqual(resp.json()["msg"], "No username provided")
+
+        #input7 again
+        #Checking for missing password field in incorrectly formatted json dictionary
+        # self.assertEqual(resp.json()["msg"], "No password provided")
