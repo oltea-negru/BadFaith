@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import PlayerWaiting from "./components/player_waiting";
+import PlayerWaiting from "../components/player_waiting";
 
 export default function WaitingRoom()
 {
@@ -29,7 +29,7 @@ export default function WaitingRoom()
             <div>
                 <div>
                     <p
-                        onClick={() => navigate("/second")}
+                        onClick={() => navigate("/settings")}
                         className="text-9xl text-white font-bloomberg absolute slowAnim hover:translate-x-3 hover:-translate-y-3 cursor-pointer">
                         Bad Faith</p>
                 </div>
