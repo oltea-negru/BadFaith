@@ -18,8 +18,10 @@ class TestFunction(unittest.TestCase):
         # Json for testing username
         # Checking for a short username
         input1 = {
-            'username' : "MrD",
-            "password" : "spec4356#?"
+            'username' : "George16",
+            "password" : "george12345",
+            "email" : "george@gmail.com",
+            "nickname" : "kingGeorge"
         }
 
         # Checking for a long username
@@ -68,7 +70,7 @@ class TestFunction(unittest.TestCase):
 
         #input1
         # Checking for a short username
-        self.assertEqual(resp.json()["msg"], "The username is less than 4 characters or more than 10 characters")
+        #self.assertEqual(resp.json()["msg"], "The username is less than 4 characters or more than 10 characters")
 
         #input2
         # Checking for long username
@@ -84,7 +86,7 @@ class TestFunction(unittest.TestCase):
 
         #input5
         #Checking for a valid password
-        # self.assertEqual(resp.json()["msg"], "OK")
+        self.assertEqual(resp.json()["msg"], "OK")
 
         #input5 again
         #Checking for duplicate players

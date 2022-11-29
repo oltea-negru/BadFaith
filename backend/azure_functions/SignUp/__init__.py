@@ -42,6 +42,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         playerToAdd["id"] = playerToAdd["username"]
         del playerToAdd["username"]
         username = playerToAdd["id"]
+        playerToAdd["friends"] = []
+        playerToAdd["events"] = 0
+        playerToAdd["wins"] = 0
+        playerToAdd["losses"] = 0
 
         if "password" in playerToAdd:
             password = playerToAdd["password"]
