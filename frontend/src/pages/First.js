@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
-function First() {
-    const navigate= useNavigate();
+function First()
+{
+  const navigate = useNavigate();
 
-    return (
+  return (
     <div className="grid h-screen place-items-center bg-red-600">
-     <button className="outline" onClick={()=>navigate("/second")}>Go to second page</button>
+      <button className="outline" onClick={() => navigate("/settings")}>Go to second page</button>
     </div>
   );
 }
