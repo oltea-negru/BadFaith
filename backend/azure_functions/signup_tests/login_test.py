@@ -37,31 +37,31 @@ class TestFunction(unittest.TestCase):
 
         #valid login input
         input1 = {
-            'username' : "MrDEEP",
-            "password" : "spec4356#?"
+            'email' : "gavin@gmail.com",
+            "password" : "password2"
         }
 
-        #invalid username
+        #incorrect email
         input2 = {
-                'username' : "Mr DEEP",
-                "password" : "spec4356#?"
+                'email' : "wronggavin@gmail.com",
+                "password" : "password2"
             }
 
-        #invalid password
+        #incorrect password
         input3 = {
-                'username' : "Mr DEEP",
-                "password" : "spec4356#?"
+                'email' : "gavin@gmail.com",
+                "password" : "wrongpassword"
             }
 
         #invalid dictionary format
         input4 = {
-                'usernam' : "Mr DEEP",
-                "password" : "spec4356#?"
+                'username' : "gavin@gmail.com",
+                "password" : "password2"
             }
 
         #invalid dictionary format
         input5 = {
-                'username' : "Mr DEEP"
+                'email' : "gavin@gmail.com"
             }
 
         resp = requests.get(
@@ -75,13 +75,13 @@ class TestFunction(unittest.TestCase):
         self.assertEqual(resp.json()["msg"], "OK")
 
         #input2 and input3
-        #checking for an incorrect username or password/failed login
-        #self.assertEqual(resp.json()["msg"], "Username or password incorrect")
+        #checking for an incorrect email or password/failed login
+        # self.assertEqual(resp.json()["msg"], "email or password incorrect")
 
         #input4
-        #checking for an incorrectly formatted json dictionary missing the username field
-        #self.assertEqual(resp.json()["msg"], "No username provided")
+        #checking for an incorrectly formatted json dictionary missing the email field
+        # self.assertEqual(resp.json()["msg"], "No email provided")
 
         #input5
         #checking for an incorrectly formatted json dictionary missing the password field
-        #self.assertEqual(resp.json()["msg"], "No password provided")
+        # self.assertEqual(resp.json()["msg"], "No password provided")

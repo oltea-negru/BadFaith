@@ -42,9 +42,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     player = req.get_json()
 
-    if "username" in player:
+    if "email" in player:
 
-        player['id'] = player["username"]
+        player['id'] = player["email"]
 
         if "password" in player:
             user = []
@@ -63,12 +63,12 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     return func.HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}))
                 else:
                     logging.info("password is incorrect")
-                    return func.HttpResponse(body=json.dumps({"result": False , "msg": "Username or password incorrect"}))
+                    return func.HttpResponse(body=json.dumps({"result": False , "msg": "email or password incorrect"}))
             else:
-                logging.info("username not there")
-                return func.HttpResponse(body=json.dumps({"result": False , "msg": "Username or password incorrect"}))
+                logging.info("email not there")
+                return func.HttpResponse(body=json.dumps({"result": False , "msg": "email or password incorrect"}))
         else:
             return func.HttpResponse(body = json.dumps({"result": False , "msg": "No password provided"}))
     
     else:
-        return func.HttpResponse(body = json.dumps({"result": False , "msg": "No username provided"}))
+        return func.HttpResponse(body = json.dumps({"result": False , "msg": "No email provided"}))

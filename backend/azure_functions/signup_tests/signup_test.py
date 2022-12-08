@@ -55,7 +55,7 @@ class TestFunction(unittest.TestCase):
                #'https://comp3207cw1-ap2g20.azurewebsites.net/api/registerplayer' ,
                'http://localhost:7071/api/SignUp'   ,                   
                                                                         
-                json = input6
+                json = input4
          )
 
 
@@ -74,7 +74,7 @@ class TestFunction(unittest.TestCase):
 
         #input4
         #Checking for a valid password
-        # self.assertEqual(resp.json()["msg"], "OK")
+        self.assertEqual(resp.json()["msg"], "OK")
 
         #input4 again
         #Checking for duplicate players
@@ -86,4 +86,4 @@ class TestFunction(unittest.TestCase):
 
         #input6 again
         #Checking for missing password field in incorrectly formatted json dictionary
-        self.assertEqual(resp.json()["msg"], "No password provided")
+        # self.assertEqual(resp.json()["msg"], "No password provided")
