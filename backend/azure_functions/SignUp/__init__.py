@@ -6,7 +6,7 @@ import os
 from azure.cosmos import CosmosClient
 from azure_functions import config
 import azure.cosmos.exceptions as exceptions
-
+import re
 
 # For testing locally
 db_URI = config.settings['db_URI']
@@ -33,37 +33,45 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     playerToAdd = req.get_json()
 
     # Checking is the username and password match the criteria to be added to the database of valid users
-    invalid_uname_msg = {"result": False, "msg": "The username is less than 4 characters or more than 10 characters"}
+    invalid_email_msg = {"result": False, "msg": "Invalid email provided"}
     invalid_pwd_msg = {"result": False, "msg": "The password is less than 8 characters or more than 30 characters"} 
-    uname_ok_msg = {"result" : True, "msg": "OK" }
-    uname_alreadyExists_msg = {"result": False, "msg": "The username already exists!" } 
+    signup_ok_msg = {"result" : True, "msg": "OK" }
+    email_alreadyExists_msg = {"result": False, "msg": "An user account already exists for the email provided, please try logging in!" } 
    
-    if "username" in playerToAdd:
-        playerToAdd["id"] = playerToAdd["username"]
-        del playerToAdd["username"]
-        username = playerToAdd["id"]
-        playerToAdd["friends"] = []
-        playerToAdd["events"] = 0
-        playerToAdd["wins"] = 0
-        playerToAdd["losses"] = 0
+    #regex for validating email adress field
+    emailFormat = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'  
+
+
+    if "email" in playerToAdd:
+        playerToAdd["id"] = playerToAdd["email"]
+        del playerToAdd["email"]
+        email = playerToAdd["id"] #holds email
 
         if "password" in playerToAdd:
             password = playerToAdd["password"]
             
-            if len(username) < 4 or len(username) > 10:
-                return func.HttpResponse(json.dumps(invalid_uname_msg))
+            # adding empty fields preparing for the db model
+            playerToAdd["username"] = "" # will be populated by their in-game username later
+            playerToAdd["imageurl"] = "" # could be pupulated later with user's profile picture
+            playerToAdd["friends"] = []
+            playerToAdd["events"] = 0
+            playerToAdd["wins"] = 0
+            playerToAdd["losses"] = 0
+
+            if not (re.fullmatch(emailFormat, email)):
+                return func.HttpResponse(json.dumps(invalid_email_msg))
             
             elif len(password) < 8 or len(password) > 30:
                 return func.HttpResponse(json.dumps(invalid_pwd_msg))
             try:
                 usersContainer.create_item(playerToAdd)
-                return func.HttpResponse(json.dumps(uname_ok_msg))
+                return func.HttpResponse(json.dumps(signup_ok_msg))
             except exceptions.CosmosHttpResponseError: 
                 logging.info("Duplicate user exists!")
-                return func.HttpResponse(json.dumps(uname_alreadyExists_msg))
+                return func.HttpResponse(json.dumps(email_alreadyExists_msg))
             
         else:
             return func.HttpResponse(body = json.dumps({"result": False , "msg": "No password provided"}))
     
     else:
-        return func.HttpResponse(body = json.dumps({"result": False , "msg": "No username provided"}))
+        return func.HttpResponse(body = json.dumps({"result": False , "msg": "No email provided"}))

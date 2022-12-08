@@ -15,47 +15,39 @@ class TestFunction(unittest.TestCase):
 
     def test_register_player(self):
 
-        # Json for testing username
-        # Checking for a short username
+        # Json for testing email
+        # Checking for a inavlid email
         input1 = {
-            'username' : "George16",
-            "password" : "george12345",
-            "email" : "george@gmail.com",
-            "nickname" : "kingGeorge"
+            'email' : "gavin@.com",
+            "password" : "password1"
         }
 
-        # Checking for a long username
-        input2 = {
-                'username' : "MrDEEPPPPPPP",
-                "password" : "spec4356#?"
-            }
-
         # Checking for a short password
-        input3 = {
-                'username' : "MrDEEP",
+        input2 = {
+                'email' : "gavin@gmail.com",
                 "password" : "6#?"
             }
 
         # Checking for a long password
-        input4 = {
-                'username' : "MrDEEP",
+        input3 = {
+                'email' : "gavin@gmail.com",
                 "password" : "PasswordSoLongThatItIsOverThe30CharLimit"
             }
 
         #Checking for a valid signup input and duplicate password
-        input5 = {
-                'username' : "MrDEEP2",
+        input4 = {
+                'email' : "gavin@gmail.com",
                 "password" : "password2"
             }
 
         #invalid dictionary format
-        input6 = {
+        input5 = {
                 "password" : "spec4356#?"
             }
 
         #invalid dictionary format
-        input7 = {
-                'username' : "Mr DEEP"
+        input6 = {
+                'email' : "gavin@gmail.com"
             }
 
         
@@ -63,39 +55,35 @@ class TestFunction(unittest.TestCase):
                #'https://comp3207cw1-ap2g20.azurewebsites.net/api/registerplayer' ,
                'http://localhost:7071/api/SignUp'   ,                   
                                                                         
-                json = input1
+                json = input6
          )
 
 
 
         #input1
-        # Checking for a short username
-        #self.assertEqual(resp.json()["msg"], "The username is less than 4 characters or more than 10 characters")
+        # Checking for a inavlid email
+        # self.assertEqual(resp.json()["msg"], "Invalid email provided")
 
         #input2
-        # Checking for long username
-        # self.assertEqual(resp.json()["msg"], "The username is less than 4 characters or more than 10 characters")
-
-        #input3
         # Checking for a short password
         # self.assertEqual(resp.json()["msg"], "The password is less than 8 characters or more than 30 characters")
   
-        #input4
+        #input3
         # Checking for a long password
         # self.assertEqual(resp.json()["msg"], "The password is less than 8 characters or more than 30 characters")
 
-        #input5
+        #input4
         #Checking for a valid password
-        self.assertEqual(resp.json()["msg"], "OK")
+        # self.assertEqual(resp.json()["msg"], "OK")
 
-        #input5 again
+        #input4 again
         #Checking for duplicate players
-        # self.assertEqual(resp.json()["msg"], "The username already exists!")
+        # self.assertEqual(resp.json()["msg"], "An user account already exists for the email provided, please try logging in!")
 
-        #input6 
-        #Checking for missing username field in incorrectly formatted json dictionary
-        # self.assertEqual(resp.json()["msg"], "No username provided")
+        #input5 
+        #Checking for missing email field in incorrectly formatted json dictionary
+        # self.assertEqual(resp.json()["msg"], "No email provided")
 
-        #input7 again
+        #input6 again
         #Checking for missing password field in incorrectly formatted json dictionary
-        # self.assertEqual(resp.json()["msg"], "No password provided")
+        self.assertEqual(resp.json()["msg"], "No password provided")
