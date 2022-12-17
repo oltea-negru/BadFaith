@@ -20,10 +20,11 @@
         "code": "",
         "events": [],
         "current_event": "event",
-        "event_history": [],
+        "event_history": []
     },
     "event": {
         "id": "",
+        "name": "",
         "player": "",
         "extra_players": [],
         "executions": [],

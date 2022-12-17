@@ -1,0 +1,31 @@
+.event {
+    display: grid;
+    grid-template-columns:  auto;
+    gap: 16px;
+    position: relative;
+    top: 50%;
+    left: 25%;
+    right: 25%;
+
+}
+
+.player_name {
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+
+.player_icon {
+    grid-column-start: 2;
+}
+
+.event_name {
+    grid-column-start: 1;
+}
+
+.event_icon {
+    grid-column-start: 2;
+}
+
+.event_flavour {
+    grid-column-start: 2;
+}
