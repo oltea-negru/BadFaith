@@ -1,0 +1,70 @@
+.event {
+    gap: 16px;
+    top: 50%;
+    border: 2px solid #000;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    padding: 10px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        "Blind-Info Blind-Info Player-Info"
+        "Event-Info Event-Info Event-Info"
+        "Event-Info Event-Info Event-Info";
+        width: fit-content;
+}
+
+.eventDetails {
+    border: 2px solid #000;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    padding: 10px;
+    width: fit-content;
+}
+.Player-Info {
+    grid-area: Player-Info;
+    border: 2px solid #000;
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    align-content: center;
+    text-align: center;
+}
+
+.Profile-Image {
+    width: 50px;
+    height: 50px;
+    margin: auto;
+}
+
+.Event-Info {
+    grid-area: Event-Info;
+}
+
+.Blind-Info {
+    grid-area: Blind-Info;
+}
+
+
+.player_name {
+    grid-column-start: 1;
+    grid-row-start: 2;
+}
+
+.player_icon {
+    grid-column-start: 2;
+}
+
+.event_name {
+    grid-column-start: 1;
+}
+
+.event_icon {
+    grid-column-start: 2;
+}
+
+.event_flavour {
+    grid-column-start: 2;
+}
