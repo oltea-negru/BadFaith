@@ -29,7 +29,9 @@
         "extra_players": [],
         "executions": [],
         "blind__info": "",
-        "details": ""
+        "details": "",
+        "event_function": ""
+
     }
 }
     
