@@ -8,16 +8,24 @@ import
 	Navigate,
 } from "react-router-dom";
 import WaitingRoom from "./pages/WaitingRoom/WaitingRoom.js";
+import LoginRoom from "./pages/LoginRoom/LoginRoom.js";
 
 
 function App() {
   return (
    <Router>
 				<Routes>
-					<Route path="/" element={<WaitingRoom/>} />
+					<Route path="/" element={<LoginRoom/>} />
 					<Route path="/second" element={<Second/>} />
 				</Routes>
 		</Router>
+
+//    <Router>
+// 				<Routes>
+// 					<Route path="/" element={<WaitingRoom/>} />
+// 					<Route path="/second" element={<Second/>} />
+// 				</Routes>
+// 		</Router>
   );
 }
 
