@@ -1,11 +1,14 @@
 // import React from 'react'
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import player_login from "./components/player_login";
+//import player_login from "./components/player_login";
+import {playerRegister} from "../../api/config.json";
 
 export default function LoginRoom() {
     const [players, setPlayers] = useState([]);
     const navigate = useNavigate();
+    const styleButton = {backgroundColor : 'blue', fontSize:'23px', color: 'white', padding: '5px', borderRadius: '10px'}
+    const styleInput = {backgroundColor : 'white', fontSize:'23px', color: 'black', padding: '5px', borderRadius: '10px', margin: '5px'}
     const email = useRef();
     const password = useRef();
     const nickname = useRef();
@@ -18,6 +21,7 @@ export default function LoginRoom() {
         console.log('provided email: ' + emailvalue);
         console.log('provided password: ' + passwordValue);
         console.log('provided nickname: ' + nicknameValue);
+        //console.log("this value is" + playerRegister);
     }
     
   return (
@@ -36,10 +40,10 @@ export default function LoginRoom() {
             </div>
             {/* Login-text-field*/}
             <div>
-                <p><input ref={email} type="text" placeholder="Enter your Email" /></p>
-                <p><input ref={nickname} type="text" placeholder="Enter your nickname" /></p>
-                <p><input ref={password} type="text" placeholder="Enter your Password" /></p>
-                <p><button onClick={handleLogin}>Login</button></p>
+                <p><input ref={email} type="text" style={styleInput} size="30" placeholder="Enter your Email" /></p>
+                <p><input ref={nickname} type="text" style={styleInput} size="30" placeholder="Enter your nickname" /></p>
+                <p><input ref={password} type="text" style={styleInput} size="30" placeholder="Enter your Password" /></p>
+                <p align="center"><button onClick={handleLogin} style={styleButton}>Login</button></p>
             </div>
     </div>
   );

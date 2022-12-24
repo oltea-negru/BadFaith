@@ -7,11 +7,17 @@ import os
 import azure.cosmos.exceptions as exceptions
 import json
 
+db_URI = config.settings['db_URI']
+db_id = config.settings['db_id']
+db_key = config.settings['db_key']
+player_cont =config.settings['player_container']
+lobby_cont = config.settings['lobby_container']
+
 class TestFunction(unittest.TestCase):
 
-    client = cosmos.cosmos_client.CosmosClient(config.settings['db_URI'], config.settings['db_key'])
-    db_client = client.get_database_client(config.settings['db_id'])
-    player_container = db_client.get_container_client(config.settings['player_container'])
+    client = cosmos.cosmos_client.CosmosClient(db_URI, db_key)
+    db_client = client.get_database_client(db_id)
+    player_container = db_client.get_container_client(player_cont)
 
     def test_register_player(self):
 
@@ -53,8 +59,8 @@ class TestFunction(unittest.TestCase):
         
         resp = requests.get (
                #'https://comp3207cw1-ap2g20.azurewebsites.net/api/registerplayer' ,
-               #'https://badfaith.azurewebsites.net/api/signup',
-               'http://localhost:7071/api/SignUp'   ,                   
+               'https://badfaith.azurewebsites.net/api/signup',
+               #'http://localhost:7071/api/SignUp'   ,                   
                                                                         
                 json = input4
          )
@@ -75,7 +81,7 @@ class TestFunction(unittest.TestCase):
 
         #input4
         #Checking for a valid password
-        self.assertEqual(resp.json()["msg"], "OK")
+        self.assertEqual(player_cont, "OK")
 
         #input4 again
         #Checking for duplicate players

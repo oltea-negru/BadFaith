@@ -31,6 +31,14 @@ const _handlePlayerRegister = async(email, username, password) => {
     return data;
 }
 
+const _handlePlayerLogin = async (email, username, password) => {
+    body = {
+        username: username,
+        password: password
+    }
+    const response = await handleFetch(playerLogin, body, 'POST')
+}
+
 // export is so that we can access the function from other js files. 
 export const playerRegister = async(email, username, password) => {
     // We put this in a try catch because `handlePlayerRegister` could throw an error 
