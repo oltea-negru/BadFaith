@@ -9,10 +9,16 @@ import azure.cosmos.exceptions as exceptions
 import re
 
 # For testing locally
-db_URI = config.settings['db_URI']
-db_key = config.settings['db_key']
-db_id = config.settings['db_id']
-player_container = config.settings['player_container']
+# db_URI = config.settings['db_URI']
+# db_key = config.settings['db_key']
+# db_id = config.settings['db_id']
+# player_container = config.settings['player_container']
+
+#online testing
+db_URI = os.environ['db_URI']
+db_key = os.environ['db_key']
+db_id = os.environ['db_id']
+player_container = os.environ['player_container']
 client = cosmos.cosmos_client.CosmosClient(db_URI, credential=db_key)
 database = client.get_database_client(db_id)
 usersContainer = database.get_container_client(player_container)

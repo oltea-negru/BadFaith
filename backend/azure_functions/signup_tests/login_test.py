@@ -65,8 +65,8 @@ class TestFunction(unittest.TestCase):
             }
 
         resp = requests.get(
-            'http://localhost:7071/api/login',
-
+            'http://localhost:7071/api/Login',
+#'https://badfaith.azurewebsites.net/api/login',
             json=input1
             )
         

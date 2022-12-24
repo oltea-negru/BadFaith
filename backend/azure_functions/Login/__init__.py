@@ -6,6 +6,7 @@ import azure.functions as func
 import azure.cosmos as cosmos
 import azure.cosmos.exceptions as exceptions
 from azure_functions import config
+import os
 
 # import importlib
 # config = importlib.import_module("azure_functions.config")
@@ -22,11 +23,19 @@ from azure_functions import config
 #     'event_container' : 'event'
 # }
 
+#local testing
 db_URI = config.settings['db_URI']
 db_id = config.settings['db_id']
 db_key = config.settings['db_key']
 player_cont =config.settings['player_container']
 lobby_cont = config.settings['lobby_container']
+
+#online testing
+# db_URI = os.environ['db_URI']
+# db_id = os.environ['db_id']
+# db_key = os.environ['db_key']
+# player_cont =os.environ['player_container']
+# lobby_cont = os.environ['lobby_container']
 
 print(db_URI)
 
