@@ -37,8 +37,8 @@ class TestFunction(unittest.TestCase):
 
         #valid login input
         input1 = {
-            'email' : "gavin@gmail.com",
-            "password" : "password2"
+            'email' : "ga02huudewy3@morinng.com",
+            "password" : "Honalulu"
         }
 
         #incorrect email
@@ -67,7 +67,7 @@ class TestFunction(unittest.TestCase):
         resp = requests.get(
             'http://localhost:7071/api/Login',
 #'https://badfaith.azurewebsites.net/api/login',
-            json=input1
+            json=input2
             )
         
         #input1

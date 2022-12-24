@@ -24,8 +24,8 @@ class TestFunction(unittest.TestCase):
         # Json for testing email
         # Checking for a inavlid email
         input1 = {
-            'email' : "gavin@.com",
-            "password" : "password1"
+            'username' : "gavin@gmail.com",
+            "password" : "password2"
         }
 
         # Checking for a short password
@@ -42,8 +42,8 @@ class TestFunction(unittest.TestCase):
 
         #Checking for a valid signup input and duplicate password
         input4 = {
-                'email' : "gavin@gmail.com",
-                "password" : "password2"
+                'email' : "ga02huudewy3@morinng.com",
+                "password" : "Honalulu"
             }
 
         #invalid dictionary format
@@ -59,8 +59,8 @@ class TestFunction(unittest.TestCase):
         
         resp = requests.get (
                #'https://comp3207cw1-ap2g20.azurewebsites.net/api/registerplayer' ,
-               'https://badfaith.azurewebsites.net/api/signup',
-               #'http://localhost:7071/api/SignUp'   ,                   
+            #    'https://badfaith.azurewebsites.net/api/signup',
+               'http://localhost:7071/api/SignUp'   ,                   
                                                                         
                 json = input4
          )
@@ -81,7 +81,7 @@ class TestFunction(unittest.TestCase):
 
         #input4
         #Checking for a valid password
-        self.assertEqual(player_cont, "OK")
+        self.assertEqual(resp.json()["msg"], "OK")
 
         #input4 again
         #Checking for duplicate players

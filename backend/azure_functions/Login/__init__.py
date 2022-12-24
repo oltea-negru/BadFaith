@@ -37,6 +37,32 @@ lobby_cont = config.settings['lobby_container']
 # player_cont =os.environ['player_container']
 # lobby_cont = os.environ['lobby_container']
 
+##USER STRUCTURE
+
+    # user = {    
+    #             "id":"",
+    #             "player" : {
+    #                 "nickname" : "",
+    #                 "password" : "",
+    #                 "friends" : [],
+    #                 "history" : []
+    #             },
+    #             "lobby" : {
+    #                 "players" : [],
+    #                 "invited" : [],
+    #                 "code" : "",
+    #                 "events" : [],
+    #                 "current_event" : "event"
+    #             },
+    #             "event" : {
+    #                 "extra_targets" : [],
+    #                 "executions" : [],
+    #                 "blind_info" : "",
+    #                 "details" : ""
+    #             }
+    #         }
+
+
 print(db_URI)
 
 
@@ -67,7 +93,8 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             if len(user) > 0:
                 logging.info("user exists")
                 onlyUser = json.loads(user[0])
-                if onlyUser['password'] == player['password']:
+                logging.info(onlyUser)
+                if onlyUser["player"]["password"] == player['password']:
                     logging.info("password matches")
                     return func.HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}))
                 else:
