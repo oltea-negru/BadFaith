@@ -1,7 +1,7 @@
 
 export default function ChatMessage({ message }) {
     return (
-        <div class="chat-row">
+        <div className="chat-row">
             <li>{message.player} : {message.message}</li>
         </div>
     );
