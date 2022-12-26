@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'main': "url('/src/assets/images/main.jpg')",
+        'waiting_lobby': "url('/src/assets/svg/waitingLobbyBackground.svg')",
+        'waiting_list': "url('/src/assets/svg/WaitingBoardComponent.svg')",
       },
       fontFamily: {
         'bloomberg': ['Bloomberg', 'sans-serif'],

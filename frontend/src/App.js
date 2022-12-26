@@ -16,8 +16,8 @@ function App()
 	return (
 		<Router>
 			<Routes>
-				<Route path="/reduxExample" element={<ReduxExample/>}/>
-				<Route path="/waitingRoom" element={<WaitingRoom />} />
+				<Route path="/reduxExample" element={<ReduxExample />} />
+				<Route path="/" element={<WaitingRoom />} />
 				<Route path="/second" element={<Second />} />
 				<Route path="/settings" element={<Settings />} />
 			</Routes>
