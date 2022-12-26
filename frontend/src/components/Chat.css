@@ -1,0 +1,34 @@
+.chat {
+    scroll-behavior: auto;
+    overflow-y: scroll;
+    max-height: 250px;
+    width: 25%;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 5px;
+}
+
+.chat-row {
+    height: 25px;
+    margin: 5px;
+    width: auto;
+}
+.chat-row:nth-child(even) {
+    background-color: darkgrey;
+    border-color: transparent;
+}
+
+.chatBar {
+    background-color: cadetblue;
+    color: black;
+    width: 550px;
+}
+
+ul {
+    width: 600px;
+}
+
+.input {
+    padding: 5px;
+    margin: 5px;
+}
