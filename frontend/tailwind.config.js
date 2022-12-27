@@ -8,7 +8,7 @@ module.exports = {
         'waiting_list': "url('/src/assets/svg/WaitingBoardComponent.svg')",
       },
       fontFamily: {
-        'bloomberg': ['Bloomberg', 'sans-serif'],
+        'another': ['Another', 'sans-serif'],
       }
     },
     plugins: [],
