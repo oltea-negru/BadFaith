@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as EnterButton } from "../../svgsfolder/Enter.svg";
+import { ReactComponent as LoginEmpty } from "../../svgsfolder/LoginEmpty.svg";
 
 export default function PlayerLogin() {
     const email = useRef();
@@ -17,10 +18,15 @@ export default function PlayerLogin() {
   return (
     // <div>playerLogin</div>
     <>
-        <div className="loginFields">
-            <input type="text" placeholder="Email" ref={email} style={styleInput}/>
-            <input type="password" placeholder="Password" ref={password} style={styleInput}/>
-            {/* <input type="text" placeholder="Nickname" ref={nickname} style={styleInput}/> */}
+        <div className="loginEmpty">
+            <form>
+                <p>
+                    <input type="text" placeholder="Email" ref={email} style={styleInput}/>
+                </p>
+                <p>
+                    <input type="text" placeholder="Password" ref={password} style={styleInput}/>
+                </p>
+            </form>
             <EnterButton onClick={handleLogin}/>
         </div>
     </>

@@ -6,6 +6,7 @@ import {playerRegister} from "../../api/config.json";
 import { ReactComponent as EntryPage } from "../../svgsfolder/EntryPageEmpty.svg";
 import { ReactComponent as LoginComponent } from "../../svgsfolder/LoginComponent.svg";
 
+
 import "../../index.css"
 
 export default function LoginRoom() {
@@ -17,18 +18,6 @@ export default function LoginRoom() {
     const password = useRef();
     const nickname = useRef();
     
-
-    function handleLogin() {
-        const emailvalue = email.current.value;
-        const passwordValue = password.current.value;
-        //const nicknameValue = nickname.current.value;
-        if(emailvalue === '' || passwordValue === '') return 
-        console.log('provided email: ' + emailvalue);
-        console.log('provided password: ' + passwordValue);
-        //console.log('provided nickname: ' + nicknameValue);
-        //console.log("this value is" + playerRegister);
-    }
-
     function playerLogin() {
         navigate("/playerLogin");
     }
@@ -39,12 +28,7 @@ export default function LoginRoom() {
         <button onClick={playerLogin}>
           <LoginComponent/>
         </button>
-        {/* <button onClick={displayFields}> */}
-        {/* Turn the Login Component into a button that routes to the next page */}
-        
-          
 
-        {/* </button> */}
       </div>
       </>
     );
