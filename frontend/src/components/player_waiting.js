@@ -1,10 +1,10 @@
 export default function PlayerWaiting(props)
 {
     return (
-        <div class="h-[100%] relative">
-            <div class="logo">
-                <div className="text-white">{props.text}</div></div>
-            <div class="shadow" /></div>
+        <div >
+            <div style={{ "animation-duration": 0.2 * props.index + "s" }} class="logo">
+                <div style={{ "background-color": props.color }} className="text-white text-4xl ml-6 font-another">{props.text}</div></div>
+            <div class="shadow" /></div >
 
     );
 }
