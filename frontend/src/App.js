@@ -1,7 +1,7 @@
 import Settings from "./pages/Settings";
 import ReduxExample from "./pages/reduxExample";
 import Second from "./pages/Second";
-import PLogin from "./pages/LoginRoom/playerLogin.js"
+import PLogin from "./pages/LoginRoom/PlayerLogin.js"
 import
 {
 	BrowserRouter as Router,

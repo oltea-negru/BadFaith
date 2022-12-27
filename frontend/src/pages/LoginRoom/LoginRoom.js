@@ -1,11 +1,11 @@
 // import React from 'react'
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 //import player_login from "./components/player_login";
 import {playerRegister} from "../../api/config.json";
 import { ReactComponent as EntryPage } from "../../svgsfolder/EntryPageEmpty.svg";
 import { ReactComponent as LoginComponent } from "../../svgsfolder/LoginComponent.svg";
-import { ReactComponent as EnterButton } from "../../svgsfolder/Enter.svg";
+
 import "../../index.css"
 
 export default function LoginRoom() {
@@ -15,7 +15,7 @@ export default function LoginRoom() {
     const styleInput = {backgroundColor : 'white', fontSize:'23px', color: 'black', padding: '5px', borderRadius: '10px', margin: '5px'}
     const email = useRef();
     const password = useRef();
-    //const nickname = useRef();
+    const nickname = useRef();
     
 
     function handleLogin() {
@@ -41,12 +41,7 @@ export default function LoginRoom() {
         </button>
         {/* <button onClick={displayFields}> */}
         {/* Turn the Login Component into a button that routes to the next page */}
-        <div className="loginFields"><LoginComponent/>
-          <input type="text" placeholder="Email" ref={email} style={styleInput}/>
-          <input type="password" placeholder="Password" ref={password} style={styleInput}/>
-          {/* <input type="text" placeholder="Nickname" ref={nickname} style={styleInput}/> */}
-          <EnterButton onClick={handleLogin} style={styleButton}/>
-        </div>
+        
           
 
         {/* </button> */}
