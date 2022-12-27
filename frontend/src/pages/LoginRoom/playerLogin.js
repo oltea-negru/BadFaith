@@ -30,8 +30,5 @@ export default function PlayerLogin() {
             <EnterButton onClick={handleLogin}/>
         </div>
     </>
-    
-    
-    
-  )
+    )
 }
