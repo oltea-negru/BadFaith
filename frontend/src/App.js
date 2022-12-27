@@ -9,6 +9,7 @@ import
 	Routes,
 
 } from "react-router-dom";
+
 import WaitingRoom from "./pages/WaitingRoom.js";
 import LoginRoom from "./pages/LoginRoom/LoginRoom.js";
 // import PlayerLogin from "./pages"

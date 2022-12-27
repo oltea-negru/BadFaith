@@ -39,6 +39,17 @@ export default function LoginRoom() {
         <button onClick={playerLogin}>
           <LoginComponent/>
         </button>
+        {/* <button onClick={displayFields}> */}
+        {/* Turn the Login Component into a button that routes to the next page */}
+        <div className="loginFields"><LoginComponent/>
+          <input type="text" placeholder="Email" ref={email} style={styleInput}/>
+          <input type="password" placeholder="Password" ref={password} style={styleInput}/>
+          {/* <input type="text" placeholder="Nickname" ref={nickname} style={styleInput}/> */}
+          <EnterButton onClick={handleLogin} style={styleButton}/>
+        </div>
+          
+
+        {/* </button> */}
       </div>
       </>
     );
