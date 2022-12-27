@@ -24,7 +24,7 @@ class TestFunction(unittest.TestCase):
         # Json for testing email
         # Checking for a inavlid email
         input1 = {
-            'username' : "gavin@gmail.com",
+            'email' : "gavin@gmail.com",
             "password" : "password2"
         }
 
