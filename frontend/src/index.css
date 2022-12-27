@@ -76,6 +76,10 @@
     background-image: url("../src/svgsfolder/EntryPageEmpty.svg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 .loginComp{
@@ -83,6 +87,20 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
+
+.loginEmpty{
+    background-image: url("../src/svgsfolder/LoginEmpty.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.center {
+    text-align: right;
+  }
 
 .enterButton {
     size: 50% 50%;
