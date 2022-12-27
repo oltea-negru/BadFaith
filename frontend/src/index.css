@@ -54,6 +54,34 @@
     animation-iteration-count: infinite;
 } */
 
+.emailfield {
+    /* background-image: url("../src/svgsfolder/InputField.svg"); */
+    /* background-repeat: no-repeat; */
+    background-color: #FFFDD0;
+    background-size: 100% 100%;
+    border-color: black;
+    border-width: 1px;
+}
+
+.passwordfield {
+    /* background-image: url("../src/svgsfolder/InputField.svg"); */
+    /* background-repeat: no-repeat; */
+    background-color: #FFFDD0;
+    background-size: 100% 100%;
+    border-color: black;
+    border-width: 1px;
+}
+
+.mainBg {
+    /* background-image: url("../src/svgsfolder/EntryPage.svg"); */
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.enterButton {
+    size: 50% 50%;
+}
+
 @keyframes bounce {
     from {
         transform: translateY(0) scale(1);
