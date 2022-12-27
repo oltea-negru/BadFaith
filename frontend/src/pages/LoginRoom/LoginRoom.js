@@ -16,6 +16,7 @@ export default function LoginRoom() {
     const email = useRef();
     const password = useRef();
     //const nickname = useRef();
+    
 
     function handleLogin() {
         const emailvalue = email.current.value;
@@ -27,17 +28,18 @@ export default function LoginRoom() {
         //console.log('provided nickname: ' + nicknameValue);
         //console.log("this value is" + playerRegister);
     }
+
+    function playerLogin() {
+        navigate("/playerLogin");
+    }
     
-  return (
-    <>
-    <EntryPage/>
-    <div className="mainBg">
-        <p><input className="emailfield" ref={email} type="text" placeholder="Enter your email"/></p>
-        <p><input className="passwordfield" ref={password} type="text" placeholder="Enter your password"/></p>
-        <button onClick={handleLogin}>
-            {/* <EnterButton/> */}
+    return (
+      <>
+      <div className="mainBg">
+        <button onClick={playerLogin}>
+          <LoginComponent/>
         </button>
-    </div>
-    </>
-  );
+      </div>
+      </>
+    );
 }

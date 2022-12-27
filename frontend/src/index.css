@@ -73,7 +73,13 @@
 }
 
 .mainBg {
-    /* background-image: url("../src/svgsfolder/EntryPage.svg"); */
+    background-image: url("../src/svgsfolder/EntryPageEmpty.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.loginComp{
+    background-image: url("../src/svgsfolder/LoginComponent.svg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
