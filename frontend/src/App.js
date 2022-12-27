@@ -2,6 +2,8 @@ import Settings from "./pages/Settings";
 import ReduxExample from "./pages/reduxExample";
 import Second from "./pages/Second";
 import PLogin from "./pages/LoginRoom/PlayerLogin.js"
+import PRegister from "./pages/LoginRoom/PlayerRegister.js"
+
 import
 {
 	BrowserRouter as Router,
@@ -25,6 +27,7 @@ function App()
 				<Route path="/second" element={<Second />} />
 				<Route path="/settings" element={<Settings />} />
 				<Route path="/playerLogin" element={<PLogin/>}/>
+				<Route path="/playerRegister" element={<PRegister/>}/>
 			</Routes>
 		</Router>
 

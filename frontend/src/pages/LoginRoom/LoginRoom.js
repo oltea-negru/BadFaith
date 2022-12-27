@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import {playerRegister} from "../../api/config.json";
 import { ReactComponent as EntryPage } from "../../svgsfolder/EntryPageEmpty.svg";
 import { ReactComponent as LoginComponent } from "../../svgsfolder/LoginComponent.svg";
+import { ReactComponent as RegisterPlayer } from "../../svgsfolder/RegisterComponent.svg";
+
 
 
 import "../../index.css"
@@ -21,14 +23,20 @@ export default function LoginRoom() {
     function playerLogin() {
         navigate("/playerLogin");
     }
+
+    function playerRegister() {
+        navigate("/playerRegister");
+    }
     
     return (
       <>
       <div className="mainBg">
+        <button onClick={playerRegister}>
+          <RegisterPlayer/>
+        </button>
         <button onClick={playerLogin}>
           <LoginComponent/>
         </button>
-
       </div>
       </>
     );
