@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PlayerWaiting from "../components/player_waiting";
+import Chat from "./ChatTest";
 
 export default function WaitingRoom()
 {
@@ -47,6 +48,7 @@ export default function WaitingRoom()
                 <div className="w-32">
                     <PlayerWaiting text={"haha"} />
                 </div>
+                <Chat/>
 
             </div>
         </div>

@@ -1,8 +1,8 @@
 .chat {
     scroll-behavior: auto;
     overflow-y: scroll;
-    max-height: 250px;
-    width: 25%;
+    height: 400px;
+    max-height: 400px;
     display: flex;
     flex-direction: column-reverse;
     padding: 5px;
@@ -11,17 +11,18 @@
 .chat-row {
     height: 25px;
     margin: 5px;
-    width: auto;
+    width: fit-content;
 }
 .chat-row:nth-child(even) {
     background-color: darkgrey;
     border-color: transparent;
+    width: fit-content;
 }
 
 .chatBar {
-    background-color: cadetblue;
+    background: whitesmoke;
     color: black;
-    width: 550px;
+    width: 650px;
 }
 
 ul {
@@ -31,4 +32,43 @@ ul {
 .input {
     padding: 5px;
     margin: 5px;
+    bottom: 0;
 }
+
+.wrapper {
+    position: absolute;
+    overflow: hidden;
+    width: 650px;
+    height: 500px;
+    right: 0;
+}
+
+.slide {
+    position: absolute;
+    right: -800px;
+    width:650px;
+    height: auto;
+    transition: 1s;
+    border-radius: 5px;
+    background: whitesmoke;
+}
+
+.slide.toggled{
+    position: absolute;
+    transition: 1s;
+    right: 0;
+    transition: 1s;
+    margin: auto;
+}
+
+.chatToggle {
+    position: absolute;
+    width: 650px;
+    padding: 10px;
+    background: white;
+    border-radius: 5px;
+    bottom: 0;
+    justify-content: center;
+    margin: auto;
+}
+
