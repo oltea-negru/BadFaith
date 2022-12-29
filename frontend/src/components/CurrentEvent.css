@@ -41,6 +41,7 @@
 
 .Event-Info {
     grid-area: Event-Info;
+    margin:auto;
 }
 
 .Blind-Info {

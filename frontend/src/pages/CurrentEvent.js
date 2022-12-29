@@ -15,7 +15,6 @@ export default function CurrentEvent()
             <div className="Blind-Info">
                 <h4>Event:</h4>
                 <strong>{dummylobbyState.current_event.name}</strong>
-                <h4>Flavour Text:</h4>
                 <p>{dummylobbyState.current_event.blind_info}</p>
             </div>
             
@@ -79,6 +78,6 @@ const dummylobbyState = {
         "name" : "PlaceholderEvent",
         "details" : "this should only be seen by Enrico",
         "extra_players" : ["Lorem", "Ipsum"],
-        "event_function" : "SampleEvent"
+        "event_function" : "OldAllies"
     }
 }
