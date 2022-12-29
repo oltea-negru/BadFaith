@@ -13,7 +13,6 @@ export default function CurrentEvent() {
     return (
         <div className="event">
             <div className="Blind-Info">
-                <h4>Event:</h4>
                 <strong>{dummylobbyState.current_event.name}</strong>
                 <p>{dummylobbyState.current_event.blind_info}</p>
             </div>
@@ -92,5 +91,5 @@ const dummylobbyState = {
     "events": [],
 
     "event_history": [],
-    "current_event": EventGenMap("DeepState", lobbyPlayers.DummyID, getPlayerArray())
+    "current_event": EventGenMap("SplinterCell", lobbyPlayers.DummyID, getPlayerArray())
 }

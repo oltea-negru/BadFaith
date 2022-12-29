@@ -1,6 +1,6 @@
 import React from "react";
 
-const PrivateCall = "There is a private phone call for you. You will be with back shortly";
+const PrivateCall = ["There is a private phone call for this player.", <br />, "They will be with back shortly."];
 
 const Events = {
     OldAllies: {
@@ -111,12 +111,10 @@ function OldAlliesEvent({ event_data }) {
 
 function DeepStateEvent({ event_data }) {
     //update state to switch player allegiance
-    if(event_data.player.allegiance == "Enemy")
-    {
+    if (event_data.player.allegiance == "Enemy") {
         event_data.player.allegiance = "Ally";
     }
-    else if(event_data.player.allegiance == "Ally")
-    {
+    else if (event_data.player.allegiance == "Ally") {
         event_data.player.allegiance = "Enemy";
     }
     return (
@@ -140,6 +138,32 @@ function DeepStateEvent({ event_data }) {
         </div>
     );
 }
+
+function SplinterCellEvent({ event_data }) {
+    event_data.player.allegiance = "Splinter";
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>{event_data.details}</strong>
+                <br></br>
+                <p>You have broken away from all allegiances and now stand alone.<br/>
+                    You must avoid being voted out to win
+                </p>
+                <h2><b>SURVIVE AT ALL COSTS</b></h2>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </div>
+    );
+}
+
+
 export default function EventMap(current_event) {
     const key = current_event.event_function;
     switch (key) {
@@ -149,6 +173,8 @@ export default function EventMap(current_event) {
             return <OldAlliesEvent event_data={current_event} />;
         case "DeepState":
             return <DeepStateEvent event_data={current_event} />;
+        case "SplinterCell":
+            return <SplinterCellEvent event_data={current_event} />;
         default:
             break;
 
@@ -164,26 +190,26 @@ function endEvent() {
 }
 
 function excludePlayer(player) {
-    return function(p) {
+    return function (p) {
         return p.nickname != player.nickname;
     }
 }
 
 function OriginalAllies(player) {
-    return function(p) {
+    return function (p) {
         return p.original === player.original;
     }
 }
 
 function OriginalEnemies(player) {
-    return function(p) {
+    return function (p) {
         return p.original != player.original;
     }
 }
 
 export function EventGenMap(eventName, player, players) {
     const event = Events[eventName];//fetch event strings
-    
+
     const valid = players.filter(excludePlayer(player));
     let extra_players;
     switch (eventName) {
@@ -195,7 +221,7 @@ export function EventGenMap(eventName, player, players) {
             break;
         case "DeepState": // Swap team- Hidden event
             break;
-        case "SplinterCell": // Turns bad to standalone - Hidden event
+        case "SplinterCell": // Turns player to standalone - Hidden event
             break;
         case "BackroomDeal": // Can choose to betray team, cannot vote if so
             break;
@@ -230,9 +256,9 @@ export function EventGenMap(eventName, player, players) {
         blind_info: event.BlindInfo,
         details: event.Details,
         event_function: eventName
-        };
+    };
 
-    
+
     return eventObject;
 }
 
