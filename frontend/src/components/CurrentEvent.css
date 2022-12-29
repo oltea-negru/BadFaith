@@ -44,7 +44,7 @@
     margin:auto;
 }
 
-.after .Event-Info {
+.Event-Info.toggle{
     display:none;
 }
 
@@ -52,6 +52,9 @@
     grid-area: Blind-Info;
 }
 
+.Finish {
+    border: black 1px;
+}
 
 .player_name {
     grid-column-start: 1;

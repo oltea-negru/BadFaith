@@ -78,10 +78,9 @@ function OldEnemiesEvent({ event_data }) {
             <div className="Event-Actions">
                 <button className="Finish"
                     onClick={() => {
-
+                        endEvent();
                     }}
-                    >
-                    </button>
+                >Done</button>
             </div>
         </>
     );
@@ -90,11 +89,21 @@ function OldEnemiesEvent({ event_data }) {
 function OldAlliesEvent({ event_data }) {
 
     return (
-        <div className="eventDetails">
-            <strong>{event_data.extra_players[0]} is an old ally of {event_data.extra_players[1]}.</strong>
-            <br></br>
-            <strong>Their last meeting was as friends, not foes.</strong>
-        </div>
+        <>
+            <div className="eventDetails">
+                <strong>{event_data.extra_players[0]} is an old ally of {event_data.extra_players[1]}.</strong>
+                <br></br>
+                <strong>Their last meeting was as friends, not foes.</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </>
     );
 }
 export default function EventMap(current_event) {
@@ -109,6 +118,13 @@ export default function EventMap(current_event) {
 
     }
 
+}
+
+function endEvent() {
+    const eventInfo = document.querySelector(".Event-Info");
+    eventInfo.classList.toggle("toggle");
+
+    //insert emits to progress game state
 }
 
 function EventGenMap(eventName, player, players) {
