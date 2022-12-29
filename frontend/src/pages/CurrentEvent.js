@@ -52,22 +52,25 @@ var lobbyPlayers = {
     "Lorem": {
         nickname: "Sean Connery",
         icon: "Figure this out",
-        original: "Enemy"
+        original: "Enemy",
+        allegiance: "Ally"
     },
     "Ipsum": {
         "nickname": "Travolta",
         "icon": "Figure this out",
         original: "Ally",
-        allegiance: "",
+        allegiance: "Enemy",
         "target": "",
     },
     "Delta": {
         nickname: "Geronimo",
         original: "Ally",
+        allegiance: "Ally"
     },
     "Beta": {
         nickname: "Jester",
-        original: "Enemy"
+        original: "Enemy",
+        allegiance: "Enemy"
     }
 }
 function getPlayerNickname(id) {
@@ -91,5 +94,5 @@ const dummylobbyState = {
     "events": [],
 
     "event_history": [],
-    "current_event": EventGenMap("BackroomDeal", lobbyPlayers.DummyID, getPlayerArray())
+    "current_event": EventGenMap("BackgroundCheck", lobbyPlayers.DummyID, getPlayerArray())
 }
