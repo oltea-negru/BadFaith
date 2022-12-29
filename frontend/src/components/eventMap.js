@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 const PrivateCall = ["There is a private phone call for this player.", <br />, "They will be with back shortly."];
 
@@ -270,14 +270,15 @@ function PickPocketEvent({ event_data }) {
                         >{player.nickname}</button>)}
                 </div>
             </div>
+            
 
         </div>
     );
 }
 
 function PrivateDiscussionEvent({ event_data }) {
-    let discussionPlayers = new Array();
-    discussionPlayers.push(event_data.player);
+    const [discussionPlayers,updateDiscussion] = useState([]);
+    
     function DiscussionDisplay(player) {
         
         const selectBox = document.querySelector(".SelectBox");
@@ -293,7 +294,11 @@ function PrivateDiscussionEvent({ event_data }) {
                         <button
                             className="PlayerSelect"
                             onClick={() => {
-                                discussionPlayers.push(player);
+                                let temp = [...discussionPlayers];
+                                temp.push(event_data.player);
+                                temp.push(player);
+                                updateDiscussion(temp);
+                                console.log(discussionPlayers);
                                 DiscussionDisplay(player);
                             }
                             }
@@ -301,14 +306,22 @@ function PrivateDiscussionEvent({ event_data }) {
                 </div>
                 <div className="Discussion">
                     {discussionPlayers.map((player) =>
-                        <div className="Player">
+                        {return <div className="Player">
                             <strong>{player.nickname}</strong>
                             <br/>
                             <strong>Allegience: {player.allegiance}</strong>
-                        </div>)}
+                        </div>}
+                        )}
                 </div>
             </div>
-
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
         </div>
     );
 }

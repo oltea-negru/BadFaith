@@ -73,6 +73,15 @@ h2 {
     border: 2px solid #000;
 }
 
+.Player {
+    padding: 5px;
+    background: white;
+    border-radius: 15px;
+    justify-content: center;
+    margin: auto;
+    border: 2px solid #000;
+}
+
 .SelectBox {
     flex-wrap: wrap;
 }
@@ -83,17 +92,18 @@ h2 {
 
 .Discussion {
     display: none;
-    border: 2px solid #000;
+    /* border: 2px solid #000; */
     border-radius: 15px;
-    
+    padding: 5px;
     
 }
 
 .Discussion.toggle {
     display: flex;
-    border: 2px solid #000;
+    /* border: 2px solid #000; */
     border-radius: 15px;
     right: 800px;
+    padding: 5px;
     
 }
 
