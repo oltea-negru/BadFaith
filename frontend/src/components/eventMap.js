@@ -1,15 +1,17 @@
 import React from "react";
 
-const PrivateCall = "has to take a private phone call. They will be with you shortly";
+const PrivateCall = "There is a private phone call for you. You will be with back shortly";
 
 const Events = {
     OldAllies: {
         BlindName: "Old Allies",
         BlindInfo: "Two players are revelead to have appeared as the same team at the start",
+        Details: ""
     },
     OldEnemies: {
         BlindName: "Old Enemies",
         BlindInfo: "Two players are revelead to have appeared on opposite teams at the start",
+        Details: ""
     },
     DeepState: {
         BlindName: "Private Call",
@@ -68,10 +70,9 @@ const Events = {
 
 function OldEnemiesEvent({ event_data }) {
     return (
-        <>
+        <div className="EventWrapper">
             <div className="eventDetails">
-                <strong>{event_data.details}</strong><br />
-                <strong>{event_data.extra_players[0]} is an old enemy of {event_data.extra_players[1]}.</strong>
+                <strong>{event_data.extra_players[0].nickname} is an old enemy of {event_data.extra_players[1].nickname}.</strong>
                 <br></br>
                 <strong>They would never knowingly work together.</strong>
             </div>
@@ -82,16 +83,17 @@ function OldEnemiesEvent({ event_data }) {
                     }}
                 >Done</button>
             </div>
-        </>
+        </div>
     );
 }
 
 function OldAlliesEvent({ event_data }) {
 
+    // console.log(event_data.extra_players);
     return (
-        <>
+        <div className="EventWrapper">
             <div className="eventDetails">
-                <strong>{event_data.extra_players[0]} is an old ally of {event_data.extra_players[1]}.</strong>
+                <strong>{event_data.extra_players[0].nickname} is an old ally of {event_data.extra_players[1].nickname}.</strong>
                 <br></br>
                 <strong>Their last meeting was as friends, not foes.</strong>
             </div>
@@ -103,7 +105,39 @@ function OldAlliesEvent({ event_data }) {
                 >Done
                 </button>
             </div>
-        </>
+        </div>
+    );
+}
+
+function DeepStateEvent({ event_data }) {
+    //update state to switch player allegiance
+    if(event_data.player.allegiance == "Enemy")
+    {
+        event_data.player.allegiance = "Ally";
+    }
+    else if(event_data.player.allegiance == "Ally")
+    {
+        event_data.player.allegiance = "Enemy";
+    }
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>{event_data.details}</strong>
+                <br></br>
+                <strong>Your mission is over, you may return to you're true allegiance</strong>
+                <br></br>
+                <strong>Your Role: </strong>
+                <strong>{event_data.player.allegiance}</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </div>
     );
 }
 export default function EventMap(current_event) {
@@ -113,6 +147,8 @@ export default function EventMap(current_event) {
             return <OldEnemiesEvent event_data={current_event} />;
         case "OldAllies":
             return <OldAlliesEvent event_data={current_event} />;
+        case "DeepState":
+            return <DeepStateEvent event_data={current_event} />;
         default:
             break;
 
@@ -127,11 +163,28 @@ function endEvent() {
     //insert emits to progress game state
 }
 
-function EventGenMap(eventName, player, players) {
+function excludePlayer(player) {
+    return function(p) {
+        return p.nickname != player.nickname;
+    }
+}
+
+function OriginalAllies(player) {
+    return function(p) {
+        return p.original === player.original;
+    }
+}
+
+function OriginalEnemies(player) {
+    return function(p) {
+        return p.original != player.original;
+    }
+}
+
+export function EventGenMap(eventName, player, players) {
     const event = Events[eventName];//fetch event strings
-    const valid = players.filter(p => { // do not compare with current player
-        return p != player;
-    });
+    
+    const valid = players.filter(excludePlayer(player));
     let extra_players;
     switch (eventName) {
         case "OldAllies": //Started game on the same team
@@ -169,14 +222,18 @@ function EventGenMap(eventName, player, players) {
             extra_players = SinglePlayer(valid);
             break;
     }
-    return { //arrange data into expected format for events
+
+    let eventObject = { //arrange data into expected format for events
         player: player,
         extra_players: extra_players,
         name: event.BlindName,
         blind_info: event.BlindInfo,
         details: event.Details,
         event_function: eventName
-    };
+        };
+
+    
+    return eventObject;
 }
 
 function GenerateEvents({ lobby_state }) {
@@ -191,10 +248,13 @@ function GenerateEvents({ lobby_state }) {
 }
 
 function getSameStartTeam(players) {
+    console.log(players);
     const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
-    const validSecond = players.filter(p => {
-        return p.original = p1.original;
-    });
+    console.log(p1);
+    const valid = players.filter(excludePlayer(p1));
+    console.log(valid);
+    const validSecond = valid.filter(OriginalAllies(p1));
+    console.log(validSecond);
     const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
     return [p1, p2];
 }

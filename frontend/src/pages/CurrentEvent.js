@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import '../components/CurrentEvent.css';
 import EventMap from "../components/eventMap";
 import profilepic from "../assets/images/PlacholderIcon.png";
+import { EventGenMap } from "../components/eventMap";
 
- 
 
-export default function CurrentEvent()
-{
+
+export default function CurrentEvent() {
     const lobby = useState([]);
 
     return (
@@ -17,10 +17,10 @@ export default function CurrentEvent()
                 <strong>{dummylobbyState.current_event.name}</strong>
                 <p>{dummylobbyState.current_event.blind_info}</p>
             </div>
-            
+
             <div className="Player-Info">
                 <strong>{getPlayerNickname(dummylobbyState.current_event.player)}</strong>
-                <img className="Profile-Image" src={profilepic} alt="placeholder profile"/>
+                <img className="Profile-Image" src={profilepic} alt="placeholder profile" />
             </div>
 
             <div className="Event-Info">
@@ -28,56 +28,69 @@ export default function CurrentEvent()
                     {EventMap(dummylobbyState.current_event)}
                 </div>
             </div>
-            
+
         </div>
     );
 }
 
-function getPlayerNickname(id) {
-    const player = lobbyPlayers[id];
-    return player.nickname;
+
+
+function getPlayerArray() {
+    let playerArray = new Array();
+    Object.keys(lobbyPlayers).forEach(player => {
+        playerArray.push(lobbyPlayers[player]);
+    })
+    return playerArray;
 }
 
 var lobbyPlayers = {
     "DummyID": {
-        "nickname" : "LoremIpsum",
-        "icon" :"Figure this out",
+        nickname: "LoremIpsum",
+        icon: "Figure this out",
+        original: "Enemy",
+        allegiance: "Enemy"
     },
     "Lorem": {
-        "nickname": "Sean Connery",
-        "icon" :"Figure this out",
+        nickname: "Sean Connery",
+        icon: "Figure this out",
+        original: "Enemy"
     },
     "Ipsum": {
         "nickname": "Travolta",
-        "icon" : "Figure this out",
-        "role" : "",
+        "icon": "Figure this out",
+        original: "Ally",
+        allegiance: "",
         "target": "",
+    },
+    "Delta": {
+        nickname: "Geronimo",
+        original: "Ally",
+    },
+    "Beta": {
+        nickname: "Jester",
+        original: "Enemy"
     }
+}
+function getPlayerNickname(id) {
+    
+    return id.nickname;
 }
 
 const dummylobbyState = {
     "id": "",
     "players": [
-         "DummyID",
+        "DummyID",
         "Lorem",
         "Ipsum"
-        
-        
+
+
     ],
-    "remaining_players" : ["Lorem","Snorlax"],
+    "remaining_players": ["Lorem", "Snorlax"],
     "invited": [],
     "host": "",
     "code": "",
     "events": [],
-    
+
     "event_history": [],
-    "current_event" : {
-        "id" : "TBFO",
-        "player" : "DummyID",
-        "blind_info" : "This is placeholderText",
-        "name" : "PlaceholderEvent",
-        "details" : "this should only be seen by Enrico",
-        "extra_players" : ["Lorem", "Ipsum"],
-        "event_function" : "OldAllies"
-    }
+    "current_event": EventGenMap("DeepState", lobbyPlayers.DummyID, getPlayerArray())
 }
