@@ -247,27 +247,70 @@ function BackgroundCheckEvent({ event_data }) {
 }
 
 function PickPocketEvent({ event_data }) {
+    function PickPocket(target) {
+        const op1 = event_data.player;
+        const op2 = target;
+        /*
+        State changes: allegience role and target of op1 to be swapped with op2
+        */
+
+    }
     return (
         <div className="EventWrapper">
             <div className="eventDetails">
-                <strong>According to the latest intel, {event_data.extra_players[0].nickname} is an  {event_data.extra_players[0].allegiance}.</strong>
-                <br></br>
-                <strong>Make of this what you will.</strong>
+                <div className="SelectBox">
+                    {event_data.extra_players.map((player) =>
+                        <button
+                            className="PlayerSelect"
+                            onClick={() => {
+                                PickPocket(player);
+                                endEvent();
+                            }
+                            }
+                        >{player.nickname}</button>)}
+                </div>
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
-                        endEvent();
-                    }}
-                >Done
-                </button>
-            </div>
+
         </div>
     );
 }
 
 function PrivateDiscussionEvent({ event_data }) {
+    let discussionPlayers = new Array();
+    discussionPlayers.push(event_data.player);
+    function DiscussionDisplay(player) {
+        
+        const selectBox = document.querySelector(".SelectBox");
+        const discussionBox = document.querySelector(".Discussion");
+        selectBox.classList.toggle("toggle");//Hide selection
+        discussionBox.classList.toggle("toggle");//Show details for each player
+    }
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <div className="SelectBox">
+                    {event_data.extra_players.map((player) =>
+                        <button
+                            className="PlayerSelect"
+                            onClick={() => {
+                                discussionPlayers.push(player);
+                                DiscussionDisplay(player);
+                            }
+                            }
+                        >{player.nickname}</button>)}
+                </div>
+                <div className="Discussion">
+                    {discussionPlayers.map((player) =>
+                        <div className="Player">
+                            <strong>{player.nickname}</strong>
+                            <br/>
+                            <strong>Allegience: {player.allegiance}</strong>
+                        </div>)}
+                </div>
+            </div>
 
+        </div>
+    );
 }
 
 function GagOrderEvent({ event_data }) {
@@ -377,13 +420,16 @@ export function EventGenMap(eventName, player, players) {
             extra_players = SinglePlayer(valid);
             break;
         case "PickPocket": // Swap allegiences with player of choice, if possible
-        extra_players = valid;
+            extra_players = valid;
             break;
         case "PrivateDiscussion": //Compare allegience with another player
+            extra_players = valid;
             break;
         case "GagOrder": //Prevent a player of choice from voting
+            extra_players = valid;
             break;
         case "BlackMark":
+            extra_players = valid;
             break;
         case "Coup": //Given player must be elminated to win - Hidden event
             extra_players = SinglePlayer(valid);

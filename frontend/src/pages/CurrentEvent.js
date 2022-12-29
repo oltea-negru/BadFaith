@@ -8,7 +8,7 @@ import { EventGenMap } from "../components/eventMap";
 
 
 export default function CurrentEvent() {
-    const lobby = useState([]);
+    // const lobby = useState([]);
 
     return (
         <div className="event">
@@ -94,5 +94,5 @@ const dummylobbyState = {
     "events": [],
 
     "event_history": [],
-    "current_event": EventGenMap("BackgroundCheck", lobbyPlayers.DummyID, getPlayerArray())
+    "current_event": EventGenMap("PrivateDiscussion", lobbyPlayers.DummyID, getPlayerArray())
 }
