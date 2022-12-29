@@ -184,6 +184,8 @@ function BackroomDealEvent({event_data}) {
         <div className="EventWrapper">
             <div className="eventDetails">
                 <strong>{event_data.details}</strong>
+                <br/>
+                <strong> Current Team: {event_data.player.allegiance}</strong>
             </div>
             <div className="Event-Actions">
                 <button className="Loyal"
