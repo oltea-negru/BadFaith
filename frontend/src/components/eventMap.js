@@ -205,6 +205,26 @@ function BackroomDealEvent({event_data}) {
     );
 }
 
+function MartyrEvent({event_data}) {
+    event_data.player.allegiance = "Splinter";
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>{event_data.details}</strong>
+                <p>You will only win if you are voted out, and you will win alone.</p>
+                
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </div>
+    );
+}
 
 export default function EventMap(current_event) {
     const key = current_event.event_function;
@@ -219,6 +239,8 @@ export default function EventMap(current_event) {
             return <SplinterCellEvent event_data={current_event} />;
         case "BackroomDeal":
             return <BackroomDealEvent event_data={current_event} />;
+        case "Martyr":
+            return <MartyrEvent event_data={current_event} />;
         default:
             break;
 
