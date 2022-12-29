@@ -91,5 +91,5 @@ const dummylobbyState = {
     "events": [],
 
     "event_history": [],
-    "current_event": EventGenMap("SplinterCell", lobbyPlayers.DummyID, getPlayerArray())
+    "current_event": EventGenMap("BackroomDeal", lobbyPlayers.DummyID, getPlayerArray())
 }

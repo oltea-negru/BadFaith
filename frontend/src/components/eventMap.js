@@ -25,8 +25,8 @@ const Events = {
     },
     BackroomDeal: {
         BlindName: "Backroom Deal",
-        BlindInfo: "A tempting offer has been made... But will it be accepted?",
-        Details: "You have the option to switch teams, but if you do so you cannot vote. Do you accept?"
+        BlindInfo: ["Their loyalty is being put to the test.", <br/>, "Is it strong enough?"],
+        Details: ["You have the option to switch teams, but if you do so you cannot vote.", <br/>, "Do you accept?"]
     },
     Martyr: {
         BlindName: "Private Call",
@@ -163,6 +163,46 @@ function SplinterCellEvent({ event_data }) {
     );
 }
 
+function BackroomDealEvent({event_data}) {
+    function Betray() {
+        if(event_data.player.allegiance == "Ally") {
+            event_data.player.allegiance = "Enemy";
+        }
+        else if(event_data.player.allegiance == "Enemy") {
+            event_data.player.allegiance = "Ally";
+        }
+        // DisableVote(event_data.player); prevent this player from being able to vote
+        endEvent();
+
+    }
+
+    function Remain() {
+        endEvent();
+    }
+
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>{event_data.details}</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Loyal"
+                    onClick={() => {
+                        Remain();
+                    }}
+                >Remain
+                </button>
+                <button className="Betray"
+                    onClick={() => {
+                        Betray();
+                    }}
+                >Betray
+                </button>
+            </div>
+        </div>
+    );
+}
+
 
 export default function EventMap(current_event) {
     const key = current_event.event_function;
@@ -175,6 +215,8 @@ export default function EventMap(current_event) {
             return <DeepStateEvent event_data={current_event} />;
         case "SplinterCell":
             return <SplinterCellEvent event_data={current_event} />;
+        case "BackroomDeal":
+            return <BackroomDealEvent event_data={current_event} />;
         default:
             break;
 
