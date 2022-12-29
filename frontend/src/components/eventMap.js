@@ -68,12 +68,22 @@ const Events = {
 
 function OldEnemiesEvent({ event_data }) {
     return (
-        <div className="eventDetails">
-            <strong>{event_data.details}</strong><br />
-            <strong>{event_data.extra_players[0]} is an old enemy of {event_data.extra_players[1]}.</strong>
-            <br></br>
-            <strong>They would never knowingly work together.</strong>
-        </div>
+        <>
+            <div className="eventDetails">
+                <strong>{event_data.details}</strong><br />
+                <strong>{event_data.extra_players[0]} is an old enemy of {event_data.extra_players[1]}.</strong>
+                <br></br>
+                <strong>They would never knowingly work together.</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+
+                    }}
+                    >
+                    </button>
+            </div>
+        </>
     );
 }
 

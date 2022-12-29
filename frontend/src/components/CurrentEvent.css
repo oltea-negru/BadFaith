@@ -44,6 +44,10 @@
     margin:auto;
 }
 
+.after .Event-Info {
+    display:none;
+}
+
 .Blind-Info {
     grid-area: Blind-Info;
 }
