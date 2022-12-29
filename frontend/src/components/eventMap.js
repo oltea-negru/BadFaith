@@ -25,8 +25,8 @@ const Events = {
     },
     BackroomDeal: {
         BlindName: "Backroom Deal",
-        BlindInfo: ["Their loyalty is being put to the test.", <br/>, "Is it strong enough?"],
-        Details: ["You have the option to switch teams, but if you do so you cannot vote.", <br/>, "Do you accept?"]
+        BlindInfo: ["Their loyalty is being put to the test.", <br />, "Is it strong enough?"],
+        Details: ["You have the option to switch teams, but if you do so you cannot vote.", <br />, "Do you accept?"]
     },
     Martyr: {
         BlindName: "Private Call",
@@ -146,7 +146,7 @@ function SplinterCellEvent({ event_data }) {
             <div className="eventDetails">
                 <strong>{event_data.details}</strong>
                 <br></br>
-                <p>You have broken away from all allegiances and now stand alone.<br/>
+                <p>You have broken away from all allegiances and now stand alone.<br />
                     You must avoid being voted out to win
                 </p>
                 <h2><b>SURVIVE AT ALL COSTS</b></h2>
@@ -163,12 +163,12 @@ function SplinterCellEvent({ event_data }) {
     );
 }
 
-function BackroomDealEvent({event_data}) {
+function BackroomDealEvent({ event_data }) {
     function Betray() {
-        if(event_data.player.allegiance == "Ally") {
+        if (event_data.player.allegiance == "Ally") {
             event_data.player.allegiance = "Enemy";
         }
-        else if(event_data.player.allegiance == "Enemy") {
+        else if (event_data.player.allegiance == "Enemy") {
             event_data.player.allegiance = "Ally";
         }
         // DisableVote(event_data.player); prevent this player from being able to vote
@@ -184,7 +184,7 @@ function BackroomDealEvent({event_data}) {
         <div className="EventWrapper">
             <div className="eventDetails">
                 <strong>{event_data.details}</strong>
-                <br/>
+                <br />
                 <strong> Current Team: {event_data.player.allegiance}</strong>
             </div>
             <div className="Event-Actions">
@@ -205,14 +205,14 @@ function BackroomDealEvent({event_data}) {
     );
 }
 
-function MartyrEvent({event_data}) {
+function MartyrEvent({ event_data }) {
     event_data.player.allegiance = "Splinter";
     return (
         <div className="EventWrapper">
             <div className="eventDetails">
                 <strong>{event_data.details}</strong>
                 <p>You will only win if you are voted out, and you will win alone.</p>
-                
+
             </div>
             <div className="Event-Actions">
                 <button className="Finish"
@@ -224,6 +224,70 @@ function MartyrEvent({event_data}) {
             </div>
         </div>
     );
+}
+
+function BackgroundCheckEvent({ event_data }) {
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>According to the latest intel, {event_data.extra_players[0].nickname} is an  {event_data.extra_players[0].allegiance}.</strong>
+                <br></br>
+                <strong>Make of this what you will.</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function PickPocketEvent({ event_data }) {
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>According to the latest intel, {event_data.extra_players[0].nickname} is an  {event_data.extra_players[0].allegiance}.</strong>
+                <br></br>
+                <strong>Make of this what you will.</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function PrivateDiscussionEvent({ event_data }) {
+
+}
+
+function GagOrderEvent({ event_data }) {
+
+}
+
+function BlackMarkEvent({ event_data }) {
+
+}
+
+function CoupEvent({ event_data }) {
+
+}
+
+function BlackmailedEvent({ event_data }) {
+
+}
+
+function BodyGuardEvent({ event_data }) {
+
 }
 
 export default function EventMap(current_event) {
@@ -241,6 +305,22 @@ export default function EventMap(current_event) {
             return <BackroomDealEvent event_data={current_event} />;
         case "Martyr":
             return <MartyrEvent event_data={current_event} />;
+        case "BackgroundCheck":
+            return <BackgroundCheckEvent event_data={current_event} />;
+        case "PickPocket":
+            return <PickPocketEvent event_data={current_event} />;
+        case "PrivateDiscussion":
+            return <PrivateDiscussionEvent event_data={current_event} />;
+        case "GagOrder":
+            return <GagOrderEvent event_data={current_event} />;
+        case "BlackMark":
+            return <BlackMarkEvent event_data={current_event} />;
+        case "Coup":
+            return <CoupEvent event_data={current_event} />;
+        case "Blackmailed":
+            return <BlackmailedEvent event_data={current_event} />;
+        case "BodyGuard":
+            return <BodyGuardEvent event_data={current_event} />;
         default:
             break;
 
@@ -297,6 +377,7 @@ export function EventGenMap(eventName, player, players) {
             extra_players = SinglePlayer(valid);
             break;
         case "PickPocket": // Swap allegiences with player of choice, if possible
+        extra_players = valid;
             break;
         case "PrivateDiscussion": //Compare allegience with another player
             break;
