@@ -47,10 +47,10 @@ function Settings()
                 {avatars}
             </div>
         </div> :
-        <div className="relative grid place-items-center bg-waiting_lobby bg-cover">
-            <img src={SettingsExpanded} alt="Settings" className="h-11/12 mb-10 mt-10" />
+        <div className="relative grid place-items-center bg-waiting_lobby bg-top ">
+            <img src={SettingsExpanded} alt="Settings" className="w-2/5 h-screen min-h-[600px] min-w-[550px]" />
 
-            <div className="absolute flex-col text-white text-3xl font-another w-1/3 h-2/3 justify-between  mt-28 items-center flex ">
+            <div className="absolute flex-col text-white text-3xl font-another w-1/3 min-w-[300px] h-2/3 justify-between  mt-28 items-center flex ">
                 <div>
                     <img src={avatarInput} alt="Avatar" className="h-36 rounded-lg " />
                     <div className="flex flex-row">
