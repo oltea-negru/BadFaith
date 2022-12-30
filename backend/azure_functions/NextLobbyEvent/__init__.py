@@ -41,8 +41,3 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     #try to pop next event from list
     #upadte lobby in db
     #return updated lobby data
-    
-        
-    
-    
-    
