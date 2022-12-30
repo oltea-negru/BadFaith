@@ -1,6 +1,9 @@
 import Settings from "./pages/Settings";
 import ReduxExample from "./pages/reduxExample";
 import Second from "./pages/Second";
+import PreviewTest from "./pages/PreviewTest";
+import Player from "./models/Player";
+
 import
 {
 	BrowserRouter as Router,
@@ -17,6 +20,7 @@ function App()
 		<Router>
 			<Routes>
 				<Route path="/reduxExample" element={<ReduxExample />} />
+				<Route path="/preview" element={<PreviewTest />} />
 				<Route path="/" element={<WaitingRoom />} />
 				<Route path="/second" element={<Second />} />
 				<Route path="/settings" element={<Settings

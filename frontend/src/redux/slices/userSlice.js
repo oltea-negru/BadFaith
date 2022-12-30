@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
+import AvatarPlaceholder from '../../assets/avatars/placeholder.svg'
 
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
+        avatar: AvatarPlaceholder,
         nickname: 'Testing',
         email: 'test@email.com',
         password: 'password',
