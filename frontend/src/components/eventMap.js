@@ -60,11 +60,11 @@ const Events = {
     },
     Blackmailed: {
         BlindName: "Blackmailed",
-        BlindInfo: "Another player has some dirt on you that cannot come to light, you will only win if they do.",
+        BlindInfo: ["Another player has some dirt on you that cannot come to light.", <br />, "You will only win if they do."],
     },
     BodyGuard: {
         BlindName: "Bodyguard",
-        BlindInfo: "You have been employed to protect another. They cannot be voted out."
+        BlindInfo: ["You have been employed to protect another.", <br />, "They cannot be voted out."]
     }
 };
 
@@ -270,17 +270,17 @@ function PickPocketEvent({ event_data }) {
                         >{player.nickname}</button>)}
                 </div>
             </div>
-            
+
 
         </div>
     );
 }
 
 function PrivateDiscussionEvent({ event_data }) {
-    const [discussionPlayers,updateDiscussion] = useState([]);
-    
+    const [discussionPlayers, updateDiscussion] = useState([]);
+
     function DiscussionDisplay(player) {
-        
+
         const selectBox = document.querySelector(".SelectBox");
         const discussionBox = document.querySelector(".Discussion");
         selectBox.classList.toggle("toggle");//Hide selection
@@ -305,13 +305,14 @@ function PrivateDiscussionEvent({ event_data }) {
                         >{player.nickname}</button>)}
                 </div>
                 <div className="Discussion">
-                    {discussionPlayers.map((player) =>
-                        {return <div className="Player">
+                    {discussionPlayers.map((player) => {
+                        return <div className="Player">
                             <strong>{player.nickname}</strong>
-                            <br/>
+                            <br />
                             <strong>Allegience: {player.allegiance}</strong>
-                        </div>}
-                        )}
+                        </div>
+                    }
+                    )}
                 </div>
             </div>
             <div className="Event-Actions">
@@ -328,22 +329,115 @@ function PrivateDiscussionEvent({ event_data }) {
 
 function GagOrderEvent({ event_data }) {
 
+    const [gagSelect, setGag] = useState();
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <div className="SelectBox">
+                    {event_data.extra_players.map((player) =>
+                        <button
+                            className="PlayerSelect"
+                            onClick={() => {
+                                setGag(player);
+                                //EmitGag();
+                                endEvent();
+                            }
+                            }
+                        >{player.nickname}</button>)}
+                </div>
+            </div>
+        </div>
+    );
 }
 
 function BlackMarkEvent({ event_data }) {
-
+    const [mark, setMark] = useState();
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <div className="SelectBox">
+                    {event_data.extra_players.map((player) =>
+                        <button
+                            className="PlayerSelect"
+                            onClick={() => {
+                                setMark(player);
+                                //EmitGag();
+                                endEvent();
+                            }
+                            }
+                        >{player.nickname}</button>)}
+                </div>
+            </div>
+        </div>
+    );
 }
 
 function CoupEvent({ event_data }) {
+    event_data.player.target = event_data.extra_players[0];
+    event_data.player.type = "vote";
 
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>{event_data.details}</strong><br />
+                <strong>{event_data.extra_players[0].nickname} has outlived the need for their service.</strong><br />
+                <strong>Make sure they are eliminated</strong><br />
+                <strong>You will lose if they are not voted out</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </div>
+    );
 }
 
 function BlackmailedEvent({ event_data }) {
-
+    event_data.player.target = event_data.extra_players[0];
+    event_data.player.type = "win";
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>{event_data.extra_players[0].nickname} knows too much.</strong><br />
+                <strong>Until you can prevent what they know from spreading, they must come out ahead.</strong><br />
+                <strong>You will lose if they do.</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </div>
+    );
 }
 
 function BodyGuardEvent({ event_data }) {
-
+    event_data.player.target = event_data.extra_players[0];
+    event_data.player.type = "lives";
+    return (
+        <div className="EventWrapper">
+            <div className="eventDetails">
+                <strong>{event_data.extra_players[0].nickname} has employed your protection.</strong><br />
+                <strong>They must survive.</strong><br />
+                <strong>You will only win if they are not voted out.</strong>
+            </div>
+            <div className="Event-Actions">
+                <button className="Finish"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >Done
+                </button>
+            </div>
+        </div>
+    );
 }
 
 export default function EventMap(current_event) {
@@ -441,7 +535,7 @@ export function EventGenMap(eventName, player, players) {
         case "GagOrder": //Prevent a player of choice from voting
             extra_players = valid;
             break;
-        case "BlackMark":
+        case "BlackMark": //Give an extra vote to player of choice
             extra_players = valid;
             break;
         case "Coup": //Given player must be elminated to win - Hidden event

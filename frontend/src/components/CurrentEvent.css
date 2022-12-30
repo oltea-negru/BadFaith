@@ -18,7 +18,7 @@ h2 {
         "Blind-Info Blind-Info Player-Info"
         "Event-Info Event-Info Event-Info"
         "Event-Info Event-Info Event-Info";
-        width: fit-content;
+    width: fit-content;
 }
 
 .eventDetails {
@@ -28,6 +28,7 @@ h2 {
     padding: 10px;
     width: fit-content;
 }
+
 .Player-Info {
     grid-area: Player-Info;
     border: 2px solid #000;
@@ -45,19 +46,22 @@ h2 {
 
 .Event-Info {
     grid-area: Event-Info;
-    margin:auto;
+    margin: auto;
 }
 
 .EventWrapper {
     padding: 15px;
     margin: auto;
 }
-.Event-Info.toggle{
-    display:none;
+
+.Event-Info.toggle {
+    display: none;
 }
 
 .Blind-Info {
     grid-area: Blind-Info;
+    margin: auto;
+    padding: 10px;
 }
 
 .Event-Actions {
@@ -95,7 +99,7 @@ h2 {
     /* border: 2px solid #000; */
     border-radius: 15px;
     padding: 5px;
-    
+
 }
 
 .Discussion.toggle {
@@ -104,7 +108,7 @@ h2 {
     border-radius: 15px;
     right: 800px;
     padding: 5px;
-    
+
 }
 
 .Finish {
@@ -116,6 +120,7 @@ h2 {
     margin: auto;
     border: 2px solid #000;
 }
+
 .Loyal {
     translate: 0 10px;
     padding: 5px;
@@ -126,6 +131,7 @@ h2 {
     border: 2px solid #000;
     min-width: 75px;
 }
+
 .Betray {
     translate: 0 10px;
     padding: 5px;

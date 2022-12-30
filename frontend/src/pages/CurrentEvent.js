@@ -94,5 +94,5 @@ const dummylobbyState = {
     "events": [],
 
     "event_history": [],
-    "current_event": EventGenMap("PrivateDiscussion", lobbyPlayers.DummyID, getPlayerArray())
+    "current_event": EventGenMap("BodyGuard", lobbyPlayers.DummyID, getPlayerArray())
 }
