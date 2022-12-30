@@ -19,7 +19,13 @@ function App()
 				<Route path="/reduxExample" element={<ReduxExample />} />
 				<Route path="/" element={<WaitingRoom />} />
 				<Route path="/second" element={<Second />} />
-				<Route path="/settings" element={<Settings />} />
+				<Route path="/settings" element={<Settings
+					avatar="frontend/src/assets/images/main.jpg"
+					nickname="aaryan"
+					email="arryan@mamba.com"
+					firends={[]}
+					stats={[]}
+					id="id" />} />
 			</Routes>
 		</Router>
 	);
