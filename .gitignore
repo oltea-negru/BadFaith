@@ -1,0 +1,13 @@
+
+.vscode/extensions.json
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
+
+backend/Lib
+backend/Scripts
+backend/azure_functions/getting_started.md
+backend/azure_functions/tests/
+backend/pyvenv.cfg
+
+node_modules
