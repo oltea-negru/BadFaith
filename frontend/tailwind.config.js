@@ -8,6 +8,7 @@ module.exports = {
         'waiting_list': "url('/src/assets/svg/WaitingBoardComponent.svg')",
         'settings': "url('/src/assets/svg/SettingsExpanded.svg')",
         'fake_pattern': "url('/src/assets/svg/pattern.svg')",
+        'event_room' : "url('/src/assets/svg/EventRoom.svg')",
       },
       fontFamily: {
         'another': ['Another', 'sans-serif'],

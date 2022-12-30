@@ -1,69 +1,89 @@
 import React, { useState } from "react";
+import WaitingList from "../assets/svg/WaitingBoardComponent.svg";
 
 const PrivateCall = ["There is a private phone call for this player.", <br />, "They will be with back shortly."];
 
 const Events = {
     OldAllies: {
         BlindName: "Old Allies",
+        EventTitle: "Old Allies",
         BlindInfo: "Two players are revelead to have appeared as the same team at the start",
-        Details: ""
+        Details: "Two players are revelead to have appeared as the same team at the start"
     },
     OldEnemies: {
         BlindName: "Old Enemies",
+        EventTitle: "Old Enemies",
         BlindInfo: "Two players are revelead to have appeared on opposite teams at the start",
-        Details: ""
+        Details: "Two players are revelead to have appeared on opposite teams at the start",
     },
     DeepState: {
         BlindName: "Private Call",
+        EventTitle: "Deep State",
         BlindInfo: PrivateCall,
         Details: "Deep State",
     },
     SplinterCell: {
         BlindName: "Private Call",
+        EventTitle: "Splinter Cell",
         BlindInfo: PrivateCall,
         Details: "Splinter Cell"
     },
     BackroomDeal: {
         BlindName: "Backroom Deal",
+        EventTitle: "Backroom Deal",
         BlindInfo: ["Their loyalty is being put to the test.", <br />, "Is it strong enough?"],
         Details: ["You have the option to switch teams, but if you do so you cannot vote.", <br />, "Do you accept?"]
     },
     Martyr: {
         BlindName: "Private Call",
+        EventTitle: "Martyr",
         BlindInfo: PrivateCall,
         Details: "You have been chosen as a Martyr, get yourself voted and you will be rewarded."
     },
     BackgroundCheck: {
         BlindName: "Background Check",
+        EventTitle: "Background Check",
         BlindInfo: "We have done a little digging. Here is what we know..."
     },
     PickPocket: {
         BlindName: "Pick Pocket",
-        BlindInfo: "Select a player to swap roles with"
+        EventTitle: "Pick Pocket",
+        BlindInfo: "Select a player to swap roles with",
+        Details: "Select a player to swap roles with"
     },
     PrivateDiscussion: {
         BlindName: "Private Discussion",
+        EventTitle: "Private Discussion",
         BlindInfo: "Select a player to share your secrets with"
     },
     GagOrder: {
         BlindName: "Gag Order",
-        BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
+        EventTitle: "Gag Order",
+        BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
+        Details: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
     },
     BlackMark: {
         BlindName: "Black Mark",
-        BlindInfo: "Choose a player to add an extra vote against"
+        EventTitle: "Black Mark",
+        BlindInfo: "Choose a player to add an extra vote against",
+        Details: "Choose a player to add an extra vote against"
     },
     Coup: {
         BlindName: "Private Call",
         BlindInfo: PrivateCall,
-        Details: "Coup d'état"
+        EventTitle: "Coup d'etat",
+        Details: "Coup d'etat"
+
     },
     Blackmailed: {
         BlindName: "Blackmailed",
+        EventTitle: "Blackmailed",
         BlindInfo: ["Another player has some dirt on you that cannot come to light.", <br />, "You will only win if they do."],
+        Details: ["Another player has some dirt on you that cannot come to light.", <br />, "You will only win if they do."],
     },
     BodyGuard: {
         BlindName: "Bodyguard",
+        EventTitle: "Bodyguard",
         BlindInfo: ["You have been employed to protect another.", <br />, "They cannot be voted out."]
     }
 };
@@ -71,8 +91,11 @@ const Events = {
 function OldEnemiesEvent({ event_data }) {
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <strong>{event_data.extra_players[0].nickname} is an old enemy of {event_data.extra_players[1].nickname}.</strong>
+                <strong><strong className="playerName">{event_data.extra_players[0].nickname}</strong> is an old enemy of <strong className="playerName">{event_data.extra_players[1].nickname}</strong>.</strong>
                 <br></br>
                 <strong>They would never knowingly work together.</strong>
             </div>
@@ -92,10 +115,13 @@ function OldAlliesEvent({ event_data }) {
     // console.log(event_data.extra_players);
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle font-another">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <strong>{event_data.extra_players[0].nickname} is an old ally of {event_data.extra_players[1].nickname}.</strong>
+                <strong className="playerName">{event_data.extra_players[0].nickname}</strong><strong><br /> is an old ally of <strong className="playerName">{event_data.extra_players[1].nickname}</strong>.</strong>
                 <br></br>
-                <strong>Their last meeting was as friends, not foes.</strong>
+                <strong>Their last meeting was as friends.</strong>
             </div>
             <div className="Event-Actions">
                 <button className="Finish"
@@ -119,14 +145,22 @@ function DeepStateEvent({ event_data }) {
     }
     return (
         <div className="EventWrapper">
-            <div className="eventDetails">
-                <strong>{event_data.details}</strong>
-                <br></br>
-                <strong>Your mission is over, you may return to you're true allegiance</strong>
-                <br></br>
-                <strong>Your Role: </strong>
-                <strong>{event_data.player.allegiance}</strong>
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
             </div>
+            <div className="eventDetails">
+                <strong>Your mission is over,<br /> you may return to you're true allegiance</strong>
+                <br></br>
+            </div>
+            <div className="secretEvent">
+                <strong>SECRET</strong>
+            </div>
+            <div className="eventChange">
+                <strong>Your Team:<br /> </strong>
+                <strong className="playerName">{event_data.player.allegiance}</strong>
+            </div>
+
+
             <div className="Event-Actions">
                 <button className="Finish"
                     onClick={() => {
@@ -143,13 +177,17 @@ function SplinterCellEvent({ event_data }) {
     event_data.player.allegiance = "Splinter";
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <strong>{event_data.details}</strong>
-                <br></br>
                 <p>You have broken away from all allegiances and now stand alone.<br />
                     You must avoid being voted out to win
                 </p>
                 <h2><b>SURVIVE AT ALL COSTS</b></h2>
+            </div>
+            <div className="secretEvent">
+                <strong>SECRET</strong>
             </div>
             <div className="Event-Actions">
                 <button className="Finish"
@@ -182,11 +220,18 @@ function BackroomDealEvent({ event_data }) {
 
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
                 <strong>{event_data.details}</strong>
                 <br />
-                <strong> Current Team: {event_data.player.allegiance}</strong>
+
             </div>
+            <div className="eventChange">
+                <strong> Your Team:<br /><strong className="playerName">{event_data.player.allegiance}</strong></strong>
+            </div>
+
             <div className="Event-Actions">
                 <button className="Loyal"
                     onClick={() => {
@@ -209,10 +254,17 @@ function MartyrEvent({ event_data }) {
     event_data.player.allegiance = "Splinter";
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
                 <strong>{event_data.details}</strong>
-                <p>You will only win if you are voted out, and you will win alone.</p>
-
+            </div>
+            <div className="eventChange">
+                <strong>If you win, <strong className="playerName">only</strong> you will win.</strong>
+            </div>
+            <div className="secretEvent">
+                <strong>SECRET</strong>
             </div>
             <div className="Event-Actions">
                 <button className="Finish"
@@ -229,8 +281,11 @@ function MartyrEvent({ event_data }) {
 function BackgroundCheckEvent({ event_data }) {
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <strong>According to the latest intel, {event_data.extra_players[0].nickname} is an  {event_data.extra_players[0].allegiance}.</strong>
+                <strong>According to the latest intel,<br /> <strong className="playerName">{event_data.extra_players[0].nickname}</strong> is an  <strong className="playerName">{event_data.extra_players[0].allegiance}</strong>.</strong>
                 <br></br>
                 <strong>Make of this what you will.</strong>
             </div>
@@ -253,26 +308,50 @@ function PickPocketEvent({ event_data }) {
         /*
         State changes: allegience role and target of op1 to be swapped with op2
         */
-
+    }
+    function showSelection() {
+        const chat = document.querySelector(".slide");
+        chat.classList.toggle("toggled");
+        console.log("Toggled");
     }
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <div className="SelectBox">
-                    {event_data.extra_players.map((player) =>
-                        <button
-                            className="PlayerSelect"
-                            onClick={() => {
-                                PickPocket(player);
-                                endEvent();
-                            }
-                            }
-                        >{player.nickname}</button>)}
+                <strong>{event_data.details}</strong>
+            </div>
+            <div className="TargetSelection">
+                <button
+                    className="TargetToggle"
+                    id="chatButton"
+                    onClick={() => {
+                        // UpdateChat(chatMessage)
+                        // setMessage('');
+                        showSelection();
+                    }}>Choose Target</button>
+            </div>
+            <div className="slideWrapper">
+                <div className="slide">
+                    <img src={WaitingList} alt="sdas" className="h-full" />
+
+                    <div className="SelectBox">
+                        {event_data.extra_players.map((player) =>
+                            <button
+                                className="PlayerSelect"
+                                onClick={() => {
+                                    PickPocket(player);
+                                    endEvent();
+                                }
+                                }
+                            >{player.nickname}</button>)}
+                    </div>
                 </div>
             </div>
 
 
-        </div>
+        </div >
     );
 }
 
@@ -286,34 +365,60 @@ function PrivateDiscussionEvent({ event_data }) {
         selectBox.classList.toggle("toggle");//Hide selection
         discussionBox.classList.toggle("toggle");//Show details for each player
     }
+    function showSelection() {
+        const chat = document.querySelector(".slide");
+        chat.classList.toggle("toggled");
+        console.log("Toggled");
+    }
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <div className="SelectBox">
-                    {event_data.extra_players.map((player) =>
-                        <button
-                            className="PlayerSelect"
-                            onClick={() => {
-                                let temp = [...discussionPlayers];
-                                temp.push(event_data.player);
-                                temp.push(player);
-                                updateDiscussion(temp);
-                                console.log(discussionPlayers);
-                                DiscussionDisplay(player);
-                            }
-                            }
-                        >{player.nickname}</button>)}
+                <strong>{event_data.details}</strong>
+            </div>
+            <div className="TargetSelection">
+                <button
+                    className="TargetToggle"
+                    id="chatButton"
+                    onClick={() => {
+                        // UpdateChat(chatMessage)
+                        // setMessage('');
+                        showSelection();
+                    }}>Choose Target</button>
+            </div>
+            <div className="slideWrapper">
+                <div className="slide">
+                    <img src={WaitingList} alt="sdas" className="h-full" />
+
+                    <div className="SelectBox">
+                        {event_data.extra_players.map((player) =>
+                            <button
+                                className="PlayerSelect"
+                                onClick={() => {
+                                    let temp = [...discussionPlayers];
+                                    temp.push(event_data.player);
+                                    temp.push(player);
+                                    updateDiscussion(temp);
+                                    console.log(discussionPlayers);
+                                    DiscussionDisplay(player);
+                                    showSelection();
+                                }
+                                }
+                            >{player.nickname}</button>)}
+                    </div>
                 </div>
-                <div className="Discussion">
-                    {discussionPlayers.map((player) => {
-                        return <div className="Player">
-                            <strong>{player.nickname}</strong>
-                            <br />
-                            <strong>Allegience: {player.allegiance}</strong>
-                        </div>
-                    }
-                    )}
-                </div>
+            </div>
+            <div className="Discussion">
+                {discussionPlayers.map((player) => {
+                    return <div className="Player">
+                        <strong className="playerName">{player.nickname}</strong>
+                        <br />
+                        <strong>Allegience: <strong className="playerName">{player.allegiance}</strong></strong>
+                    </div>
+                }
+                )}
             </div>
             <div className="Event-Actions">
                 <button className="Finish"
@@ -327,23 +432,48 @@ function PrivateDiscussionEvent({ event_data }) {
     );
 }
 
-function GagOrderEvent({ event_data }) {
 
+
+function GagOrderEvent({ event_data }) {
+    function showSelection() {
+        const chat = document.querySelector(".slide");
+        chat.classList.toggle("toggled");
+        console.log("Toggled");
+    }
     const [gagSelect, setGag] = useState();
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <div className="SelectBox">
-                    {event_data.extra_players.map((player) =>
-                        <button
-                            className="PlayerSelect"
-                            onClick={() => {
-                                setGag(player);
-                                //EmitGag();
-                                endEvent();
-                            }
-                            }
-                        >{player.nickname}</button>)}
+                <strong>{event_data.details}</strong>
+            </div>
+            <div className="TargetSelection">
+                <button
+                    className="TargetToggle"
+                    id="chatButton"
+                    onClick={() => {
+                        // UpdateChat(chatMessage)
+                        // setMessage('');
+                        showSelection();
+                    }}>Choose Target</button>
+            </div>
+            <div className="slideWrapper">
+                <div className="slide">
+                    <img src={WaitingList} alt="sdas" className="h-full" />
+
+                    <div className="SelectBox">
+                        {event_data.extra_players.map((player) =>
+                            <button
+                                className="PlayerSelect"
+                                onClick={() => {
+                                    setGag(player);
+                                    //EmitGag();
+                                    endEvent();
+                                }}
+                            >{player.nickname}</button>)}
+                    </div>
                 </div>
             </div>
         </div>
@@ -352,20 +482,44 @@ function GagOrderEvent({ event_data }) {
 
 function BlackMarkEvent({ event_data }) {
     const [mark, setMark] = useState();
+    function showSelection() {
+        const chat = document.querySelector(".slide");
+        chat.classList.toggle("toggled");
+        console.log("Toggled");
+    }
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <div className="SelectBox">
-                    {event_data.extra_players.map((player) =>
-                        <button
-                            className="PlayerSelect"
-                            onClick={() => {
-                                setMark(player);
-                                //EmitGag();
-                                endEvent();
-                            }
-                            }
-                        >{player.nickname}</button>)}
+                <strong>{event_data.details}</strong>
+            </div>
+            <div className="TargetSelection">
+                <button
+                    className="TargetToggle"
+                    id="chatButton"
+                    onClick={() => {
+                        // UpdateChat(chatMessage)
+                        // setMessage('');
+                        showSelection();
+                    }}>Choose Target</button>
+            </div>
+            <div className="slideWrapper">
+                <div className="slide">
+                    <img src={WaitingList} alt="sdas" className="h-full" />
+
+                    <div className="SelectBox">
+                        {event_data.extra_players.map((player) =>
+                            <button
+                                className="PlayerSelect"
+                                onClick={() => {
+                                    setMark(player);
+                                    //EmitMark();
+                                    endEvent();
+                                }}
+                            >{player.nickname}</button>)}
+                    </div>
                 </div>
             </div>
         </div>
@@ -378,11 +532,15 @@ function CoupEvent({ event_data }) {
 
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <strong>{event_data.details}</strong><br />
-                <strong>{event_data.extra_players[0].nickname} has outlived the need for their service.</strong><br />
+                <strong><strong className="playerName">{event_data.extra_players[0].nickname}</strong> has outlived the need for their service.</strong><br />
                 <strong>Make sure they are eliminated</strong><br />
-                <strong>You will lose if they are not voted out</strong>
+            </div>
+            <div className="eventChange">
+                <strong>To win they must be eliminated</strong>
             </div>
             <div className="Event-Actions">
                 <button className="Finish"
@@ -401,10 +559,18 @@ function BlackmailedEvent({ event_data }) {
     event_data.player.type = "win";
     return (
         <div className="EventWrapper">
-            <div className="eventDetails">
-                <strong>{event_data.extra_players[0].nickname} knows too much.</strong><br />
-                <strong>Until you can prevent what they know from spreading, they must come out ahead.</strong><br />
-                <strong>You will lose if they do.</strong>
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
+            <div className="eventDetails long">
+                <strong>{event_data.details}</strong><br />
+                <strong >Until you can prevent what they know from spreading, they must come out ahead.</strong>
+            </div>
+            <div className="eventChange">
+                <strong>You lose if they lose.</strong>
+            </div>
+            <div className="eventExtra">
+                <strong><strong className="playerName">{event_data.extra_players[0].nickname}</strong> knows too much.</strong><br />
             </div>
             <div className="Event-Actions">
                 <button className="Finish"
@@ -423,10 +589,16 @@ function BodyGuardEvent({ event_data }) {
     event_data.player.type = "lives";
     return (
         <div className="EventWrapper">
+            <div className="eventTitleBox">
+                <strong className="eventTitle">{event_data.event_name}</strong>
+            </div>
             <div className="eventDetails">
-                <strong>{event_data.extra_players[0].nickname} has employed your protection.</strong><br />
+                <strong><strong className="playerName">{event_data.extra_players[0].nickname}</strong> has employed your protection.</strong><br />
                 <strong>They must survive.</strong><br />
-                <strong>You will only win if they are not voted out.</strong>
+
+            </div>
+            <div className="eventChange">
+                <strong>If they are not voted <br />out you win.</strong>
             </div>
             <div className="Event-Actions">
                 <button className="Finish"
@@ -552,7 +724,8 @@ export function EventGenMap(eventName, player, players) {
     let eventObject = { //arrange data into expected format for events
         player: player,
         extra_players: extra_players,
-        name: event.BlindName,
+        blind_name: event.BlindName,
+        event_name: event.EventTitle,
         blind_info: event.BlindInfo,
         details: event.Details,
         event_function: eventName

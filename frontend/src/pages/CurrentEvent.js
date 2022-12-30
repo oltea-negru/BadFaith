@@ -12,15 +12,7 @@ export default function CurrentEvent() {
 
     return (
         <div className="event">
-            <div className="Blind-Info">
-                <strong>{dummylobbyState.current_event.name}</strong>
-                <p>{dummylobbyState.current_event.blind_info}</p>
-            </div>
-
-            <div className="Player-Info">
-                <strong>{getPlayerNickname(dummylobbyState.current_event.player)}</strong>
-                <img className="Profile-Image" src={profilepic} alt="placeholder profile" />
-            </div>
+            
 
             <div className="Event-Info">
                 <div>
@@ -74,7 +66,7 @@ var lobbyPlayers = {
     }
 }
 function getPlayerNickname(id) {
-    
+
     return id.nickname;
 }
 

@@ -9,6 +9,7 @@ import
 
 } from "react-router-dom";
 import WaitingRoom from "./pages/WaitingRoom.js";
+import EventRoom from "./pages/EventRoom";
 
 
 function App()
@@ -26,6 +27,7 @@ function App()
 					firends={[]}
 					stats={[]}
 					id="id" />} />
+				<Route path="/event" element={<EventRoom />} />
 			</Routes>
 		</Router>
 	);
