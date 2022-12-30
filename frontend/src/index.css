@@ -9,7 +9,7 @@
 
 
 .settingsInput {
-    @apply rounded-lg bg-gray-300 h-10 w-4/6 px-5 text-sm;
+    @apply rounded-lg bg-gray-300 h-10 w-1/2 ml-3 px-5 text-sm;
 
 }
 

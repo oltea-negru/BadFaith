@@ -50,7 +50,7 @@ function Settings()
         <div className="relative grid place-items-center bg-waiting_lobby bg-cover">
             <img src={SettingsExpanded} alt="Settings" className="h-11/12 mb-10 mt-10" />
 
-            <div className="absolute flex-col text-white text-3xl font-another w-1/2 h-2/3 justify-between  mt-28 items-center flex ">
+            <div className="absolute flex-col text-white text-3xl font-another w-1/3 h-2/3 justify-between  mt-28 items-center flex ">
                 <div>
                     <img src={avatarInput} alt="Avatar" className="h-36 rounded-lg " />
                     <div className="flex flex-row">
