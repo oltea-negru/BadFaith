@@ -52,7 +52,7 @@ function Settings()
 
             <div className="absolute flex-col text-white text-3xl font-another w-1/2 h-2/3 justify-between  mt-28 items-center flex ">
                 <div>
-                    <img src={avatarInput} alt="Avatar" className="h-36 rounded-lg bg-white" />
+                    <img src={avatarInput} alt="Avatar" className="h-36 rounded-lg " />
                     <div className="flex flex-row">
                         <img src={EditAvatar} alt="Edit Avatar" onClick={() => setShowOptions(true)} className="w-10 avatarButton " />
                         <img src={RemoveAvatar} alt="Remove Avatar" onClick={() => setAvatarInput(AvatarPlaceholder)} className="avatarButton" />
