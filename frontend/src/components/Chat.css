@@ -1,9 +1,14 @@
+@font-face {
+    font-family: 'Another';
+    src: url('../../src/assets/fonts/atwriter.ttf');
+
+}
 .chat {
     scroll-behavior: auto;
     overflow-y: scroll;
     height: 400px;
     max-height: 400px;
-    display: flex;
+    display: block;
     flex-direction: column-reverse;
     padding: 5px;
 }
@@ -11,11 +16,6 @@
 .chat-row {
     height: 25px;
     margin: 5px;
-    width: fit-content;
-}
-.chat-row:nth-child(even) {
-    background-color: darkgrey;
-    border-color: transparent;
     width: fit-content;
 }
 
@@ -30,9 +30,12 @@ ul {
 }
 
 .input {
+    display:block;
+    /* position: absolute; */
     padding: 5px;
     margin: 5px;
-    bottom: 0;
+    /* translate: 0 450px; */
+    z-index: 1;
 }
 
 .wrapper {
@@ -41,10 +44,14 @@ ul {
     width: 650px;
     height: 500px;
     right: 0;
+    translate: 0 100%;
+    z-index: 1;
 }
 
 .slide {
+    flex-direction: column;
     position: absolute;
+    display: flex;
     right: -800px;
     width:650px;
     height: auto;
@@ -54,7 +61,10 @@ ul {
 }
 
 .slide.toggled{
+    display: flex;
     position: absolute;
+    width:650px;
+    height: auto;
     transition: 1s;
     right: 0;
     transition: 1s;

@@ -35,7 +35,7 @@ export default function Chat() {
                 </div>
             </div>
             <button
-                className="chatToggle"
+                className="chatToggle font-another"
                 id="chatButton"
                 onClick={() => {
                     // UpdateChat(chatMessage)
