@@ -1,57 +1,46 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import WaitingList from "../assets/svg/WaitingBoardComponent.svg";
 import PlayerWaiting from "../components/player_waiting";
 import Chat from "./ChatTest";
 
 export default function WaitingRoom()
 {
-    const [players, setPlayers] = useState([]);
-    const navigate = useNavigate();
 
-    // async function getPlayers(){
-    //     var i=0;
-    //     while(i<3){
-    //         setPlayers(...players,dummyPlayers[i]);
+    const colors = ['#813b45', '#7f6a8b', '#6f98aa', '#FF8042', '#7c6434', '#e3bd73', '#5a2b32', '#8c9c83'];
+
+    // async function getPlayers()
+    // {
+    //     var i = 0;
+    //     while (i < 3)
+    //     {
+    //         setPlayers(...players, dummyPlayers[i]);
     //         setTimeout(() =>
     //         {
-    //            console.log("jo");
+    //             console.log("jo");
     //         }, 500);
     //         i++;
     //     }
     // }
 
-    // useEffect(() => {   
+    // useEffect(() =>
+    // {
     //     getPlayers();
     //     console.log(players.length);
     // }, []);
 
     return (
-        <div className="grid h-screen place-items-center bg-main bg-cover">
-            <div>
-                <div>
-                    <p
-                        onClick={() => navigate("/settings")}
-                        className="text-9xl text-white font-bloomberg absolute slowAnim hover:translate-x-3 hover:-translate-y-3 cursor-pointer">
-                        Bad Faith</p>
-                </div>
-                <div className="overflow-hidden">
-                    <p className="text-9xl text-blue-600 font-bloomberg overflow-hidden static">
-                        Bad Faith</p>
-                </div>
-
-                {dummyPlayers.map((player) =>
-                    <PlayerWaiting text={player.nickname} />)}
-
-                <div className="w-14">
-                    <PlayerWaiting text={"S"} />
-                </div>
-                <div className="w-32">
-                    <PlayerWaiting text={"haha"} />
+        <div className="bg-waiting_lobby bg-cover h-screen w-screen">
+            <div className="bottom-0 left-14 h-5/6 absolute">
+                <img src={WaitingList} alt="sdas" className="h-full" />
+                <div className="absolute top-[15%] h-[45%] left-1/3 ">
+                    {dummyPlayers.map((player) => <p className="text-white font-another text-3xl "> {player.nickname}</p>)}
                 </div>
                 <Chat/>
-
+            </div>
+            <div className="flex flex-row ml-[30%] mt-[20%] absolute">
+                {dummyPlayers.map((player, index) => <PlayerWaiting text={player.nickname} color={colors[index]} index={index + 1} />)}
             </div>
         </div>
+
     );
 }
 
@@ -67,6 +56,15 @@ const dummyPlayers = [
     },
     {
         "nickname": "gavin",
+    },
+    {
+        "nickname": "adithya",
+    },
+    {
+        "nickname": "thanuj",
+    },
+    {
+        "nickname": "cameron",
     },
 
 ]
