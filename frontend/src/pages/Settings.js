@@ -84,7 +84,7 @@ function Settings()
                 </div>
 
                 <button className="settingsButton hover:shadow-2xl 
-                hover:shadow-sm hover:shadow-white focus:outline-none focus:ring-0 active:bg-red-300 active:shadow-lg transition duration-150 ease-in-out " onClick={() => dispatch(setUserDetails({ nickname: nicknameInput, email: emailInput }))}>
+                hover:shadow-sm hover:shadow-white focus:outline-none focus:ring-0 active:bg-red-300 active:shadow-lg transition duration-150 ease-in-out " onClick={() => { dispatch(setUserDetails({ nickname: nicknameInput, email: emailInput })); alert("Profile updated successfully!") }}>
                     Submit</button>
             </div >
         </div>
