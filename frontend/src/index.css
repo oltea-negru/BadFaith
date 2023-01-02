@@ -7,23 +7,29 @@
     border: 1px solid red;
 } */
 
-.slowAnim{
-    @apply hover:transition duration-700 ease-in-out;
-}
+/* .slowAnim {
+    @apply hover: transition duration-700 ease-in-out;
+} */
 
 @font-face {
     font-family: "Another";
     src: url("../src/assets/fonts/atwriter.ttf");
 }
 
-
-
 :root {
     --drop-height: 300px;
-    --logo-size:70px;
+    --logo-size: 70px;
     --offset: 200px;
     --shadow-height: 20px;
     --duration: 0.7s;
+}
+
+.clickable:active {
+    @apply shadow-lg shadow-black;
+}
+
+.clickable:hover {
+    @apply cursor-pointer;
 }
 
 
@@ -82,13 +88,13 @@
     height: 100vh;
 }
 
-.loginComp{
+.loginComp {
     background-image: url("../src/svgsfolder/LoginComponent.svg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
 
-.loginEmpty{
+.loginEmpty {
     background-image: url("../src/svgsfolder/LoginEmpty.svg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -100,7 +106,7 @@
 
 .center {
     text-align: right;
-  }
+}
 
 .enterButton {
     size: 50% 50%;
@@ -135,4 +141,3 @@
         transform: scale(1.5, 0.8);
     }
 }
-

@@ -1,7 +1,7 @@
 import Settings from "./pages/Settings";
 import ReduxExample from "./pages/reduxExample";
 import Second from "./pages/Second";
-import PLogin from "./pages/LoginRoom/PlayerLogin.js"
+import PLogin from "./pages/LoginRoom/components/player_login.js"
 import PRegister from "./pages/LoginRoom/PlayerRegister.js"
 
 import
@@ -26,17 +26,17 @@ function App()
 				<Route path="/" element={<LoginRoom />} />
 				<Route path="/second" element={<Second />} />
 				<Route path="/settings" element={<Settings />} />
-				<Route path="/playerLogin" element={<PLogin/>}/>
-				<Route path="/playerRegister" element={<PRegister/>}/>
+				<Route path="/playerLogin" element={<PLogin />} />
+				<Route path="/playerRegister" element={<PRegister />} />
 			</Routes>
 		</Router>
 
-//    <Router>
-// 				<Routes>
-// 					<Route path="/" element={<WaitingRoom/>} />
-// 					<Route path="/second" element={<Second/>} />
-// 				</Routes>
-// 		</Router>
+		//    <Router>
+		// 				<Routes>
+		// 					<Route path="/" element={<WaitingRoom/>} />
+		// 					<Route path="/second" element={<Second/>} />
+		// 				</Routes>
+		// 		</Router>
 	);
 }
 
