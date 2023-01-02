@@ -58,9 +58,8 @@ class TestFunction(unittest.TestCase):
 
         
         resp = requests.get (
-               #'https://comp3207cw1-ap2g20.azurewebsites.net/api/registerplayer' ,
-            #    'https://badfaith.azurewebsites.net/api/signup',
-               'http://localhost:7071/api/SignUp'   ,                   
+               'https://badfaith2.azurewebsites.net/api/signup',
+            #    'http://localhost:7071/api/SignUp'   ,                   
                                                                         
                 json = input4
          )
