@@ -10,8 +10,8 @@ const io = require('socket.io')({
   }
 });
 
-const redisHost = process.env.REDIS_HOST
-const redisPort = process.env.REDIS_PORT
+const redisHost = process.env.REDIS_HOST || 'localhost'
+const redisPort = process.env.REDIS_PORT || '6379'
 const pubClient = createClient({ url: `redis://${redisHost}:${redisPort}`})
 const subClient = pubClient.duplicate()
 
