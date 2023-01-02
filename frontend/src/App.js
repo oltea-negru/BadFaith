@@ -1,7 +1,7 @@
 import Settings from "./pages/Settings";
 import ReduxExample from "./pages/reduxExample";
 import Second from "./pages/Second";
-import PLogin from "./pages/LoginRoom/components/player_login.js"
+import PLogin from "./pages/LoginRoom/PlayerLogin.js"
 import PRegister from "./pages/LoginRoom/PlayerRegister.js"
 
 import
