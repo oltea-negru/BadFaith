@@ -26,17 +26,17 @@ function App()
 				<Route path="/" element={<LoginRoom />} />
 				<Route path="/second" element={<Second />} />
 				<Route path="/settings" element={<Settings />} />
-				<Route path="/playerLogin" element={<PLogin/>}/>
-				<Route path="/playerRegister" element={<PRegister/>}/>
+				<Route path="/playerLogin" element={<PLogin />} />
+				<Route path="/playerRegister" element={<PRegister />} />
 			</Routes>
 		</Router>
 
-//    <Router>
-// 				<Routes>
-// 					<Route path="/" element={<WaitingRoom/>} />
-// 					<Route path="/second" element={<Second/>} />
-// 				</Routes>
-// 		</Router>
+		//    <Router>
+		// 				<Routes>
+		// 					<Route path="/" element={<WaitingRoom/>} />
+		// 					<Route path="/second" element={<Second/>} />
+		// 				</Routes>
+		// 		</Router>
 	);
 }
 

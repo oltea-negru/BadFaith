@@ -1,27 +1,33 @@
 import React from 'react'
 import { useState, useEffect, useRef } from "react";
 import { ReactComponent as EnterButton } from "../../svgsfolder/Enter.svg";
+import { useSelector, useDispatch, } from 'react-redux'
+import { setUserDetails, setCredentials } from "../../redux/slices/userSlice";
 
 export default function PlayerRegister() {
-  const email = useRef();
-  const password = useRef();
+  // const email = useRef();
+  // const password = useRef();
   const styleInput = {backgroundColor : 'white', fontSize:'23px', color: 'black', padding: '5px', borderRadius: '10px', margin: '5px'}
 
+  const [emailInput, setEmail] = useState('');
+  const [passwordInput, setPassword] = useState('');
+  const dispatch = useDispatch()
+
+
   function hanldeRegister() {
-    const emailvalue = email.current.value;
-    const passwordValue = password.current.value;
-    if(emailvalue === '' || passwordValue === '') return 
-    console.log('Registering email: ' + emailvalue);
-    console.log('Registering password: ' + passwordValue);
+    if(emailInput === '' || passwordInput === '') return 
+    console.log('Registering email: ' + emailInput);
+    console.log('Registering password: ' + passwordInput);
   }
   return (
+    <>
     <div className='registerEmpty'>
       <form>
-        <p><input type="text" placeholder="Email" ref={email} style={styleInput}/></p>
-        <p><input type="text" placeholder="Password" ref={password} style={styleInput}/></p>
+            <p><input type="text" id="email" name="email" placeholder="Email" style={styleInput} value={emailInput} onChange={event => setEmail(event.target.value)}/> </p>
+            <p><input type="text" id="password" name="password" placeholder="Password" style={styleInput} value={passwordInput} onChange={event => setPassword(event.target.value)}/> </p>
       </form>
-
-      <EnterButton onClick={hanldeRegister}/>
+      <p><button className="outline" onClick={() => hanldeRegister({email: emailInput, password: passwordInput})}><EnterButton/></button></p>
     </div>
+    </>
   )
 }
