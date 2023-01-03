@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { ReactComponent as EnterButton } from "../../svgsfolder/Enter.svg";
 import { useSelector, useDispatch, } from 'react-redux'
 import { setUserDetails, setCredentials } from "../../redux/slices/userSlice";
+import { player_Register } from "../../api/examplePlayerMethods.js";
 
 export default function PlayerRegister() {
   // const email = useRef();
@@ -14,10 +15,12 @@ export default function PlayerRegister() {
   const dispatch = useDispatch()
 
 
-  function hanldeRegister() {
+  async function hanldeRegister() {
     if(emailInput === '' || passwordInput === '') return 
     console.log('Registering email: ' + emailInput);
     console.log('Registering password: ' + passwordInput);
+    const message = await (player_Register(emailInput, passwordInput))
+    console.log(message)
   }
   return (
     <>

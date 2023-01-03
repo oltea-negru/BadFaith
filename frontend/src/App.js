@@ -3,6 +3,7 @@ import ReduxExample from "./pages/reduxExample";
 import Second from "./pages/Second";
 import PLogin from "./pages/LoginRoom/PlayerLogin.js"
 import PRegister from "./pages/LoginRoom/PlayerRegister.js"
+import Voting from "./pages/VotingRoom/Voting.js";
 
 import
 {
@@ -28,6 +29,7 @@ function App()
 				<Route path="/settings" element={<Settings />} />
 				<Route path="/playerLogin" element={<PLogin />} />
 				<Route path="/playerRegister" element={<PRegister />} />
+				<Route path="/voting" element={<Voting />} />
 			</Routes>
 		</Router>
 
