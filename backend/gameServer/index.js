@@ -23,6 +23,33 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
   io.adapter(createAdapter(pubClient, subClient));
 });
 
+// Data held in redis:
+// user:**playerID**
+//  - Role
+//  - Event
+//  - Evidence
+//  - socketID
+
+// players:**lobbyid** array
+
+// votes:**lobbyid** hash playerID to number of votes 
+// (allows get all values at end. not sure about incrementing though, might have to be manual)
+
+// playerToSocket:**lobbyID** -> set field name to be player
+// eg: field playerID : value socketID 
+
+// socketToPlayer:**lobbyID** -> set field name to be socket
+// eg: field socketID : value playerID
+
+// gameState:**lobbyName** key value pair
+// event:**lobbyName** hash with fields
+//  - name
+//  - desc
+//  - evidence (should be a string code that can be processed)
+// eventHistory:**lobbyName** array
+//  - **eventName**:**playerName**
+
+
 io.on('connection', async (socket) => {
   
   console.log(`Socket ${socket.id} connected.`)
