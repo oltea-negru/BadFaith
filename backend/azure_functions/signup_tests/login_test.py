@@ -4,8 +4,7 @@ import requests
 import os
 import azure.functions as func
 import azure.cosmos as cosmos
-
-from azure_functions import config as c
+import config as c
 
 # settings = {
 #     'local_URI': 'http://localhost:7071/api/' ,

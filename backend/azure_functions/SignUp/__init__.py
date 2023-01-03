@@ -3,7 +3,7 @@ import json
 import azure.functions as func
 import azure.cosmos as cosmos 
 import os
-from azure.cosmos import CosmosClient
+# import CosmosClient
 # from azure_functions import config
 import azure.cosmos.exceptions as exceptions
 import re
