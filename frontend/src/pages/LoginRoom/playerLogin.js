@@ -5,69 +5,33 @@ import { ReactComponent as EnterButton } from "../../svgsfolder/Enter.svg";
 import { ReactComponent as LoginEmpty } from "../../svgsfolder/LoginEmpty.svg";
 import { useSelector, useDispatch, } from 'react-redux'
 import { setUserDetails, setCredentials } from "../../redux/slices/userSlice";
-
-// export default function PlayerLogin() {
-//     const email = useRef();
-//     const password = useRef();
-//     const styleInput = {backgroundColor : 'white', fontSize:'23px', color: 'black', padding: '5px', borderRadius: '10px', margin: '5px'}
-//     function handleLogin() {
-//         const emailvalue = email.current.value;
-//         const passwordValue = password.current.value;
-//         if(emailvalue === '' || passwordValue === '') return 
-//         console.log('provided email: ' + emailvalue);
-//         console.log('provided password: ' + passwordValue);
-//     }
-//   return (
-//     // <div>playerLogin</div>
-//     <>
-//         <div className="loginEmpty">
-//             <form>
-//                 <p>
-//                     <input type="text" placeholder="Email" ref={email} style={styleInput}/>
-//                 </p>
-//                 <p>
-//                     <input type="text" placeholder="Password" ref={password} style={styleInput}/>
-//                 </p>
-//             </form>
-//             <EnterButton onClick={handleLogin}/>
-//         </div>
-//     </>
-//     )
-// }
+import { player_Login } from "../../api/examplePlayerMethods.js";
 
 export default function PlayerLogin() {
     //const email = useRef();
     const pwd = useRef();
     const styleInput = {backgroundColor : 'white', fontSize:'23px', color: 'black', padding: '5px', borderRadius: '10px', margin: '5px'}
-    function handleLogin() {
-        const emailvalue = email.current.value;
-        const passwordValue = password.current.value;
-        if(emailvalue === '' || passwordValue === '') return 
-        console.log('provided email: ' + emailvalue);
-        console.log('provided password: ' + passwordValue);
-    }
+
     const [emailInput, setEmail] = useState('');
     const [passwordInput, setPassword] = useState('');
     const dispatch = useDispatch()
     
-    const { stats, nickname, email, password } = useSelector(state => state.user)
+    const { email, password } = useSelector(state => state.user)
+
+    async function handleLogin() {
+        if(emailInput === '' || passwordInput === '') return 
+        console.log('provided email: ' + emailInput);
+        console.log('provided password: ' + passwordInput);
+        const message = await (player_Login(emailInput, passwordInput))
+        console.log(message.msg)
+        if(message.msg === 'OK') {
+            console.log("User LogedIn, Dispatching credentials")
+            dispatch(setCredentials({email: emailInput, password: passwordInput}))
+        }
+        console.log("current User: " + email + " " + password)
+    }
   return (
-    // <div>playerLogin</div>
-    // <>
-    //     <div className="loginEmpty">
-    //         <form>
-    //             <p>
-    //                 <input type="text" placeholder="Email" ref={email} style={styleInput}/>
-    //             </p>
-    //             <p>
-    //                 <input type="text" placeholder="Password" ref={password} style={styleInput}/>
-    //             </p>
-    //         </form>
-    //         <EnterButton onClick={handleLogin}/>
-    //     </div>
-    // </>
-    <>
-    
+    <> 
     <div className="loginEmpty">
         <form>
             <p>
@@ -78,7 +42,7 @@ export default function PlayerLogin() {
             </p>
         </form>
             <p>
-                <button className="outline" onClick={() => dispatch(setCredentials({email: emailInput, password: passwordInput}))}><EnterButton/></button>
+                <button className="outline" onClick={() => handleLogin({email: emailInput, password: passwordInput})}><EnterButton/></button>
             </p>
             {/* Need to navigate to lobby here */}
             {/* <button className="outline" onClick={() => navigate("/settings")}>Go to second page</button> */}
