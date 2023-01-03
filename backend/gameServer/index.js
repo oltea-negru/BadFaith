@@ -24,33 +24,38 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 });
 
 io.on('connection', async (socket) => {
-  console.log(`Socket ${socket.id} connected.`);
+  
+  console.log(`Socket ${socket.id} connected.`)
 
-  await sendRedisPing(socket)
+  socket.on('createLobby', () => {
+    
+  })
 
-  await getRedisVal(socket)
+  socket.on('joinLobby', () => {
+
+  })
+
+  socket.on('readyUp', () => {
+    
+  })
+
+  socket.on('action', () => {
+    
+  })
+
+  socket.on('vote', () => {
+    
+  })
 
   socket.on('chat', message => {
-    console.log('Chat message:', message)
-    socket.broadcast.emit('chat', message)
+    // 1. Add socket to room
+    // 2. Add the player to an array of players associated with the room name in redis
   })
 
   socket.on('disconnect', () => {
     console.log(`Socket ${socket.id} disconnected.`);
   });
 });
-
-
-
-//Testing redis connection/read/write
-async function sendRedisPing(socket){
-  await client.set(socket.id, 'true')
-}
-
-async function getRedisVal(socket){
-  const id = await client.get(socket.id)
-  socket.emit('id', id)
-}
 
 
 // TODO Function
