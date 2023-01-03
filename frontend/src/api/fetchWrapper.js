@@ -15,7 +15,7 @@ const handleFetch = async(route, body, requestType, headers={}) => {
     headers['x-functions-key'] = process.env['APP_KEY']
 
     // fetch is like the `requests.` function in our python tests for azure
-    return fetch("https://badfaith2.azurewebsites.net" + route, {
+    return fetch("http://localhost:7071" + route, {
         method: requestType,
         headers,
         body: JSON.stringify(body)

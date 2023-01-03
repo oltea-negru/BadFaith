@@ -17,9 +17,9 @@ const _handlePlayerRegister = async(email, password) => {
         email: email,
         password: password
     }
-    const response = await handleFetch("/api/signup", body, 'POST')
+    const response = await handleFetch("/api/SignUp", body, 'POST')
     
-    // If the request returns an error, it'll throw (python raise exception equivalent) 
+    // If the request returns an error, it'll throw (python raise exception equivalent) http://localhost:7071/api/SignUp
     // the error text instead of trying to get the response body (Most likely because
     // it doesn't exist)
     if(!response.ok) {
