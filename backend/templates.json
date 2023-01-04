@@ -14,19 +14,24 @@
     "lobby": {
         "id": "",
         "players": [],
+        "remaining_players" : [],
         "invited": [],
         "host": "",
         "code": "",
         "events": [],
-        "current_event": "event"
+        "current_event": "event",
+        "event_history": []
     },
     "event": {
         "id": "",
+        "name": "",
         "player": "",
         "extra_players": [],
         "executions": [],
         "blind__info": "",
-        "details": ""
+        "details": "",
+        "event_function": ""
+
     }
 }
     
