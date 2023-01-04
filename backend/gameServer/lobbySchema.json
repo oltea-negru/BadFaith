@@ -8,6 +8,7 @@
             "allegiance": ""
         }
     },
+    "readyUp": 0,
     "socketToPlayers": {},
     "votes": {},
     "playerToSocket": {},
