@@ -4,7 +4,7 @@ import requests
 import os
 import azure.functions as func
 import azure.cosmos as cosmos
-import config as c
+from azure_functions import config as c
 
 # settings = {
 #     'local_URI': 'http://localhost:7071/api/' ,
@@ -64,8 +64,8 @@ class TestFunction(unittest.TestCase):
             }
 
         resp = requests.get(
-            'http://localhost:7071/api/Login',
-#'https://badfaith2.azurewebsites.net/api/login',
+            # 'http://localhost:7071/api/Login',
+'https://badfaith2.azurewebsites.net/api/login',
             json=input1
             )
         

@@ -44,7 +44,10 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     "nickname" : "",
                     "password" : "",
                     "friends" : [],
-                    "history" : []
+                    "history" : [],
+                    "wins": 0,
+                    "losses": 0,
+                    "avatar" : ""
                 },
                 "lobby" : {
                     "players" : [],
