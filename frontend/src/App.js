@@ -26,10 +26,16 @@ function App()
 				<Route path="/reduxExample" element={<ReduxExample />} />
 				<Route path="/" element={<LoginRoom />} />
 				<Route path="/second" element={<Second />} />
-				<Route path="/settings" element={<Settings />} />
 				<Route path="/playerLogin" element={<PLogin />} />
 				<Route path="/playerRegister" element={<PRegister />} />
 				<Route path="/voting" element={<Voting />} />
+				<Route path="/settings" element={<Settings
+					avatar="frontend/src/assets/images/main.jpg"
+					nickname="aaryan"
+					email="arryan@mamba.com"
+					firends={[]}
+					stats={[]}
+					id="id" />} />
 			</Routes>
 		</Router>
 

@@ -13,17 +13,17 @@ export default function PlayerRegister() {
   const [emailInput, setEmail] = useState('');
   const [passwordInput, setPassword] = useState('');
   const dispatch = useDispatch()
-  const { email, password } = useSelector(state => state.user)
+  let { email, password } = useSelector(state => state.user)
 
 
   async function hanldeRegister() {
     if(emailInput === '' || passwordInput === '') return 
-    console.log('Registering email: ' + emailInput);
-    console.log('Registering password: ' + passwordInput);
     const message = await (player_Register(emailInput, passwordInput))
     console.log(message.msg)
     if(message.msg === 'OK') {
       console.log("User registered, Dispatching credentials")
+      console.log('Current registered email: ' + emailInput);
+      console.log('Current registered password: ' + passwordInput);
       dispatch(setCredentials({email: emailInput, password: passwordInput}))
     }
     console.log("current User: " + email + " " + password)
