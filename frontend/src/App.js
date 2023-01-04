@@ -5,6 +5,8 @@ import PLogin from "./pages/LoginRoom/PlayerLogin.js"
 import PRegister from "./pages/LoginRoom/PlayerRegister.js"
 import Voting from "./pages/VotingRoom/Voting.js";
 
+import Chat from "./pages/ChatTest";
+import Lobby from "./pages/Lobby";
 import
 {
 	BrowserRouter as Router,
@@ -16,6 +18,7 @@ import
 import WaitingRoom from "./pages/WaitingRoom.js";
 import LoginRoom from "./pages/LoginRoom/LoginRoom.js";
 // import PlayerLogin from "./pages"
+import EventRoom from "./pages/EventRoom";
 
 
 function App()
@@ -29,6 +32,8 @@ function App()
 				<Route path="/playerLogin" element={<PLogin />} />
 				<Route path="/playerRegister" element={<PRegister />} />
 				<Route path="/voting" element={<Voting />} />
+				<Route path="/chat" element={<Chat />} />
+				<Route path="/lobby" element={<Lobby />} />
 				<Route path="/settings" element={<Settings
 					avatar="frontend/src/assets/images/main.jpg"
 					nickname="aaryan"
@@ -36,6 +41,7 @@ function App()
 					firends={[]}
 					stats={[]}
 					id="id" />} />
+				<Route path="/event" element={<EventRoom />} />
 			</Routes>
 		</Router>
 

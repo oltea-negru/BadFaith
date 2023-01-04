@@ -46,3 +46,11 @@ __pycache__/
 __blobstorage__
 __queuestorage__
 __azurite_db*__.json
+
+# Extra
+Scripts/
+Lib/
+Include/
+.vscode/
+pyvenv.cfg
+getting_started.md
