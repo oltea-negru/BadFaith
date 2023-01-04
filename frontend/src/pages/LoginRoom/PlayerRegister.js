@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState, useEffect, useRef } from "react";
 import { ReactComponent as EnterButton } from "../../svgsfolder/Enter.svg";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch, } from 'react-redux'
 import { setRegister } from "../../redux/slices/userSlice";
 import { player_Register } from "../../api/examplePlayerMethods.js";
@@ -25,9 +26,9 @@ export default function PlayerRegister() {
   const [emailInput, setEmail] = useState('');
   const [passwordInput, setPassword] = useState('');
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { stats, nickname, email, password, avatar } = useSelector(state => state.user);
-  const avatarsMap = [{0: AvatarPlaceholder},{1: Avatar1},{2: Avatar2},{3: Avatar3},{4: Avatar4},{5: Avatar5},{6: Avatar6},{7: Avatar7}];
-
+ 
   const [nicknameInput, setNickname] = useState(nickname);
   const [showOptions, setShowOptions] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -39,6 +40,7 @@ export default function PlayerRegister() {
     if(emailInput === '' || passwordInput === '') return 
     const message = await (player_Register(emailInput, passwordInput))
     console.log(message.msg)
+    
     if(message.msg === 'OK') {
       console.log("User registered, Dispatching credentials")
       console.log('Current registered email: ' + emailInput);
@@ -46,6 +48,9 @@ export default function PlayerRegister() {
       console.log('Avatar Number: ' + avatarNumber);
       alert("Registered successfully!");
       dispatch(setRegister({email: emailInput, password: passwordInput, avatar: avatarInput} ))
+      navigateToLobby();
+    }else{
+      alert(message.msg);
     }
     console.log("current User: " + email + " " + password + " " + avatarNumber)
   }
@@ -56,6 +61,11 @@ export default function PlayerRegister() {
       alt="Avatar"
       className="h-32 hover:transition ease-out duration-500  rounded-lg hover:h-44  hover:cursor-pointer" />)
 
+  function navigateToLobby()
+  {
+    navigate("/lobby");
+  }
+
   return showOptions ?
   <div className="relative grid place-items-center bg-waiting_lobby h-screen w-screen bg-bottom">
     <div className="h-1/3 w-full flex flex-row justify-around items-center bg-waiting_lobby bg-bottom border-[#7b6437] border-8">
@@ -65,7 +75,7 @@ export default function PlayerRegister() {
     <div className='registerEmpty'>
       <form>
             <p><input type="text" id="email" name="email" placeholder="Email" style={styleInput} value={emailInput} onChange={event => setEmail(event.target.value)}/> </p>
-            <p><input type="text" id="password" name="password" placeholder="Password" style={styleInput} value={passwordInput} onChange={event => setPassword(event.target.value)}/> </p>
+            <p><input type="text" id="password" name="password" placeholder="Password (8-30 chars)" style={styleInput} value={passwordInput} onChange={event => setPassword(event.target.value)}/> </p>
       </form>
       <p><button className="outline" onClick={() => hanldeRegister({email: emailInput, password: passwordInput})}><EnterButton/></button></p>
  

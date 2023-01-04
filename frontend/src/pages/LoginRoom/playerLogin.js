@@ -10,6 +10,7 @@ import { player_Login } from "../../api/examplePlayerMethods.js";
 export default function PlayerLogin() {
     //const email = useRef();
     const pwd = useRef();
+    const navigate = useNavigate();
     const styleInput = {backgroundColor : 'white', fontSize:'23px', color: 'black', padding: '5px', borderRadius: '10px', margin: '5px'}
 
     const [emailInput, setEmail] = useState('');
@@ -28,8 +29,16 @@ export default function PlayerLogin() {
             console.log("User LogedIn, Dispatching credentials")
             dispatch(setLogin({email: emailInput, password: passwordInput}))
             alert("Logged In successfully!");
+            navigateToLobby();
+        }else{
+            alert(message.msg);
         }
         console.log("current User: " + email + " " + password)
+    }
+
+    function navigateToLobby()
+    {
+      navigate("/lobby");
     }
   return (
     <> 
@@ -39,7 +48,7 @@ export default function PlayerLogin() {
                 <input type="text" id="email" name="email" placeholder="Email" style={styleInput} value={emailInput} onChange={event => setEmail(event.target.value)}/> 
             </p>
             <p>
-                <input type="text" id="password" name="password" placeholder="Password" style={styleInput} value={passwordInput} onChange={event => setPassword(event.target.value)}/> 
+                <input type="text" id="password" name="password" placeholder="Password (8-30 chars)" style={styleInput} value={passwordInput} onChange={event => setPassword(event.target.value)}/> 
             </p>
         </form>
             <p>
