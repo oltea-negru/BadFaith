@@ -3,24 +3,45 @@
 @tailwind utilities;
 
 
-/* *{
+/* * {
     border: 1px solid red;
 } */
 
-.slowAnim{
-    @apply hover:transition duration-700 ease-in-out;
+
+.settingsInput {
+    @apply rounded-lg bg-gray-300 h-10 w-1/2 ml-3 px-5 text-sm;
+
+}
+
+.settingsInput:focus {
+    @apply bg-white outline-orange-900;
+}
+
+.settingsButton {
+    @apply rounded-lg bg-[#813b45] text-white h-10 text-lg w-full m-1;
+}
+
+.avatarButton {
+    @apply rounded-lg bg-[#813b45] h-10 text-lg w-full m-3 p-1;
+}
+
+.avatarButton:hover {
+    @apply cursor-pointer shadow-sm shadow-white;
+}
+
+.avatarButton:active {
+    @apply bg-[#f08d9c] shadow-lg;
 }
 
 @font-face {
-    font-family: "Another";
-    src: url("../src/assets/fonts/atwriter.ttf");
+    font-family: 'Another';
+    src: url('../src/assets/fonts/atwriter.ttf');
+
 }
-
-
 
 :root {
     --drop-height: 300px;
-    --logo-size:70px;
+    --logo-size: 70px;
     --offset: 200px;
     --shadow-height: 20px;
     --duration: 0.7s;
@@ -29,30 +50,11 @@
 
 .logo {
     width: fit-content;
-    /* left: calc(50% - var(--logo-size) / 2); */
     animation-name: bounce;
-    /* animation-duration: var(--duration); */
     animation-direction: alternate;
     animation-timing-function: cubic-bezier(0.95, 0.05, 0.795, 0.035);
     animation-iteration-count: infinite;
 }
-
-/* .shadow {
-    width: var(--logo-size);
-    height: var(--shadow-height);
-    background: radial-gradient(50% 50%,
-            rgba(150, 150, 150, 1),
-            rgba(150, 150, 150, 0.05));
-    position: absolute;
-    top: calc(var(--offset) + var(--drop-height) + var(--logo-size) - 1.5 * var(--shadow-height));
-    left: calc(50% - var(--logo-size) / 2);
-
-    animation-name: grow;
-    animation-duration: var(--duration);
-    animation-direction: alternate;
-    animation-timing-function: cubic-bezier(0.95, 0.05, 0.795, 0.035);
-    animation-iteration-count: infinite;
-} */
 
 @keyframes bounce {
     from {
@@ -73,4 +75,3 @@
         transform: scale(1.5, 0.8);
     }
 }
-
