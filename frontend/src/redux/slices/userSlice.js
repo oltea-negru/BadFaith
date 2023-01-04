@@ -7,6 +7,7 @@ export const userSlice = createSlice({
         email: '',
         password: '',
         friends: '',
+        avatar: '',
         stats: {
             achievements: [],
             wins: 0,
@@ -14,19 +15,28 @@ export const userSlice = createSlice({
         }
     },
     reducers: {
-        setUserDetails: (state, action) =>
+        setSettings: (state, action) =>
         {
             state.nickname = action.payload.nickname
-            state.email = action.payload.email
-            // state.friends = action.payload.friends
-            // state.avatar = action.payload.avatar
-            // state.stats = action.payload.stats
+            state.avatar = action.payload.avatar
+            state.password = action.payload.password
+            console.log(state.nickname)
+            console.log(state.avatar)
+            console.log(state.password)
         },
-        setCredentials:(state, action) => {
+        setLogin:(state, action) => {
             state.email = action.payload.email
             state.password = action.payload.password
             console.log(state.email)
             console.log(state.password)
+        },
+        setRegister:(state, action) => {
+            state.email = action.payload.email
+            state.password = action.payload.password
+            state.avatar = action.payload.avatar
+            console.log(state.email)
+            console.log(state.password)
+            console.log(state.avatar)
         },
         setFriends: (state, action) => {
             state.friends = action.payload.friends
@@ -46,6 +56,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { setUserDetails, incrementWin, incrementGame, setState, setCredentials} = userSlice.actions
+export const { setRegister, incrementWin, incrementGame, setState, setLogin, setSettings} = userSlice.actions
 
 export default userSlice.reducer

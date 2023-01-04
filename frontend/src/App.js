@@ -1,5 +1,5 @@
 import Settings from "./pages/Settings";
-import ReduxExample from "./pages/reduxExample";
+// import ReduxExample from "./pages/reduxExample";
 import Second from "./pages/Second";
 import PLogin from "./pages/LoginRoom/PlayerLogin.js"
 import PRegister from "./pages/LoginRoom/PlayerRegister.js"
@@ -23,7 +23,7 @@ function App()
 	return (
 		<Router>
 			<Routes>
-				<Route path="/reduxExample" element={<ReduxExample />} />
+				{/* <Route path="/reduxExample" element={<ReduxExample />} /> */}
 				<Route path="/" element={<LoginRoom />} />
 				<Route path="/second" element={<Second />} />
 				<Route path="/playerLogin" element={<PLogin />} />

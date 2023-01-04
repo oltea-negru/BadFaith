@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as EnterButton } from "../../svgsfolder/Enter.svg";
 import { ReactComponent as LoginEmpty } from "../../svgsfolder/LoginEmpty.svg";
 import { useSelector, useDispatch, } from 'react-redux'
-import { setUserDetails, setCredentials } from "../../redux/slices/userSlice";
+import { setLogin } from "../../redux/slices/userSlice";
 import { player_Login } from "../../api/examplePlayerMethods.js";
 
 export default function PlayerLogin() {
@@ -26,7 +26,8 @@ export default function PlayerLogin() {
         console.log(message.msg)
         if(message.msg === 'OK') {
             console.log("User LogedIn, Dispatching credentials")
-            dispatch(setCredentials({email: emailInput, password: passwordInput}))
+            dispatch(setLogin({email: emailInput, password: passwordInput}))
+            alert("Logged In successfully!");
         }
         console.log("current User: " + email + " " + password)
     }

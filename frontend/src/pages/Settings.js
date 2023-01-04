@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { setUserDetails, incrementWin, incrementGame } from "../redux/slices/userSlice";
+import { setSettings, incrementWin, incrementGame } from "../redux/slices/userSlice";
 import { useEffect, useState } from 'react';
 import SettingsExpanded from "../assets/svg/SettingsExpanded.svg";
 import AvatarPlaceholder from "../assets/avatars/placeholder.svg";
@@ -21,15 +21,15 @@ function Settings()
 {
     const dispatch = useDispatch()
 
-    const { stats, nickname, email, password, avatar } = useSelector(state => state.user)
+    const { stats, nickname, password, avatar } = useSelector(state => state.user)
 
 
     const [nicknameInput, setNickname] = useState(nickname)
-    const [emailInput, setEmail] = useState(email)
-    const [passwordInput, setPassword] = useState(password);
+    const [passwordInput, passwordChange] = useState("");
+    // const [passwordChange, setNewPassword] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [avatarInput, setAvatarInput] = useState(AvatarPlaceholder);
+    const [avatarInput, setAvatarInput] = useState(avatar);
 
     const navigate = useNavigate();
 
@@ -59,7 +59,7 @@ function Settings()
                     </div>
                 </div>
                 <div className="flex flex-row w-full m-3 justify-between">
-                    <label for="nickname" className="font-another">Nickname:</label>
+                    <label for="nickname" className="font-another">Change Nickname:</label>
                     <input className="settingsInput text-black" type="text" id="nickname" name="nickname" value={nicknameInput}
                         onChange={event =>
                         {
@@ -67,24 +67,26 @@ function Settings()
                             console.log(event.target.value)
                         }} />
                 </div>
-                <div className="flex flex-row w-full  justify-between">
-                    <label for="email">Email:</label>
-                    <input className="settingsInput text-black" type="text" id="email" name="email" value={emailInput}
-                        onChange={event => setEmail(event.target.value)} />
-                </div>
                 <div className="w-full flex flex-row">
                     <div className="flex flex-row w-full justify-between">
-                        <label for="password">Password:</label>
-                        {showPassword ? <input className="settingsInput text-black" type="password" id="password" name="password" value={passwordInput}
-                            onChange={event => setPassword(event.target.value)} /> :
-                            <input className="settingsInput text-black" type="text" id="password" name="password" value={passwordInput} />}
+                        <label for="password">Change Password:</label>
+                        {showPassword ? <input className="settingsInput text-black" type="password" id="password" name="password" value = {passwordInput}
+                            onChange={event => {
+                                passwordChange(event.target.value)
+                                console.log(event.target.value)
+                            }} /> :
+                            <input className="settingsInput text-black" type="text" id="password" name="password" value = {passwordInput} 
+                            onChange={event => {
+                                passwordChange(event.target.value)
+                                console.log(event.target.value)
+                            }} />}
                     </div>
                     {showPassword ? <img src={SeePassword} alt="See Password" onClick={() => setShowPassword(false)} className="w-10 absolute rounded-lg right-2 ml-10 hover:cursor-pointer" /> :
                         <img src={HidePassword} alt="Hide Password" onClick={() => setShowPassword(true)} className="w-10 absolute rounded-lg right-2 ml-10 hover:cursor-pointer" />}
                 </div>
 
                 <button className="settingsButton hover:shadow-2xl 
-                hover:shadow-sm hover:shadow-white focus:outline-none focus:ring-0 active:bg-red-300 active:shadow-lg transition duration-150 ease-in-out " onClick={() => { dispatch(setUserDetails({ nickname: nicknameInput, email: emailInput })); alert("Profile updated successfully!") }}>
+                hover:shadow-sm hover:shadow-white focus:outline-none focus:ring-0 active:bg-red-300 active:shadow-lg transition duration-150 ease-in-out " onClick={() => { dispatch(setSettings({ nickname: nicknameInput, password: passwordInput, avatar: avatarInput })); alert("Profile updated successfully!") }}>
                     Submit</button>
             </div >
         </div>
