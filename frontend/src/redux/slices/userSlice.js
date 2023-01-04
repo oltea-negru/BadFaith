@@ -24,20 +24,20 @@ export const userSlice = createSlice({
             console.log(state.avatar)
             console.log(state.password)
         },
-        setLogin:(state, action) => {
+        setCredentials:(state, action) => {
             state.email = action.payload.email
             state.password = action.payload.password
             console.log(state.email)
             console.log(state.password)
         },
-        setRegister:(state, action) => {
-            state.email = action.payload.email
-            state.password = action.payload.password
-            state.avatar = action.payload.avatar
-            console.log(state.email)
-            console.log(state.password)
-            console.log(state.avatar)
-        },
+        // setRegister:(state, action) => {
+        //     state.email = action.payload.email
+        //     state.password = action.payload.password
+        //     state.avatar = action.payload.avatar
+        //     console.log(state.email)
+        //     console.log(state.password)
+        //     console.log(state.avatar)
+        // },
         setFriends: (state, action) => {
             state.friends = action.payload.friends
         },
@@ -56,6 +56,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { setRegister, incrementWin, incrementGame, setState, setLogin, setSettings} = userSlice.actions
+export const { setCredentials, incrementWin, incrementGame, setState, setSettings} = userSlice.actions
 
 export default userSlice.reducer
