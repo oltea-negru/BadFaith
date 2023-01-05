@@ -1,7 +1,7 @@
 const { createClient } = require('redis')
 const { createAdapter } = require('@socket.io/redis-adapter');
 
-const { client, connect } = require('./redisClient');
+const gameStoreClient = new require('./redisClient')();
 const server = require('http').Server();
 const io = require('socket.io')({
   cors: {
@@ -25,17 +25,53 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 
 // Schema in lobbySchema.json
 
+function generateLobbyCode(){
+  let codeLength = 5
+  let lobbyCode = generateRandomString(codeLength)
+  let retryCount = 0
+  while(gameStoreClient.doesLobbyExist(lobbyCode)){
+    if(retryCount == 5)
+      retryCount++
+    lobbyCode = generateLobbyCode(codeLength)
+  }
+
+  return lobbyCode
+}
+
+function generateRandomString(length){
+  const validCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
+  const output = '';
+  for (let i=0; i<length; i++) {
+      output += validCharacters.charAt(Math.floor(Math.random() * validCharacters.length));
+  }
+  return output;
+}
+
+async function createLobby(lobbyCode, hostDetails){
+  await gameStoreClient.createLobbyDocument(lobbyCode)
+  await gameStoreClient.joinPlayer(lobbyCode, hostDetails)
+}
+
+async function joinLobby(lobbyCode, hostDetails){
+  await gameStoreClient.joinLobby(lobbyCode, playerDetails)
+  await gameStoreClient.joinPlayer(lobbyCode, hostDetails)
+}
 
 io.on('connection', async (socket) => {
   
   console.log(`Socket ${socket.id} connected.`)
 
-  socket.on('createLobby', () => {
-    
+  socket.on('createLobby', async (hostDetails, callback) => {
+    const lobbyCode = generateLobbyCode()
+    await createLobby(lobbyCode, hostDetails)
+    callback({
+      lobbyCode
+    })
   })
 
-  socket.on('joinLobby', () => {
-
+  socket.on('joinLobby', async (lobbyCode, playerDetails) => {
+    const lobbyCode = generateLobbyCode()
+    await joinLobby(lobbyCode, playerDetails)
   })
 
   socket.on('readyUp', () => {
@@ -67,7 +103,7 @@ async function verifyUniqueConn(socket) {
 }
 
 async function startServer(){
-  await connect()
+  await gameStoreClient.connect()
   console.log('Redis connect')
   server.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`)

@@ -5,14 +5,23 @@ bluebird.promisifyAll(redis);
 
 const redisHost = process.env.REDIS_HOST || 'localhost'
 const redisPort = process.env.REDIS_PORT || '6379'
-const client = redis.createClient({ url: `redis://${redisHost}:${redisPort}`})
 
-async function connect() {
-    await client.connect()
-    console.log('Connected Redis?')
-}
+export default class HotStorageClient{
+    constructor(){
+        this.client = redis.createClient({ url: `redis://${redisHost}:${redisPort}`})
+    }
 
-module.exports = {
-    client, 
-    connect
+    async connect(){
+        await this.client.connect()
+    }
+
+    async createLobbyDocument(lobbyCode){
+
+    }
+
+    async joinPlayer(lobbyCode, hostDetails)
+
+    async doesLobbyExist(lobbyCode){
+        
+    }
 }
