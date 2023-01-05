@@ -17,7 +17,7 @@
         "event_name": "",
         "details": "",
         "player": "",
-        "extra_players": "",
+        "extra_players": [],
         "blind_name": "",
         "blind_info": "",
         "event_function": ""
@@ -27,7 +27,7 @@
             "event_name": "",
             "details": "",
             "player": "",
-            "extra_players": "",
+            "extra_players": [],
             "blind_name": "",
             "blind_info": "",
             "event_function": ""
