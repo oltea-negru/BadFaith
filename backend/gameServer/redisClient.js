@@ -20,10 +20,38 @@ export default class HotStorageClient{
     }
 
     async joinLobby(lobbyCode, hostDetails){
-        
+
     }
 
     async doesLobbyExist(lobbyCode){
         
+    }
+
+    async addReady(lobbyCode){
+        
+    }
+
+    async getReadyCounter(lobbyCode){
+
+    }
+
+    async getActivePlayerNumber(lobbyCode){
+
+    }
+
+    async progressGameState(lobbyCode){
+
+    }
+
+    async getUserState(socket){
+        
+    }
+
+    async getUsername(socket){
+
+    }
+
+    async getNickname(socket){
+
     }
 }
