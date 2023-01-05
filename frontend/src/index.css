@@ -2,11 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* * {
     border: 1px solid red;
 } */
 
+/* .slowAnim {
+    @apply hover: transition duration-700 ease-in-out;
+} */
 
 .settingsInput {
     @apply rounded-lg bg-gray-300 h-10 w-1/2 ml-3 px-5 text-sm;
@@ -47,6 +49,14 @@
     --duration: 0.7s;
 }
 
+.clickable:active {
+    @apply shadow-lg shadow-black;
+}
+
+.clickable:hover {
+    @apply cursor-pointer;
+}
+
 
 .logo {
     width: fit-content;
@@ -54,6 +64,85 @@
     animation-direction: alternate;
     animation-timing-function: cubic-bezier(0.95, 0.05, 0.795, 0.035);
     animation-iteration-count: infinite;
+}
+
+/* .shadow {
+    width: var(--logo-size);
+    height: var(--shadow-height);
+    background: radial-gradient(50% 50%,
+            rgba(150, 150, 150, 1),
+            rgba(150, 150, 150, 0.05));
+    position: absolute;
+    top: calc(var(--offset) + var(--drop-height) + var(--logo-size) - 1.5 * var(--shadow-height));
+    left: calc(50% - var(--logo-size) / 2);
+
+    animation-name: grow;
+    animation-duration: var(--duration);
+    animation-direction: alternate;
+    animation-timing-function: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+    animation-iteration-count: infinite;
+} */
+
+.emailfield {
+    /* background-image: url("../src/svgsfolder/InputField.svg"); */
+    /* background-repeat: no-repeat; */
+    background-color: #FFFDD0;
+    background-size: 100% 100%;
+    border-color: black;
+    border-width: 1px;
+}
+
+.passwordfield {
+    /* background-image: url("../src/svgsfolder/InputField.svg"); */
+    /* background-repeat: no-repeat; */
+    background-color: #FFFDD0;
+    background-size: 100% 100%;
+    border-color: black;
+    border-width: 1px;
+}
+
+.mainBg {
+    background-image: url("../src/svgsfolder/EntryPageEmpty.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.loginComp {
+    background-image: url("../src/svgsfolder/LoginComponent.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.loginEmpty {
+    background-image: url("../src/svgsfolder/LoginEmpty.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.center {
+    text-align: right;
+}
+
+.enterButton {
+    size: 50% 50%;
+}
+
+.registerEmpty {
+    background-image: url("../src/svgsfolder/RegisterEmpty.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
 @keyframes bounce {

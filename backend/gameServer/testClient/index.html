@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <title>Single User Websocket</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js" integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs" crossorigin="anonymous"></script>
   <script src="client.js"></script>
 </head>
 <body>
@@ -15,6 +15,9 @@
       name="status" value="Disconnected"
       readonly="readonly" style="width: 300px;"
     />
+    <input type="text" id="port"
+      name="port" value="" style="width: 300px;"
+    />
   </p>
   <p>
     <button id="connect" onclick="connect()">
@@ -22,6 +25,9 @@
     </button>
     <button id="disconnect" onclick="disconnect()" disabled>
       Disconnect
+    </button>
+    <button id="chat" onclick="chat()">
+      Chat
     </button>
   </p>
 </body>
