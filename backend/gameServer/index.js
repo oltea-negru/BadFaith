@@ -30,8 +30,10 @@ function generateLobbyCode(){
   let lobbyCode = generateRandomString(codeLength)
   let retryCount = 0
   while(gameStoreClient.doesLobbyExist(lobbyCode)){
-    if(retryCount == 5)
-      retryCount++
+    if(retryCount == 5){
+      codeLength++
+      retryCount=0
+    }
     lobbyCode = generateLobbyCode(codeLength)
   }
 
