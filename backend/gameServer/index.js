@@ -35,7 +35,7 @@ function generateLobbyCode(){
       codeLength++
       retryCount=0
     }
-    lobbyCode = generateLobbyCode(codeLength)
+    lobbyCode = generateRandomString(codeLength)
     retryCount++
   }
 
