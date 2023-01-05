@@ -19,7 +19,9 @@ export default class HotStorageClient{
 
     }
 
-    async joinPlayer(lobbyCode, hostDetails)
+    async joinLobby(lobbyCode, hostDetails){
+        
+    }
 
     async doesLobbyExist(lobbyCode){
         

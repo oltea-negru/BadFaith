@@ -30,8 +30,10 @@ function generateLobbyCode(){
   let lobbyCode = generateRandomString(codeLength)
   let retryCount = 0
   while(gameStoreClient.doesLobbyExist(lobbyCode)){
-    if(retryCount == 5)
-      retryCount++
+    if(retryCount == 5){
+      codeLength++
+      retryCount=0
+    }
     lobbyCode = generateLobbyCode(codeLength)
   }
 
@@ -49,12 +51,11 @@ function generateRandomString(length){
 
 async function createLobby(lobbyCode, hostDetails){
   await gameStoreClient.createLobbyDocument(lobbyCode)
-  await gameStoreClient.joinPlayer(lobbyCode, hostDetails)
+  await gameStoreClient.joinLobby(lobbyCode, hostDetails)
 }
 
-async function joinLobby(lobbyCode, hostDetails){
+async function joinLobby(lobbyCode, playerDetails){
   await gameStoreClient.joinLobby(lobbyCode, playerDetails)
-  await gameStoreClient.joinPlayer(lobbyCode, hostDetails)
 }
 
 io.on('connection', async (socket) => {
@@ -70,7 +71,6 @@ io.on('connection', async (socket) => {
   })
 
   socket.on('joinLobby', async (lobbyCode, playerDetails) => {
-    const lobbyCode = generateLobbyCode()
     await joinLobby(lobbyCode, playerDetails)
   })
 
