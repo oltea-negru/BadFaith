@@ -51,12 +51,11 @@ function generateRandomString(length){
 
 async function createLobby(lobbyCode, hostDetails){
   await gameStoreClient.createLobbyDocument(lobbyCode)
-  await gameStoreClient.joinPlayer(lobbyCode, hostDetails)
+  await gameStoreClient.joinLobby(lobbyCode, hostDetails)
 }
 
-async function joinLobby(lobbyCode, hostDetails){
+async function joinLobby(lobbyCode, playerDetails){
   await gameStoreClient.joinLobby(lobbyCode, playerDetails)
-  await gameStoreClient.joinPlayer(lobbyCode, hostDetails)
 }
 
 io.on('connection', async (socket) => {
@@ -72,7 +71,6 @@ io.on('connection', async (socket) => {
   })
 
   socket.on('joinLobby', async (lobbyCode, playerDetails) => {
-    const lobbyCode = generateLobbyCode()
     await joinLobby(lobbyCode, playerDetails)
   })
 
