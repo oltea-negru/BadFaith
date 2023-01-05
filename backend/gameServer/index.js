@@ -1,6 +1,7 @@
 const { createClient } = require('redis')
 const { createAdapter } = require('@socket.io/redis-adapter');
 
+
 const gameStoreClient = new require('./redisClient')();
 const server = require('http').Server();
 const io = require('socket.io')({
@@ -35,6 +36,7 @@ function generateLobbyCode(){
       retryCount=0
     }
     lobbyCode = generateLobbyCode(codeLength)
+    retryCount++
   }
 
   return lobbyCode
@@ -74,8 +76,8 @@ io.on('connection', async (socket) => {
     await joinLobby(lobbyCode, playerDetails)
   })
 
-  socket.on('readyUp', () => {
-    
+  socket.on('readyUp', async () => {
+    await readyUp(socket)
   })
 
   socket.on('action', () => {
