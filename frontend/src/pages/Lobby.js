@@ -1,9 +1,9 @@
 import React from 'react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import JoinLobbyCard from '../assets/svg/JoinLobbyComponent.svg'
 import CreateLobbyCard from '../assets/svg/CreateLobbyComponent.svg'
-import CreateLobbySettingsComponent from '../assets/svg/CreateLobbySettingsComponent.svg'
-import EnterCodeComponent from '../assets/svg/EnterCodeComponent.svg'
+import Settings from '../assets/svg/SettingsExpanded.svg'
 
 
 
@@ -16,6 +16,7 @@ function Lobby()
     const [timeLimit, setTimeLimit] = useState(0)
     const [privateLobby, setPrivateLobby] = useState(false)
     const [codeCreated, setCodeCreated] = useState('')
+    const navigate = useNavigate()
 
 
     return (
@@ -66,6 +67,7 @@ function Lobby()
                     <div>
                         <img src={JoinLobbyCard} alt="" className='absolute h-[40%] top-[10%] left-[10%] hover:h-[45%] hover:cursor-pointer' onClick={() => { setOpenCard(true); setWhichCard('join') }} />
                         <img src={CreateLobbyCard} alt="" className='absolute h-[70%] top-[10%] right-[10%] hover:h-[75%] hover:cursor-pointer' onClick={() => { setOpenCard(true); setWhichCard('create') }} />
+                        <img src={Settings} alt="" className='absolute h-[30%] bottom-[10%] right-[42%] -rotate-12 hover:h-[35%] hover:cursor-pointer' onClick={() => navigate("/settings")} />
                     </div>
             }
             <button className='active:text-4xl focus:outline-none absolute bottom-20 left-20 text-3xl text-white' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
