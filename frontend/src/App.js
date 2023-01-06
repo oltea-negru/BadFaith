@@ -1,7 +1,7 @@
 import Settings from "./pages/Settings";
 // import ReduxExample from "./pages/reduxExample";
 import Second from "./pages/Second";
-import PLogin from "./pages/LoginRoom/PlayerLogin.js"
+import PLogin from "./pages/LoginRoom/playerLogin.js"
 import PRegister from "./pages/LoginRoom/PlayerRegister.js"
 import Voting from "./pages/VotingRoom/Voting.js";
 
@@ -15,7 +15,6 @@ import
 
 } from "react-router-dom";
 
-import WaitingRoom from "./pages/WaitingRoom.js";
 import LoginRoom from "./pages/LoginRoom/LoginRoom.js";
 // import PlayerLogin from "./pages"
 import EventRoom from "./pages/EventRoom";
