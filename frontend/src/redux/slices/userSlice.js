@@ -7,7 +7,7 @@ export const userSlice = createSlice({
         email: '',
         password: '',
         friends: '',
-        avatar: '',
+        avatar: 0,
         stats: {
             achievements: [],
             wins: 0,
@@ -24,7 +24,8 @@ export const userSlice = createSlice({
             console.log(state.avatar)
             console.log(state.password)
         },
-        setCredentials:(state, action) => {
+        setCredentials: (state, action) =>
+        {
             state.email = action.payload.email
             state.password = action.payload.password
             console.log(state.email)
@@ -38,10 +39,12 @@ export const userSlice = createSlice({
         //     console.log(state.password)
         //     console.log(state.avatar)
         // },
-        setFriends: (state, action) => {
+        setFriends: (state, action) =>
+        {
             state.friends = action.payload.friends
         },
-        incrementWin: state => {
+        incrementWin: state =>
+        {
             state.stats.wins++
             state.stats.totalGames++
         },
@@ -56,6 +59,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { setCredentials, incrementWin, incrementGame, setState, setSettings} = userSlice.actions
+export const { setCredentials, incrementWin, incrementGame, setState, setSettings } = userSlice.actions
 
 export default userSlice.reducer

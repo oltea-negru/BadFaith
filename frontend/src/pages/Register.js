@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from "react";
-import EnterButton from "../svgsfolder/Enter.svg";
+import EnterButton from "../assets/svg/Enter.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch, } from 'react-redux'
 import { setCredentials } from "../redux/slices/userSlice";
