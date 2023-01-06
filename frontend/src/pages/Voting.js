@@ -45,12 +45,12 @@ export default function Voting()
   }
 
   return (
-    <div className='bg-voting bg-cover h-screen flex flex-col justify-between '>
+    <div className='bg-voting bg-cover h-screen flex flex-col justify-between overflow-hidden '>
       <div className='h-3/5 text-center flex flex-row justify-evenly align-middle'>
         {dummyPlayers.map((player) => playerFrame(player.nickname, player.avatar))}
       </div>
 
-      <div className='h-2/5 w-[110%] bg-rope bg-cover bg-bottom '></div>
+      <div className='h-2/5 w-[120%] bg-rope bg-cover bg-bottom -translate-x-[10%]'></div>
     </div>
   )
 }
