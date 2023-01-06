@@ -36,7 +36,7 @@
 }
 
 .input {
-    @apply rounded-lg px-10 bg-gray-300 h-[50px] w-[300px] ml-3 font-another text-2xl;
+    @apply rounded-lg px-10 bg-white h-[50px] w-[300px] ml-3 font-another text-2xl;
 }
 
 @font-face {

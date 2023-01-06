@@ -20,12 +20,12 @@ export default function LoginRoom()
 
   function playerLogin()
   {
-    navigate("/playerLogin");
+    navigate("/login");
   }
 
   function playerRegister()
   {
-    navigate("/playerRegister");
+    navigate("/register");
   }
 
 
