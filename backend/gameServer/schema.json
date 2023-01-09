@@ -1,0 +1,29 @@
+{
+    "lobby": {
+        "players": {},
+        "readyUp": 0,
+        "socketToPlayers": {},
+        "votes": {},
+        "playerToSocket": {},
+        "state": 0,
+        "currentEvent": {},
+        "events": [],
+        "voteLimit": 0
+    },
+    "player": {
+        "socket": "",
+        "role": "",
+        "target": "",
+        "nickname": "",
+        "allegiance": ""
+    },
+    "event": {
+        "event_name": "",
+        "details": "",
+        "player": "",
+        "extra_players": [],
+        "blind_name": "",
+        "blind_info": "",
+        "event_function": ""
+    }
+}
