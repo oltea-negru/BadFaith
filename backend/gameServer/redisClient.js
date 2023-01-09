@@ -226,6 +226,24 @@ export default class HotStorageClient {
         return lobby
     }
 
+    async setLobbyEvents(lobbyCode, eventArray) {
+        const lobby = await this.client.get(lobbyCode)
+        if (lobby.state != 2) {
+            return {
+                result: false,
+                msg: "Game State is incorrect for storing events"
+            }
+        }
+        lobby.events = eventArray
+        const updateResult = await this.updateLobby(lobbyCode, lobby)
+        if (updateResult.result) {
+            return {
+                result: true,
+                msg: "Events stored successfully"
+            }
+        }
+    }
+
     //fetch lobbies redis object UNUSED
     // async getLobbies() {
     //     const lobbies = await this.client.get('lobbies')
