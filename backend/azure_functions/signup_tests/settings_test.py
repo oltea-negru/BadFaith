@@ -4,28 +4,33 @@ import requests
 import os
 import azure.functions as func
 import azure.cosmos as cosmos
-from azure_functions import config as c
+from azure_functions import config
 
-db_URI = c.settings['db_URI']
-db_id = c.settings['db_id']
-db_key = c.settings['db_key']
-player_cont = c.settings['player_container']
-lobby_cont = c.settings['lobby_container']
+db_URI = config.settings['db_URI']
+db_id = config.settings['db_id']
+db_key = config.settings['db_key']
+player_cont =config.settings['player_container']
+lobby_cont = config.settings['lobby_container']
+
+# db_URI = os.environ['db_URI']
+# db_id = os.environ['db_id']
+# db_key = os.environ['db_key']
+# player_cont =os.environ['player_container']
+# lobby_cont = os.environ['lobby_container']
 
 
 class TestFunction(unittest.TestCase):
-    client = cosmos.cosmos_client.CosmosClient(db_URI,db_key )
 
+    client = cosmos.cosmos_client.CosmosClient(db_URI, db_key)
     db_client = client.get_database_client(db_id)
-
     player_container = db_client.get_container_client(player_cont)
 
-    def test_login_player(self):
+    def test_settings(self):
 
         # Changing nickname and password 
         input1 = {
             'email' : "deep@123.com",
-            'nickname' : "DEEP123",
+            'nickname' : "MAMAMAMAMA",
             "password" : "deepdeep"
         }
 
@@ -49,8 +54,8 @@ class TestFunction(unittest.TestCase):
         }
 
         resp = requests.get(
-             'http://localhost:7071/api/settings',
-            #  'https://badfaith2.azurewebsites.net/api/settings',
+            #  'http://localhost:7071/api/Settings',
+             'https://badfaith2.azurewebsites.net/api/settings',
             
             json = input1
         )
@@ -61,6 +66,7 @@ class TestFunction(unittest.TestCase):
         # "Email incorrect"
         
         # Checking for changing both nickname and password
+        print("This is the json", resp.json())
         self.assertEqual(resp.json()["msg"], "Nickname and password succesfully changed")
 
         # Checking for changing only nickname

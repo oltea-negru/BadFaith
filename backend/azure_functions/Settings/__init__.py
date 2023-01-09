@@ -4,21 +4,21 @@ import azure.functions as func
 import azure.cosmos as cosmos
 import azure.cosmos.exceptions as exceptions
 import os
-from azure_functions import config as config
+# from azure_functions import config as config
 
-#local testing
-db_URI = config.settings['db_URI']
-db_id = config.settings['db_id']
-db_key = config.settings['db_key']
-player_cont =config.settings['player_container']
-lobby_cont = config.settings['lobby_container']
+# #local testing
+# db_URI = config.settings['db_URI']
+# db_id = config.settings['db_id']
+# db_key = config.settings['db_key']
+# player_cont =config.settings['player_container']
+# lobby_cont = config.settings['lobby_container']
 
 # online testing
-# db_URI = os.environ['db_URI']
-# db_id = os.environ['db_id']
-# db_key = os.environ['db_key']
-# player_cont =os.environ['player_container']
-# lobby_cont = os.environ['lobby_container']
+db_URI = os.environ['db_URI']
+db_id = os.environ['db_id']
+db_key = os.environ['db_key']
+player_cont =os.environ['player_container']
+lobby_cont = os.environ['lobby_container']
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
@@ -33,7 +33,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     if "email" in playerToEdit:
         playerToEdit['id'] = playerToEdit["email"]
 
-        if "password" and "nickname" in playerToEdit:
+        if "password" in playerToEdit and "nickname" in playerToEdit:
             user = []
             logging.info("empty user list")
 
