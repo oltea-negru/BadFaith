@@ -6,7 +6,7 @@ import azure.cosmos.exceptions as exceptions
 import os
 # from azure_functions import config as config
 
-# #local testing
+#local testing
 # db_URI = config.settings['db_URI']
 # db_id = config.settings['db_id']
 # db_key = config.settings['db_key']
@@ -46,10 +46,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 onlyUser = json.loads(user[0])
                 logging.info(onlyUser)
 
-                if len(playerToEdit["password"]) < 8 or len(playerToEdit["password"]) > 16:
+                if len(playerToEdit["password"]) >= 8 and len(playerToEdit["password"]) <= 16:
                     onlyUser['player']['nickname'] = playerToEdit['nickname']
                     onlyUser['player']['password'] = playerToEdit['password']
                     onlyUser['player']['avatar'] = playerToEdit['avatar']
+                    logging.info("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
                     logging.info('Nickname for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['nickname'])
                     logging.info('Password for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['password'])
                     logging.info('Avatar for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['avatar'])

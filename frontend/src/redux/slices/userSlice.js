@@ -7,7 +7,7 @@ export const userSlice = createSlice({
         email: '',
         password: '',
         friends: '',
-        avatar: 0,
+        avatar: "",
         stats: {
             achievements: [],
             wins: 0,

@@ -30,8 +30,9 @@ class TestFunction(unittest.TestCase):
         # Changing nickname and password 
         input1 = {
             'email' : "deep@123.com",
-            'nickname' : "MAMAMAMAMA",
-            "password" : "deepdeep"
+            'nickname' : "MAMAM",
+            "password" : "deepdeep9",
+            "avatar"    : "salusas/sdfg/sdgsg.sfhw101010"
         }
 
         # Changing only nickname

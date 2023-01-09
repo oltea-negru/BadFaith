@@ -36,7 +36,8 @@ function Settings()
     // const [passwordChange, setNewPassword] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [avatarInput, setAvatarInput] = useState(avatar);
+    const [avatarInput, setAvatarInput] = useState("");
+    // setAvatarInput(Avatar0);
 
     const navigate = useNavigate();
 
@@ -72,7 +73,7 @@ function Settings()
         var message = null;
         if (passwordInput === "") {
             passwordChange(password)
-            message = await (player_Settings(email, nicknameInput, password))
+            message = await (player_Settings(email, nicknameInput, password, avatarInput))
             console.log(message.msg)
             if (message.msg === "Nickname and password succesfully changed") {
                 console.log("dispatched settings")
@@ -83,7 +84,7 @@ function Settings()
             }
         }
         else {
-            message = await (player_Settings(email, nicknameInput, passwordInput))
+            message = await (player_Settings(email, nicknameInput, passwordInput, avatarInput))
             console.log(message.msg)
             if (message.msg === "Nickname and password succesfully changed") {
                 console.log("dispatched settings")

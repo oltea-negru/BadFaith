@@ -47,11 +47,12 @@ const _handlePlayerLogin = async (email, password) => {
     return data;
 }
 
-const _handlePlayerSettings = async (email, nickname, password) => {
+const _handlePlayerSettings = async (email, nickname, password, avatar) => {
     const body = {
         email: email,
         nickname: nickname,
-        password: password
+        password: password,
+        avatar: avatar
     }
     const response = await handleFetch("/api/settings", body, 'POST')
 
@@ -103,11 +104,11 @@ export const player_Login = async(email, password) => {
     }
 }
 
-export const player_Settings = async(email, nickname, password) => {
+export const player_Settings = async(email, nickname, password, avatar) => {
     // We put this in a try catch because `handlePlayerRegister` could throw an error 
     // and we want to catch it.
     try{
-        const message = _handlePlayerSettings(email, nickname, password)
+        const message = _handlePlayerSettings(email, nickname, password, avatar)
         // Wherever we call this function, if it worked, we want to know, so we can
         // display meaningful UI. Doesn't need to be a boolean, but makes sense here
         console.log('Player Settings message: ' + message)
