@@ -48,7 +48,11 @@ export default class HotStorageClient {
         playerDetails.socket = hostDetails.socket
         playerDetails.nickname = hostDetails.nickname
         lobbyDoc.players[hostDetails.playerID] = playerDetails
+
         lobbyDoc.voteLimit++;
+
+        lobbyDoc.socketToPlayers[hostDetails.socket] = hostDetails.playerID
+        lobbyDoc.playerToSockets[hostDetails.player] = hostDetails.socket
         console.log("Lobby " + lobbyCodeAdding + ": " + hostDetails.playerID)
         return this.updateLobby(lobbyCode, lobbyDoc)
     }
@@ -59,9 +63,11 @@ export default class HotStorageClient {
         return { result: lobbyDoc != null }
     }
 
-    async addReady(lobbyCode) {
+    async addReady(lobbyCode, socket, ready) {
         var lobbyDoc = await this.getLobby(lobbyCode)
         lobbyDoc.readyUp++
+        const playerID = lobbyDoc.socketToPlayers[socket]
+        lobbyDoc.players[playerID].ready = ready
         return this.updateLobby(lobbyCode, lobbyDoc)
     }
 
@@ -203,7 +209,7 @@ export default class HotStorageClient {
 
     async getUsername(lobbyCode, socket) {
         var lobbyDoc = await this.getLobby(lobbyCode)
-        var playerID = lobbyDoc.socketsToPlayers[socket]
+        var playerID = lobbyDoc.socketToPlayers[socket]
         return {
             result: true,
             username: playerID
@@ -212,7 +218,7 @@ export default class HotStorageClient {
 
     async getNickname(lobbyCode, socket) {
         var lobbyDoc = await this.getLobby(lobbyCode)
-        var playerID = lobbyDoc.socketsToPlayers[socket]
+        var playerID = lobbyDoc.socketToPlayers[socket]
         const nickname = lobbyDoc.players[playerID]
         return {
             result: true,
@@ -242,6 +248,27 @@ export default class HotStorageClient {
                 msg: "Events stored successfully"
             }
         }
+    }
+
+    async addVote(lobbyCode, target) {
+        const lobby = await this.client.get(lobbyCode)
+        if(!lobby.players[target]) {
+            return {
+                result: false,
+                msg: "Player does not exist"
+            }
+        }
+        if(lobby.votes[target]) {
+            lobby.votes[target]++
+        } else {
+            lobby.votes[target] = 1
+        }
+        await this.updateLobby(lobbyCode,lobby)
+        return {
+            result: true,
+            msg: "Vote added"
+        }
+
     }
 
     //fetch lobbies redis object UNUSED

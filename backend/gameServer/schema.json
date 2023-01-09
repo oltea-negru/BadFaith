@@ -15,7 +15,8 @@
         "role": "",
         "target": "",
         "nickname": "",
-        "allegiance": ""
+        "allegiance": "",
+        "ready": false
     },
     "event": {
         "event_name": "",
