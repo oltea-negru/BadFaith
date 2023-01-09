@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { player_Settings } from "../api/examplePlayerMethods.js";
+
 import
 {
     setSettings,
@@ -64,6 +66,33 @@ function Settings()
     function navigateToLobby()
     {
         navigate("/lobby");
+    }
+
+    async function saveSettings() {
+        var message = null;
+        if (passwordInput === "") {
+            passwordChange(password)
+            message = await (player_Settings(email, nicknameInput, password))
+            console.log(message.msg)
+            if (message.msg === "Nickname and password succesfully changed") {
+                console.log("dispatched settings")
+                dispatch(setSettings({nickname: nicknameInput, password: password, avatar: avatarInput }))
+                alert("Settings saved")
+            } else {
+                alert(message.msg)
+            }
+        }
+        else {
+            message = await (player_Settings(email, nicknameInput, passwordInput))
+            console.log(message.msg)
+            if (message.msg === "Nickname and password succesfully changed") {
+                console.log("dispatched settings")
+                dispatch(setSettings({nickname: nicknameInput, password: passwordInput, avatar: avatarInput }))
+                alert("Settings saved")
+            } else {
+                alert(message.msg)
+            }
+        }
     }
 
     return showOptions ? (
@@ -185,14 +214,15 @@ function Settings()
                 hover:shadow-sm hover:shadow-white focus:outline-none focus:ring-0 active:bg-red-300 active:shadow-lg transition duration-150 ease-in-out "
                     onClick={() =>
                     {
-                        dispatch(
-                            setSettings({
-                                nickname: nicknameInput,
-                                password: passwordInput,
-                                avatar: avatarInput,
-                            })
-                        );
-                        alert("Profile updated successfully!");
+                        // dispatch(
+                        //     setSettings({
+                        //         nickname: nicknameInput,
+                        //         password: passwordInput,
+                        //         avatar: avatarInput,
+                        //     })
+                        // )
+                        saveSettings({nickname: nicknameInput, password: passwordInput, avatar: avatarInput})
+                        // alert("Profile updated successfully!");
                     }}
                 >
                     Submit Changes
