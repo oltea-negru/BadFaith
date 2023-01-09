@@ -45,14 +45,20 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 logging.info("user exists")
                 onlyUser = json.loads(user[0])
                 logging.info(onlyUser)
-                
-                onlyUser['player']['nickname'] = playerToEdit['nickname']
-                onlyUser['player']['password'] = playerToEdit['password']
-                logging.info('Nickname for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['nickname'])
-                logging.info('Password for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['password'])
-                player_container.upsert_item(onlyUser)
-                
-                return func.HttpResponse(body=json.dumps({"result": True , "msg" : "Nickname and password succesfully changed"}))
+
+                if len(playerToEdit["password"]) < 8 or len(playerToEdit["password"]) > 16:
+                    onlyUser['player']['nickname'] = playerToEdit['nickname']
+                    onlyUser['player']['password'] = playerToEdit['password']
+                    onlyUser['player']['avatar'] = playerToEdit['avatar']
+                    logging.info('Nickname for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['nickname'])
+                    logging.info('Password for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['password'])
+                    logging.info('Avatar for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['avatar'])
+                    player_container.upsert_item(onlyUser)
+                    
+                    return func.HttpResponse(body=json.dumps({"result": True , "msg" : "Nickname and password succesfully changed"}))
+                else:
+                    logging.info("Invalid password")
+                    return func.HttpResponse(body=json.dumps({"result": False , "msg": "Password less than 8 characters or greater than 16 characters"}))
            
             else:
                 logging.info("Invalid email")
@@ -70,10 +76,17 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 onlyUser = json.loads(user[0])
                 logging.info(onlyUser)
 
-                onlyUser['player']['nickname'] = playerToEdit['nickname']
-                logging.info('Nickname for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['nickname'])
-                player_container.upsert_item(onlyUser)
-                return func.HttpResponse(body=json.dumps({"result": True , "msg" : "Nickname succesfully changed"}))
+                if len(playerToEdit["password"]) < 8 or len(playerToEdit["password"]) > 16:
+                    onlyUser['player']['nickname'] = playerToEdit['nickname']
+                    onlyUser['player']['avatar'] = playerToEdit['avatar']
+                    logging.info('Nickname for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['nickname'])
+                    logging.info('Avatar for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['avatar'])
+                    player_container.upsert_item(onlyUser)
+                    
+                    return func.HttpResponse(body=json.dumps({"result": True , "msg" : "Nickname succesfully changed"}))
+                else:
+                    logging.info("Invalid password")
+                    return func.HttpResponse(body=json.dumps({"result": False , "msg": "Password less than 8 characters or greater than 16 characters"}))
             
             else:
                 logging.info("Invalid email")
@@ -90,11 +103,14 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 onlyUser = json.loads(user[0])
                 logging.info(onlyUser)
 
-                onlyUser['player']['password'] = playerToEdit['password']
-                logging.info('Password for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['password'])
-                player_container.upsert_item(onlyUser)
-                
-                return func.HttpResponse(body=json.dumps({"result": True , "msg" : "Password succesfully changed"}))
+                if len(playerToEdit["password"]) < 8 or len(playerToEdit["password"]) > 16:
+                    onlyUser['player']['nickname'] = playerToEdit['nickname']
+                    onlyUser['player']['avatar'] = playerToEdit['avatar']
+                    logging.info('Password for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['password'])
+                    logging.info('Avatar for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['avatar'])
+                    player_container.upsert_item(onlyUser)
+                    
+                    return func.HttpResponse(body=json.dumps({"result": True , "msg" : "Password succesfully changed"}))
             else:
                 logging.info("Invalid email")
                 return func.HttpResponse(body=json.dumps({"result": False , "msg": "Email incorrect"}))
