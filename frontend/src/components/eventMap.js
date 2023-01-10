@@ -566,7 +566,7 @@ function BlackmailedEvent({ event_data }) {
     event_data.player.target = event_data.extra_players[0];
     event_data.player.type = "win";
     return (
-        <div className="p-4 m-auto">strong
+        <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
                 <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
