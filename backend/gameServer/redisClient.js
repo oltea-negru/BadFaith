@@ -60,7 +60,7 @@ export default class HotStorageClient {
     //Check that the lobby exists 
     async doesLobbyExist(lobbyCode) {
         var lobbyDoc = await this.getLobby(lobbyCode)
-        return { result: lobbyDoc != null }
+        return lobbyDoc != null 
     }
 
     async addReady(lobbyCode, socket, ready) {

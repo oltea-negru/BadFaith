@@ -68,6 +68,10 @@ async function readyUp(lobbyCode, socket) {
 async function addVote(lobbyCode, target) {
   const result = await gameStoreClient.addVote(lobbyCode,target)
 }
+
+async function progressGameState(lobbyCode) {
+  await gameStoreClient.progressGameState(lobbyCode)
+}
 io.on('connection', async (socket) => {
 
   console.log(`Socket ${socket.id} connected.`)
