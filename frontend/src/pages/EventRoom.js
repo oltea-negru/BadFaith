@@ -1,8 +1,11 @@
 import { EventGenMap } from "../components/eventMap";
 import {CurrentEvent, EventWaiting } from "./CurrentEvent";
 
-export default function EventRoom() {
+export default function EventRoom({lobby_state}) {
     
+
+    var used_state = lobby_state
+    if (used_state == null) used_state = dummylobbyState
     dummylobbyState.current_event = EventGenMap("GagOrder", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
@@ -13,13 +16,13 @@ export default function EventRoom() {
     if (inEvent) {
         return (
             <div className="bg-event_room h-screen w-screen bg-cover">
-                <CurrentEvent current_event={dummylobbyState.current_event} />
+                <CurrentEvent current_event={used_state.current_event} />
             </div>
         )
     } else {
         return (
             <div className="bg-event_waiting h-screen w-screen bg-cover">
-                <EventWaiting current_event={dummylobbyState.current_event} />
+                <EventWaiting current_event={used_state.current_event} />
             </div>
         )
     }
