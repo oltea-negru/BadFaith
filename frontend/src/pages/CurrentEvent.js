@@ -11,10 +11,10 @@ export default function CurrentEvent() {
     // const lobby = useState([]);
 
     return (
-        <div className="event">
+        <div>
             
 
-            <div className="Event-Info">
+            <div id="Event-Info">
                 <div>
                     {EventMap(dummylobbyState.current_event)}
                 </div>
@@ -26,7 +26,7 @@ export default function CurrentEvent() {
 
 export function EventWaiting() {
     return (
-        <div className="event">
+        <div>
             <OutsideEvent event_data={dummylobbyState.current_event} />
         </div>
     );
@@ -94,5 +94,5 @@ const dummylobbyState = {
     "events": [],
 
     "event_history": [],
-    "current_event": EventGenMap("BodyGuard", lobbyPlayers.DummyID, getPlayerArray())
+    "current_event": EventGenMap("PrivateDiscussion", lobbyPlayers.DummyID, getPlayerArray())
 }

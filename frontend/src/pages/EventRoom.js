@@ -17,4 +17,4 @@ export default function EventRoom() {
     }
 }
 
-const inEvent = false
+const inEvent = true

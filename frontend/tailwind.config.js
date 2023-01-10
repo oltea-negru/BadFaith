@@ -17,6 +17,10 @@ module.exports = {
       },
       fontFamily: {
         'another': ['Another', 'sans-serif'],
+      },
+      rotate: {
+        '9': '9deg',
+        '10': '10deg'
       }
     },
     plugins: [],
