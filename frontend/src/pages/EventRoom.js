@@ -1,10 +1,20 @@
 import eventRoom from "../assets/svg/EventRoom.svg";
-import CurrentEvent from "./CurrentEvent";
+import CurrentEvent, { EventWaiting } from "./CurrentEvent";
 
 export default function EventRoom() {
-    return (
-        <div className="bg-event_room h-screen w-screen bg-cover">
-            <CurrentEvent />
-        </div>
-    )
+    if (inEvent) {
+        return (
+            <div className="bg-event_room h-screen w-screen bg-cover">
+                <CurrentEvent />
+            </div>
+        )
+    } else {
+        return (
+            <div className="bg-event_waiting h-screen w-screen bg-cover">
+                <EventWaiting />
+            </div>
+        )
+    }
 }
+
+const inEvent = false

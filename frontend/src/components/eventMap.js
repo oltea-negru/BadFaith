@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import WaitingList from "../assets/svg/WaitingBoardComponent.svg";
-
 const PrivateCall = ["There is a private phone call for this player.", <br />, "They will be with back shortly."];
 
 const Events = {
@@ -333,7 +332,7 @@ function PickPocketEvent({ event_data }) {
                     }}>Choose Target</button>
             </div>
             <div className="slideWrapper">
-                <div className="slide">
+                <div className="eventSlide">
                     <img src={WaitingList} alt="sdas" className="h-full" />
 
                     <div className="SelectBox">
@@ -389,7 +388,7 @@ function PrivateDiscussionEvent({ event_data }) {
                     }}>Choose Target</button>
             </div>
             <div className="slideWrapper">
-                <div className="slide">
+                <div className="eventSlide">
                     <img src={WaitingList} alt="sdas" className="h-full" />
 
                     <div className="SelectBox">
@@ -460,7 +459,7 @@ function GagOrderEvent({ event_data }) {
                     }}>Choose Target</button>
             </div>
             <div className="slideWrapper">
-                <div className="slide">
+                <div className="eventSlide">
                     <img src={WaitingList} alt="sdas" className="h-full" />
 
                     <div className="SelectBox">
@@ -506,7 +505,7 @@ function BlackMarkEvent({ event_data }) {
                     }}>Choose Target</button>
             </div>
             <div className="slideWrapper">
-                <div className="slide">
+                <div className="eventSlide">
                     <img src={WaitingList} alt="sdas" className="h-full" />
 
                     <div className="SelectBox">
@@ -744,6 +743,19 @@ function GenerateEvents({ lobby_state }) {
     });
 
 
+}
+
+export function OutsideEvent({ event_data }) {
+    return (
+        <div className="absolute">
+            <div className="absolute top-[516px] left-[370px] w-[385px] h-[100px] grid content-center text-center text-4xl text-white font-another">
+                {event_data.blind_name}
+            </div>
+            <div className="absolute top-[700px] left-[370px] w-[385px] h-[100px] grid content-center text-center text-4xl text-white font-another">
+                ReplaceWithAvatar
+            </div>
+        </div>
+    )
 }
 
 function getSameStartTeam(players) {

@@ -8,7 +8,11 @@ module.exports = {
         'waiting_list': "url('/src/assets/svg/WaitingBoardComponent.svg')",
         'settings': "url('/src/assets/svg/SettingsExpanded.svg')",
         'fake_pattern': "url('/src/assets/svg/pattern.svg')",
-        'event_room' : "url('/src/assets/svg/EventRoom.svg')",
+        'event_room': "url('/src/assets/svg/EventRoom.svg')",
+        'event_waiting': "url('/src/assets/svg/EventPlayerNonActive1.svg')",
+        'lobby': "url('/src/assets/svg/MainLobbyEmpty.svg')",
+        'register': "url('/src/assets/svg/EmptyRegisterPage.svg')",
+        "login": "url('/src/assets/svg/EmptyLoginPage.svg')",
       },
       fontFamily: {
         'another': ['Another', 'sans-serif'],

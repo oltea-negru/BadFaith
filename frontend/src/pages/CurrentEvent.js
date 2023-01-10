@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import '../components/CurrentEvent.css';
-import EventMap from "../components/eventMap";
+import EventMap, { OutsideEvent } from "../components/eventMap";
 import profilepic from "../assets/images/PlacholderIcon.png";
 import { EventGenMap } from "../components/eventMap";
 
@@ -20,6 +20,14 @@ export default function CurrentEvent() {
                 </div>
             </div>
 
+        </div>
+    );
+}
+
+export function EventWaiting() {
+    return (
+        <div className="event">
+            <OutsideEvent event_data={dummylobbyState.current_event} />
         </div>
     );
 }
