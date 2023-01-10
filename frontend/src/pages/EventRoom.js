@@ -3,7 +3,7 @@ import {CurrentEvent, EventWaiting } from "./CurrentEvent";
 
 export default function EventRoom() {
     
-    dummylobbyState.current_event = EventGenMap("Blackmailed", {
+    dummylobbyState.current_event = EventGenMap("GagOrder", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
         original: "Enemy",

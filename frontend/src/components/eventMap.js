@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import WaitingList from "../assets/svg/WaitingBoardComponent.svg";
+import WaitingList from "../assets/svg/EventBoardComponent.svg";
 const PrivateCall = ["There is a private phone call for this player.", <br />, "They will be with back shortly."];
 
 const Events = {
@@ -340,7 +340,7 @@ function PickPocketEvent({ event_data }) {
                         className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {event_data.extra_players.map((player) =>
                             <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl hover:text-[#ff0000]"
+                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
                                     PickPocket(player);
                                     endEvent();
@@ -398,7 +398,7 @@ function PrivateDiscussionEvent({ event_data }) {
                         className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {event_data.extra_players.map((player) =>
                             <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl hover:text-[#ff0000]"
+                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
                                     let temp = [...discussionPlayers];
                                     temp.push(event_data.player);
@@ -472,7 +472,7 @@ function GagOrderEvent({ event_data }) {
                         className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {event_data.extra_players.map((player) =>
                             <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl hover:text-[#ff0000]"
+                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
                                     setGag(player);
                                     //EmitGag();
@@ -520,7 +520,7 @@ function BlackMarkEvent({ event_data }) {
                         className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {event_data.extra_players.map((player) =>
                             <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl hover:text-[#ff0000]"
+                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
                                     setMark(player);
                                     //EmitMark();
