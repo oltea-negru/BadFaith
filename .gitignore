@@ -4,10 +4,13 @@
 .vscode/settings.json
 .vscode/tasks.json
 
-backend/Lib
-backend/Scripts
+backend/azure_functions/Lib
+backend/azure_functions/Scripts
 backend/azure_functions/getting_started.md
 backend/azure_functions/tests/
+backend/azure_functions/pyvenv.cfg
+backend/Lib/
 backend/pyvenv.cfg
+backend/Scripts/
 
 node_modules

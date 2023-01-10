@@ -1,4 +1,5 @@
 {
-    "playerRegister": "/player/register/",
-    "apiEndpoint": "www.azurething.com/olteasCosmosDB"
+    "playerRegister": "/api/signup",
+    "playerLogin": "/api/login",
+    "apiEndpoint": "https://badfaith2.azurewebsites.net"
 }
