@@ -53,7 +53,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     logging.info("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
                     logging.info('Nickname for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['nickname'])
                     logging.info('Password for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['password'])
-                    logging.info('Avatar for the user: ' + playerToEdit['id'] + ' has been changed to: ' + playerToEdit['avatar'])
+                    # logging.info('Avatar for the user: ' + playerToEdit['id'] + ' has been changed to: ' + str(playerToEdit['avatar']))
                     player_container.upsert_item(onlyUser)
                     
                     return func.HttpResponse(body=json.dumps({"result": True , "msg" : "Nickname and password succesfully changed"}))
