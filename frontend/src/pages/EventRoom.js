@@ -1,5 +1,5 @@
 import { EventGenMap } from "../components/eventMap";
-import CurrentEvent, { EventWaiting } from "./CurrentEvent";
+import {CurrentEvent, EventWaiting } from "./CurrentEvent";
 
 export default function EventRoom() {
     
@@ -25,7 +25,7 @@ export default function EventRoom() {
     }
 }
 
-const inEvent = true
+const inEvent = false
 const dummylobbyState = {
     "id": "",
     "players": {

@@ -755,15 +755,35 @@ function GenerateEvents({ lobby_state }) {
 }
 
 export function OutsideEvent({ event_data }) {
+    function showSelection() {
+        const chat = document.querySelector("#eventSlide");
+        chat.classList.toggle("translate-y-full");
+        console.log("Toggled");
+    }
     return (
-        <div className="absolute">
-            <div className="absolute top-[516px] left-[370px] w-[385px] h-[100px] grid content-center text-center text-4xl text-white font-another">
-                {event_data.blind_name}
-            </div>
+        <div className="p-4 m-auto">
+            <button className="absolute top-[516px] left-[370px] w-[385px] h-[100px] grid content-center text-center text-4xl text-white font-another"
+                id="chatButton"
+                onClick={() => {
+                    // UpdateChat(chatMessage)
+                    // setMessage('');
+                    showSelection();
+                }}>{event_data.blind_name}
+            </button>
             <div className="absolute top-[700px] left-[370px] w-[385px] h-[100px] grid content-center text-center text-4xl text-white font-another">
                 ReplaceWithAvatar
             </div>
-        </div>
+            <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
+                <div id="eventSlide"
+                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full ">
+                    <img src={WaitingList} alt="sdas" className="h-full" />
+                    <div className="w-[430px] m-auto max-w-[430px]">
+                        <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">{event_data.blind_info}</strong>
+                    </div>
+
+                </div>
+            </div>
+        </div >
     )
 }
 
