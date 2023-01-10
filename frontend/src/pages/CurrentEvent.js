@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import '../components/CurrentEvent.css';
 import EventMap, { OutsideEvent } from "../components/eventMap";
 import profilepic from "../assets/images/PlacholderIcon.png";
 import { EventGenMap } from "../components/eventMap";
