@@ -1,5 +1,6 @@
 {
     "playerRegister": "/api/signup",
     "playerLogin": "/api/login",
+    "playerSettings": "/api/settings",
     "apiEndpoint": "https://badfaith2.azurewebsites.net"
 }
