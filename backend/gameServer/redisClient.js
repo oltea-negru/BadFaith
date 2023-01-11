@@ -64,23 +64,26 @@ class HotStorageClient {
         return (lobbyDoc != null)
     }
 
-    async addReady(lobbyCode, socket, ready) {
+    async toggleReady(lobbyCode, socket) {
         var lobbyDoc = await this.getLobby(lobbyCode)
         const playerID = lobbyDoc.socketToPlayers[socket]
-        if (!ready && lobbyDoc.players[playerID].ready) {
-            lobbyDoc.readyUp++
-        } else if (ready && !lobbyDoc.players[playerID].ready) {
+        if (lobbyDoc.players[playerID].ready) {
             lobbyDoc.readyUp--
         }
-        lobbyDoc.players[playerID].ready = ready
+        else {
+            lobbyDoc.readyUp++
+        }
+        lobbyDoc.players[playerID].ready = !lobbyDoc.players[playerID].ready
         const readyResult = await this.updateLobby(lobbyCode, lobbyDoc)
         const progressResult = await this.progressGameState(lobbyCode)
         if (progressResult?.ok)
             return {
                 progressState: true
             }
-        else
-            return readyResult
+        if(readyResult.ok) 
+            return {
+                isReady: lobbyDoc.players[playerID].ready
+            }
     }
 
     async getReadyCounter(lobbyCode) {

@@ -17,7 +17,8 @@
         "target": "",
         "nickname": "",
         "allegiance": "",
-        "ready": false
+        "ready": false,
+        "vote": ""
     },
     "event": {
         "event_name": "",

@@ -21,7 +21,8 @@ export const gameSlice = createSlice({
             target: "",
             nickname: "",
             allegiance: "",
-            ready: false
+            ready: false,
+            vote: ""
         },
         playerID: "Default"
     },
@@ -34,10 +35,16 @@ export const gameSlice = createSlice({
         },
         updatePlayer: (state, action) => {
             state.player = action.payload
+        },
+        toggleReady: (state, isReady) => {
+            state.player.ready = isReady
+        },
+        updateVote: (state, vote) => {
+            state.player.vote = vote
         }
     }
 })
 
-export const { updatePlayerID, updateLobby, updatePlayer } = gameSlice.actions
+export const { updatePlayerID, updateLobby, updatePlayer, toggleReady, updateVote } = gameSlice.actions
 
 export default gameSlice.reducer

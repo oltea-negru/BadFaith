@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import ChatMessage from "../components/chat";
 import '../components/Chat.css';
-import { sendChatAction, gsConnect } from "../redux/middleware/gameServerMiddleware"
+import { sendChat, gsConnect } from "../redux/middleware/gameServerMiddleware"
 
 const defaultPlayer = "Default";
 
@@ -24,7 +24,7 @@ export default function Chat() {
     const [chatMessage, setMessage] = useState('');
     function UpdateChat(message) {
         console.log('Chat submitted', message)
-        dispatch(sendChatAction(message))
+        dispatch(sendChat(message))
     }
     return (
         <div className="wrapper">

@@ -60,12 +60,12 @@ async function joinLobby(lobbyCode, playerDetails) {
 }
 
 async function readyUp(lobbyCode, socket) {
-    const result = await gameStoreClient.addReady(lobbyCode, socket.id, true)
+    const result = await gameStoreClient.toggleReady(lobbyCode, socket.id)
     return result
 }
 
 async function addVote(lobbyCode, target) {
-    const result = await gameStoreClient.addVote(lobbyCode, target)
+    await gameStoreClient.addVote(lobbyCode, target)
 }
 
 async function emitGameState(lobbyCode, socket) {
@@ -78,7 +78,7 @@ async function updateAll(lobbyCode) {
     }
 }
 
-async function updatePlayer(lobbyCode, playerDetails) {
+async function updatePlayerGoal(lobbyCode, playerDetails) {
     const result = await gameStoreClient.updatePlayer(lobbyCode, playerDetails)
 }
 
@@ -97,6 +97,7 @@ io.on('connection', async (socket) => {
         const result = await createLobby(lobbyCode, hostDetails)
         socket.join(lobbyCode)
         const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
+        emitGameState(lobbyCode, socket.id)
         acknowledgement(callbackObj)
     })
 
@@ -104,23 +105,24 @@ io.on('connection', async (socket) => {
         playerDetails.socketID = socket.id
         const result = await joinLobby(lobbyCode, playerDetails)
         socket.join(lobbyCode)
+        emitGameState(lobbyCode, socket.id)
         acknowledgement(result)
     })
 
     socket.on('readyUp', async (lobbyCode, acknowledgement) => {
-        const result = await readyUp(lobbyCode, socket)
+        const isReady = await readyUp(lobbyCode, socket)
         if (result.progressState) {
-            updateAll(lobbyCode);
-            acknowledgement(result)
+            updateAll(lobbyCode)
         }
-        else
-            acknowledgement(result)
+        else{
+            acknowledgement(isReady)
+        }
     })
 
     socket.on('action', async (lobbyCode, type, actionDetails, acknowledgement) => {
         switch (type) {
             case 'vote':
-                acknowledgement(await addVote(lobbyCode, actionDetails.target))
+                await addVote(lobbyCode, actionDetails.target)
                 break;
             case 'update':
                 /*
@@ -133,8 +135,13 @@ io.on('connection', async (socket) => {
                     "ready": ,
                 }
                 */
-                acknowledgement(await updatePlayer(lobbyCode, actionDetails))
+                await updatePlayerGoal(lobbyCode, actionDetails)
+                break;
+            default:
+                break;
         }
+        await gameStoreClient.progressGameState(lobbyCode)
+        await updateAll(lobbyCode) 
     })
 
     socket.on('vote', async (lobbyCode, target, acknowledgement) => {
