@@ -5,6 +5,9 @@ import Voting from "./pages/Voting.js";
 import Chat from "./pages/ChatTest";
 import Lobby from "./pages/Lobby";
 import WaitingRoom from "./pages/WaitingRoom";
+import { useSelector} from 'react-redux'
+import {useEffect} from 'react';
+import { login_remove } from "./api/examplePlayerMethods.js";
 import
 {
 	BrowserRouter as Router,
@@ -20,6 +23,26 @@ import EventRoom from "./pages/EventRoom";
 
 function App()
 {
+	const { email, password } = useSelector(state => state.user)
+	// async function removeUser() {
+	// 	await login_remove(email, password);
+	// }
+
+	useEffect (() => {	
+		const handleTabClose = async event => {
+			event.preventDefault();
+			await login_remove(email, password);
+			console.log('beforeunload event triggered');	
+	  
+			return (event.returnValue = 'Are you sure you want to exit?');
+		  };
+		  
+		window.addEventListener('beforeunload', () => handleTabClose());
+	
+		return () => {
+		  window.removeEventListener('beforeunload', () => handleTabClose());
+		};
+	  }, []);
 	return (
 		<Router>
 			<Routes>

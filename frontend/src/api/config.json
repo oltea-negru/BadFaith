@@ -2,5 +2,7 @@
     "playerRegister": "/api/signup",
     "playerLogin": "/api/login",
     "playerSettings": "/api/settings",
+    "loginStatus" : "/api/loginstatus",
+    "loginRemove" : "/api/loginremove",
     "apiEndpoint": "https://badfaith2.azurewebsites.net"
 }
