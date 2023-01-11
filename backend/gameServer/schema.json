@@ -7,6 +7,7 @@
         "playerToSocket": {},
         "state": 0,
         "currentEvent": {},
+        "eventHistory": [],
         "events": [],
         "voteLimit": 0
     },

@@ -60,7 +60,7 @@ export default class HotStorageClient {
     //Check that the lobby exists 
     async doesLobbyExist(lobbyCode) {
         var lobbyDoc = await this.getLobby(lobbyCode)
-        return lobbyDoc != null 
+        return lobbyDoc != null
     }
 
     async addReady(lobbyCode, socket, ready) {
@@ -151,6 +151,7 @@ export default class HotStorageClient {
                     }
                 } else { // moving to next event
                     console.log("Lobby " + lobbyCode + ": progressing to next event")
+                    if (lobby.currentEvent != null) lobby.eventHistory.add(lobby.currentEvent);
                     lobby.currentEvent = lobby.events.shift()
                     lobby.state = 4
                     await this.updateLobby(lobbyCode, lobby)
@@ -252,18 +253,18 @@ export default class HotStorageClient {
 
     async addVote(lobbyCode, target) {
         const lobby = await this.client.get(lobbyCode)
-        if(!lobby.players[target]) {
+        if (!lobby.players[target]) {
             return {
                 result: false,
                 msg: "Player does not exist"
             }
         }
-        if(lobby.votes[target]) {
+        if (lobby.votes[target]) {
             lobby.votes[target]++
         } else {
             lobby.votes[target] = 1
         }
-        await this.updateLobby(lobbyCode,lobby)
+        await this.updateLobby(lobbyCode, lobby)
         return {
             result: true,
             msg: "Vote added"
