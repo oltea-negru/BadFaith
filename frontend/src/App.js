@@ -16,6 +16,7 @@ import
 import LoginRoom from "./pages/Home.js";
 // import PlayerLogin from "./pages"
 import EventRoom from "./pages/EventRoom";
+import Game from "./pages/Game";
 
 
 function App()
@@ -32,7 +33,7 @@ function App()
 				<Route path="/chat" element={<Chat />} />
 				<Route path="/lobby" element={<Lobby />} />
 				<Route path="/settings" element={<Settings />} />
-				<Route path="/event" element={<EventRoom />} />
+				<Route path="/game" element={<Game />} />
 			</Routes>
 		</Router>
 	);
