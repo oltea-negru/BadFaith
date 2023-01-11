@@ -8,6 +8,7 @@ import WaitingRoom from "./pages/WaitingRoom";
 import { useSelector} from 'react-redux'
 import {useEffect} from 'react';
 import { login_remove } from "./api/examplePlayerMethods.js";
+import Endgame from "./pages/Endgame";
 import
 {
 	BrowserRouter as Router,
@@ -52,6 +53,7 @@ function App()
 				<Route path="/login" element={<PLogin />} />
 				<Route path="/register" element={<PRegister />} />
 				<Route path="/voting" element={<Voting />} />
+				<Route path="/endgame" element={<Endgame />} />
 				<Route path="/chat" element={<Chat />} />
 				<Route path="/lobby" element={<Lobby />} />
 				<Route path="/settings" element={<Settings />} />
