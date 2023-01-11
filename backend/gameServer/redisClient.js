@@ -16,7 +16,7 @@ export default class HotStorageClient {
 
     async connect() {
         await this.client.connect()
-        this
+        this.client.set("players", "")
     }
 
     async createLobby(lobbyCode) {
@@ -38,7 +38,8 @@ export default class HotStorageClient {
 
     //Attempts to add player to lobby
     async joinLobby(lobbyCode, hostDetails) {
-        const activePlayers = this.getActivePlayers()
+        await this.setActivePlayer(hostDetails.playerID, hostDetails.socketID, lobbyCode)
+
         var lobbyDoc = await this.getLobby(lobbyCode)
         if (lobbyDoc.players[hostDetails.playerID]) {
             return {
@@ -234,7 +235,7 @@ export default class HotStorageClient {
             delete lobby.currentEvent.event_function
             delete lobby.currentEvent.event_name
 
-            Object.keys(lobby.players).foreach(player =>  { //Players should not know the details more than what is needed outside the event
+            Object.keys(lobby.players).foreach(player => { //Players should not know the details more than what is needed outside the event
                 delete lobby.players[player].socketID
                 delete lobby.players[player].allegiance
                 delete lobby.players[player].role
@@ -289,7 +290,29 @@ export default class HotStorageClient {
     }
 
     async getActivePlayers() {
+        const active = await this.client.get("players")
+        return JSON.parse(active)
+    }
 
+    async setActivePlayer(playerID, socket, lobbyCode) {
+        const players = await this.getActivePlayers()
+        players[playerID] = {
+            lobbyCode: lobbyCode,
+            socket: socket
+        }
+        await this.client.set("players", JSON.stringify(players))
+    }
+
+    async getActivePlayer(playerID) {
+        const players = this.getActivePlayers()
+        const player = players[playerID]
+        return player
+    }
+
+    async removeActivePlayer(playerID) {
+        const players = this.getActivePlayers()
+        delete players[playerID]
+        await this.client.set("players", JSON.stringify(players))
     }
 
     async addVote(lobbyCode, target) {
