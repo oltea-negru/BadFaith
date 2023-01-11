@@ -12,7 +12,7 @@
         "voteLimit": 0
     },
     "player": {
-        "socket": "",
+        "socketId": "",
         "role": "",
         "target": "",
         "nickname": "",

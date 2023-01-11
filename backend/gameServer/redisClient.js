@@ -45,14 +45,14 @@ export default class HotStorageClient {
             }
         }
         var playerDetails = schema.player
-        playerDetails.socket = hostDetails.socket
+        playerDetails.socketId = hostDetails.socketId
         playerDetails.nickname = hostDetails.nickname
         lobbyDoc.players[hostDetails.playerID] = playerDetails
 
         lobbyDoc.voteLimit++;
 
-        lobbyDoc.socketToPlayers[hostDetails.socket] = hostDetails.playerID
-        lobbyDoc.playerToSockets[hostDetails.player] = hostDetails.socket
+        lobbyDoc.socketToPlayers[hostDetails.socketId] = hostDetails.playerID
+        lobbyDoc.playerToSockets[hostDetails.player] = hostDetails.socketId
         console.log("Lobby " + lobbyCodeAdding + ": " + hostDetails.playerID)
         return this.updateLobby(lobbyCode, lobbyDoc)
     }

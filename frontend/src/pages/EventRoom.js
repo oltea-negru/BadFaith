@@ -1,30 +1,32 @@
 import { EventGenMap } from "../components/eventMap";
-import {CurrentEvent, EventWaiting } from "../components/CurrentEvent";
+import { CurrentEvent, EventWaiting } from "../components/CurrentEvent";
 
-export default function EventRoom({lobby_state}) {
-    
+export default function EventRoom({ lobby_state }) {
+
 
     var used_state = lobby_state
     if (used_state == null) used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("GagOrder", {
+    dummylobbyState.current_event = EventGenMap("DeepState", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
         original: "Enemy",
         allegiance: "Enemy"
     }, getPlayerArray())
 
-    if (inEvent) {
-        return (
-            <div className="bg-event_room h-screen w-screen bg-cover">
-                <CurrentEvent current_event={used_state.current_event} />
-            </div>
-        )
-    } else {
-        return (
-            <div className="bg-event_waiting h-screen w-screen bg-cover">
-                <EventWaiting current_event={used_state.current_event} />
-            </div>
-        )
+    if (used_state.state == 4) {
+        if (inEvent) {
+            return (
+                <div className="bg-event_room h-screen w-screen bg-cover">
+                    <CurrentEvent current_event={used_state.current_event} />
+                </div>
+            )
+        } else {
+            return (
+                <div className="bg-event_waiting h-screen w-screen bg-cover">
+                    <EventWaiting current_event={used_state.current_event} />
+                </div>
+            )
+        }
     }
 }
 
@@ -67,7 +69,7 @@ const dummylobbyState = {
     "host": "",
     "code": "",
     "events": [],
-    "state": 0,
+    "state": 4,
     "event_history": [],
     "current_event": {}
 }
