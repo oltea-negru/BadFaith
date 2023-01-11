@@ -21,10 +21,9 @@ const gameServerMiddleware = () => {
   return store => next => action => {
     switch (action.type) {
       case 'GS_CONNECT':
-        if (socket !== null) {
-          socket.close();
-        }
-
+        if (socket !== null) 
+          console.log('Socket is already open!')
+          
         // connect to the remote host
         socket = new io('localhost:9000', {
           transports: ['websocket']
