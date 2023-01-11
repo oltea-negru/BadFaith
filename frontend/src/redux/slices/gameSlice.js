@@ -9,7 +9,7 @@ export const gameSlice = createSlice({
             socketToPlayers: {},
             votes: {},
             playerToSockets: {},
-            state: 0,
+            state: 1,
             currentEvent: {},
             eventHistory: [],
             events: [],

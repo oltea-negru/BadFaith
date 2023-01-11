@@ -24,7 +24,7 @@ function Lobby()
     useEffect(() => {
         const host = `TODO gamesocket url here`;
         dispatch(gsConnect(host));
-     }, [])
+     }, [dispatch])
 
 
     return (
