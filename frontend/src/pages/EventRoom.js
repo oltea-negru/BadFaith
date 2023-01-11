@@ -6,7 +6,7 @@ export default function EventRoom({ lobby_state }) {
 
     var used_state = lobby_state
     if (used_state == null) used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("DeepState", {
+    dummylobbyState.current_event = EventGenMap("GagOrder", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
         original: "Enemy",
@@ -30,7 +30,7 @@ export default function EventRoom({ lobby_state }) {
     }
 }
 
-const inEvent = false
+const inEvent = true
 const dummylobbyState = {
     "id": "",
     "players": {

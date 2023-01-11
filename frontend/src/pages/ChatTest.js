@@ -1,19 +1,36 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
+import { AddMessage } from "../redux/slices/chatSlice";
 import ChatMessage from "../components/chat";
 import '../components/Chat.css';
-let messages = new Array();
-let chatMessage;
+
 const defaultPlayer = "Default";
+
 export default function Chat() {
 
+    function showChat() {
+        const chat = document.querySelector(".slide");
+        chat.classList.toggle("toggled");
+        console.log("Toggled");
+    }
+    const dispatch = useDispatch()
+    const { chat } = useSelector(state => state.chat);
     const [chatMessage, setMessage] = useState('');
+    function UpdateChat(message) {
+        const send = {
+            player: defaultPlayer,
+            message: message
+        }
+        console.log(send)
+        dispatch(AddMessage(send))
+    }
     return (
         <div className="wrapper">
             <div className="slide">
                 <div className="chat" id="chatbox">
                     <ul>
-                        {messages.map((m) =>
+                        {chat.map((m) =>
                             <ChatMessage message={m} />)}
                     </ul>
                 </div>
@@ -46,12 +63,4 @@ export default function Chat() {
     );
 }
 
-function showChat() {
-    const chat = document.querySelector(".slide");
-    chat.classList.toggle("toggled");
-    console.log("Toggled");
-}
 
-function UpdateChat(message) {
-    messages.push({ player: defaultPlayer, message: message });
-}
