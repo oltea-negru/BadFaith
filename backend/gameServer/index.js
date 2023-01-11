@@ -64,17 +64,22 @@ async function readyUp(lobbyCode, socket) {
 }
 
 async function addVote(lobbyCode, target) {
-  const result = await gameStoreClient.addVote(lobbyCode,target)
+  const result = await gameStoreClient.addVote(lobbyCode, target)
 }
 
-async function emitGameState(lobbyCode, socket){
+async function emitGameState(lobbyCode, socket) {
   io.to(socket).emit('state', await gameStoreClient.getUserState(lobbyCode, socket.id))
 }
 
-async function updateAll(lobbyCode){
-  for(const socket of await gameStoreClient.getSockets(lobbyCode)){
+async function updateAll(lobbyCode) {
+  for (const socket of await gameStoreClient.getSockets(lobbyCode)) {
     emitGameState(lobbyCode, socket)
   }
+}
+
+async function getPlayer(lobbyCode, socket) {
+  io.to(socket).emit('player', await gameStoreClient.getPlayer(lobbyCode, socket))
+  return result
 }
 
 io.on('connection', async (socket) => {
@@ -86,7 +91,7 @@ io.on('connection', async (socket) => {
     hostDetails.socketID = socket.id
     const result = await createLobby(lobbyCode, hostDetails)
     socket.join(lobbyCode)
-    const callbackObj = result.ok ? {...result, lobbyCode} : {...result} 
+    const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
     acknowledgement(callbackObj)
   })
 
@@ -99,7 +104,7 @@ io.on('connection', async (socket) => {
 
   socket.on('readyUp', async (lobbyCode, acknowledgement) => {
     const result = await readyUp(lobbyCode, socket)
-    if(result.progressState){
+    if (result.progressState) {
       updateAll(lobbyCode);
       acknowledgement(result)
     }
@@ -108,18 +113,18 @@ io.on('connection', async (socket) => {
   })
 
   socket.on('action', () => {
-    
+
   })
 
-  socket.on('vote', async (lobbyCode,target, acknowledgement) => {
-    acknowledgement(await addVote(lobbyCode,target))
+  socket.on('vote', async (lobbyCode, target, acknowledgement) => {
+    acknowledgement(await addVote(lobbyCode, target))
   })
 
   socket.on('chat', async message => {
     console.log('Chat event')
     const lobbyCode = Array.from(socket.rooms.keys())[1]
     const player = (await gameStoreClient.getNickname(lobbyCode, socket.id)).nickname
-    socket.to(lobbyCode).emit('chat', {player, message});
+    socket.to(lobbyCode).emit('chat', { player, message });
   })
 
   socket.on('disconnect', () => {

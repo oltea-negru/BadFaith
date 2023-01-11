@@ -2,7 +2,10 @@ import Voting from "./Voting.js";
 import WaitingRoom from "./WaitingRoom";
 import EventRoom from "./EventRoom";
 import { EventGenMap } from "../components/eventMap";
+import { useSelector, useDispatch } from 'react-redux'
 export default function Game({ lobby_state }) {
+
+    const { game } = useSelector(state => state.game);
     var used_state = lobby_state
     if (used_state == null) used_state = dummylobbyState
     dummylobbyState.current_event = EventGenMap("GagOrder", {
@@ -12,32 +15,33 @@ export default function Game({ lobby_state }) {
         allegiance: "Enemy"
     }, getPlayerArray())
 
-   return (
-    <div>
-        {setFunction(used_state)}
-    </div>
-   )
+    const setFunction = (used_state) => {
+        switch (used_state.state) {
+            case 1:// Joining
+                return (<WaitingRoom />)
+            case 2:// Starting
+                return (<WaitingRoom />)
+            case 3:// Between Events
+                return (<WaitingRoom />)
+            case 4:// Events
+                return (<EventRoom lobby_state={used_state} />)
+            case 5:// Discussion
+                return (<WaitingRoom />)
+            case 6:// Voting
+                return (<Voting />)
+            case 7:// Results
+                return (<WaitingRoom />)
+        }
+    }
+    
+    return (
+        <div>
+            {setFunction(game.lobby)}
+        </div>
+    )
 }
 
-const setFunction = (used_state) =>  {
-    switch (used_state.state) {
-        case 1:// Joining
-            return (<WaitingRoom />)
-        case 2:// Starting
-            return (<WaitingRoom />)
-        case 3:// Between Events
-            return (<WaitingRoom />)
-        case 4:// Events
-            return (<EventRoom lobby_state={used_state} />)
-        case 5:// Discussion
-            return (<WaitingRoom />)
-        case 6:// Voting
-            return (<Voting />)
-        case 7:// Results
-            break;
-    }
-    return
-}
+
 
 
 
