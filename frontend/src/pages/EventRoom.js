@@ -1,8 +1,9 @@
 import { EventGenMap } from "../components/eventMap";
-import {CurrentEvent, EventWaiting } from "../components/CurrentEvent";
+import { CurrentEvent, EventWaiting } from "../components/CurrentEvent";
 
-export default function EventRoom({lobby_state}) {
-    
+export default function EventRoom({ lobby_state })
+{
+
 
     var used_state = lobby_state
     if (used_state == null) used_state = dummylobbyState
@@ -13,17 +14,17 @@ export default function EventRoom({lobby_state}) {
         allegiance: "Enemy"
     }, getPlayerArray())
 
-    if (inEvent) {
+    if (inEvent)
+    {
         return (
-            <div className="bg-event_room h-screen w-screen bg-cover">
+            <div className="bg-event_room h-screen bg-cover">
                 <CurrentEvent current_event={used_state.current_event} />
             </div>
         )
-    } else {
+    } else
+    {
         return (
-            <div className="bg-event_waiting h-screen w-screen bg-cover">
-                <EventWaiting current_event={used_state.current_event} />
-            </div>
+            <EventWaiting current_event={used_state.current_event} />
         )
     }
 }
@@ -71,9 +72,11 @@ const dummylobbyState = {
     "event_history": [],
     "current_event": {}
 }
-function getPlayerArray() {
+function getPlayerArray()
+{
     let playerArray = new Array();
-    Object.keys(dummylobbyState.players).forEach(player => {
+    Object.keys(dummylobbyState.players).forEach(player =>
+    {
         playerArray.push(dummylobbyState.players[player]);
     })
     return playerArray;
