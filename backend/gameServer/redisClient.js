@@ -16,6 +16,7 @@ export default class HotStorageClient {
 
     async connect() {
         await this.client.connect()
+        this
     }
 
     async createLobby(lobbyCode) {
@@ -37,6 +38,7 @@ export default class HotStorageClient {
 
     //Attempts to add player to lobby
     async joinLobby(lobbyCode, hostDetails) {
+        const activePlayers = this.getActivePlayers()
         var lobbyDoc = await this.getLobby(lobbyCode)
         if (lobbyDoc.players[hostDetails.playerID]) {
             return {
@@ -45,14 +47,14 @@ export default class HotStorageClient {
             }
         }
         var playerDetails = schema.player
-        playerDetails.socketId = hostDetails.socketId
+        playerDetails.socketID = hostDetails.socketID
         playerDetails.nickname = hostDetails.nickname
         lobbyDoc.players[hostDetails.playerID] = playerDetails
 
         lobbyDoc.voteLimit++;
 
-        lobbyDoc.socketToPlayers[hostDetails.socketId] = hostDetails.playerID
-        lobbyDoc.playerToSockets[hostDetails.player] = hostDetails.socketId
+        lobbyDoc.socketToPlayers[hostDetails.socketID] = hostDetails.playerID
+        lobbyDoc.playerToSockets[hostDetails.playerID] = hostDetails.socketID
         console.log("Lobby " + lobbyCodeAdding + ": " + hostDetails.playerID)
         return this.updateLobby(lobbyCode, lobbyDoc)
     }
@@ -233,7 +235,7 @@ export default class HotStorageClient {
             delete lobby.currentEvent.event_name
 
             Object.keys(lobby.players).foreach(player =>  { //Players should not know the details more than what is needed outside the event
-                delete lobby.players[player].socketId
+                delete lobby.players[player].socketID
                 delete lobby.players[player].allegiance
                 delete lobby.players[player].role
                 delete lobby.players[player].target
@@ -284,6 +286,10 @@ export default class HotStorageClient {
                 msg: "Events stored successfully"
             }
         }
+    }
+
+    async getActivePlayers() {
+
     }
 
     async addVote(lobbyCode, target) {
