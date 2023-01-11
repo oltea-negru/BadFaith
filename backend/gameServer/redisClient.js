@@ -219,7 +219,21 @@ export default class HotStorageClient {
     }
 
     async getUserState(lobbyCode, socket) {
-        //????
+        const lobby = this.getLobby(lobbyCode)
+        const playerID = lobby.socketToPlayers[socket]
+        delete lobby.events
+        if (lobby.currentEvent.player == playerID)
+        {
+            return lobby
+        } else {
+            let temp = {
+                blind_name: lobby.currentEvent.blind_name,
+                blind_info: lobby.currentEvent.blind_info,
+                player: lobby.currentEvent.player
+            }
+            lobby.currentEvent = temp
+            return lobby
+        }
     }
 
     async getUsername(lobbyCode, socket) {
