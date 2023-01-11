@@ -1,29 +1,30 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { AddMessage } from "../redux/slices/chatSlice";
 import ChatMessage from "../components/chat";
 import '../components/Chat.css';
+import { sendChatAction, gsConnect } from "../redux/middleware/gameServerMiddleware"
 
 const defaultPlayer = "Default";
 
 export default function Chat() {
+
+
+    const dispatch = useDispatch()
+    useEffect(()=> {
+        dispatch(gsConnect())
+    }, [])
 
     function showChat() {
         const chat = document.querySelector(".slide");
         chat.classList.toggle("toggled");
         console.log("Toggled");
     }
-    const dispatch = useDispatch()
     const { chat } = useSelector(state => state.chat);
     const [chatMessage, setMessage] = useState('');
     function UpdateChat(message) {
-        const send = {
-            player: defaultPlayer,
-            message: message
-        }
-        console.log(send)
-        dispatch(AddMessage(send))
+        console.log('Chat submitted', message)
+        dispatch(sendChatAction(message))
     }
     return (
         <div className="wrapper">
