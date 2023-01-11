@@ -1,6 +1,6 @@
 const { createClient } = require('redis')
 const { createAdapter } = require('@socket.io/redis-adapter');
-const { default: HotStorageClient } = require('./redisClient');
+const HotStorageClient = require('./redisClient').HotStorageClient;
 
 const gameStoreClient = new HotStorageClient()
 const server = require('http').Server();
@@ -26,16 +26,16 @@ Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
 
 // Schema in lobbySchema.json
 
-function generateLobbyCode() {
+async function generateLobbyCode() {
   let codeLength = 5
   let lobbyCode = generateRandomString(codeLength)
   let retryCount = 0
-  while (gameStoreClient.doesLobbyExist(lobbyCode)) {
+  while (await gameStoreClient.doesLobbyExist(lobbyCode)) {
     if (retryCount == 5) {
       codeLength++
       retryCount = 0
     }
-    lobbyCode = generateLobbyCode(codeLength)
+    lobbyCode = await generateLobbyCode(codeLength)
   }
 
   return lobbyCode
@@ -43,7 +43,7 @@ function generateLobbyCode() {
 
 function generateRandomString(length) {
   const validCharacters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
-  const output = '';
+  let output = '';
   for (let i = 0; i < length; i++) {
     output += validCharacters.charAt(Math.floor(Math.random() * validCharacters.length));
   }
@@ -68,28 +68,40 @@ async function addVote(lobbyCode, target) {
   const result = await gameStoreClient.addVote(lobbyCode,target)
 }
 
+async function emitGameState(lobbyCode){
+  for(const socket of io.sockets.adapter.rooms.get(lobbyCode)){
+    socket.emit('state', gameStoreClient.getUserState(lobbyCode, socket.id))
+  }
+}
+
 io.on('connection', async (socket) => {
 
   console.log(`Socket ${socket.id} connected.`)
 
   socket.on('createLobby', async (hostDetails, acknowledgement) => {
-    const lobbyCode = generateLobbyCode()
-    hostDetails.socketId = socket.id
+    const lobbyCode = await generateLobbyCode()
+    hostDetails.socketID = socket.id
     const result = await createLobby(lobbyCode, hostDetails)
+    socket.join(lobbyCode)
+    console.log('Sockets in room', io.adapter.rooms, socket.adapter.rooms)
     const callbackObj = result.ok ? {...result, lobbyCode} : {...result} 
     acknowledgement(callbackObj)
   })
 
   socket.on('joinLobby', async (lobbyCode, playerDetails, acknowledgement) => {
-    playerDetails.socketId = socket.id
-    acknowledgement(await joinLobby(lobbyCode, playerDetails))
+    playerDetails.socketID = socket.id
+    const result = await joinLobby(lobbyCode, playerDetails)
+    socket.join(lobbyCode)
+    console.log('Sockets in room', io.sockets.adapter.rooms)
+    acknowledgement(result)
   })
 
   socket.on('readyUp', async (lobbyCode, acknowledgement) => {
     const result = await readyUp(lobbyCode, socket)
     if(result.progressState)
-      
-    acknowledgement()
+      emitGameState(lobbyCode)
+    else
+      acknowledgement(result)
   })
 
   socket.on('action', () => {
@@ -101,8 +113,10 @@ io.on('connection', async (socket) => {
   })
 
   socket.on('chat', message => {
-    const lobbyCode = socket.rooms.entries()[0];
-    io.to(lobbyCode).emit(message);
+    console.log('Chat event', Array.from(socket.rooms.keys())[1])
+    const lobbyCode = Array.from(socket.rooms.keys())[1]
+    console.log('Sockets in room', io.sockets.adapter.rooms)
+    socket.to(lobbyCode).emit(message);
   })
 
   socket.on('disconnect', () => {

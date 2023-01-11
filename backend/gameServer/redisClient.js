@@ -1,6 +1,6 @@
 const bluebird = require('bluebird');
 const redis = require('redis');
-const schema = require('schema.json')
+const schema = require('./schema.json')
 
 bluebird.promisifyAll(redis);
 
@@ -8,15 +8,14 @@ const redisHost = process.env.REDIS_HOST || 'localhost'
 const redisPort = process.env.REDIS_PORT || '6379'
 DEFAULT_EXPIRATIION = 3600
 
-export default class HotStorageClient {
+class HotStorageClient {
     constructor() {
         this.client = redis.createClient({ url: `redis://${redisHost}:${redisPort}` })
-
     }
 
     async connect() {
         await this.client.connect()
-        this.client.set("players", "")
+        await this.client.set("players", "{}")
     }
 
     async createLobby(lobbyCode) {
@@ -24,7 +23,7 @@ export default class HotStorageClient {
         lobbyDoc.state = 1
         const lobbyExists = await this.getLobby(lobbyCode)
         if (lobbyExists == null) {
-            this.client.setex(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
+            this.client.SETEX(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
             return {
                 ok: true,
                 msg: "Lobby created: " + lobbyCode
@@ -38,7 +37,7 @@ export default class HotStorageClient {
 
     //Attempts to add player to lobby
     async joinLobby(lobbyCode, hostDetails) {
-        var lobbyDoc = await this.getLobby(lobbyCode)
+        const lobbyDoc = await this.getLobby(lobbyCode)
         if (lobbyDoc == null) {
             return {
                 ok: false,
@@ -62,13 +61,13 @@ export default class HotStorageClient {
     //Check that the lobby exists 
     async doesLobbyExist(lobbyCode) {
         var lobbyDoc = await this.getLobby(lobbyCode)
-        return lobbyDoc != null
+        return (lobbyDoc != null)
     }
 
     async addReady(lobbyCode, socket, ready) {
         var lobbyDoc = await this.getLobby(lobbyCode)
         const playerID = lobbyDoc.socketToPlayers[socket]
-        if (ready) {
+        if(ready) {
             lobbyDoc.readyUp++
         } else {
             lobbyDoc.readyUp--
@@ -76,7 +75,7 @@ export default class HotStorageClient {
         lobbyDoc.players[playerID].ready = ready
         const readyResult = await this.updateLobby(lobbyCode, lobbyDoc)
         const progressResult = await this.progressGameState(lobbyCode)
-        if (progressResult.ok)
+        if(progressResult.ok)
             return {
                 progressState: true
             }
@@ -138,7 +137,7 @@ export default class HotStorageClient {
                         msg: "Incorrect number of events to progress: " + lobby.events.length
                     }
                 }
-                for ((player, data) in lobby.players) {
+                for (const [player, data] in lobby.players) {
                     console.log(player + ": " + data.allegiance)
                     if (data.allegiance == "") {
                         //Player has not been allocated a team
@@ -303,7 +302,7 @@ export default class HotStorageClient {
     }
 
     async getActivePlayer(playerID) {
-        const players = this.getActivePlayers()
+        const players = await this.getActivePlayers()
         const player = players[playerID]
         return player
     }
@@ -350,10 +349,12 @@ export default class HotStorageClient {
     async updateLobby(lobbyCode, lobbyDoc) {
         const lobby = await this.getLobby(lobbyCode)
         if (lobby == null) return { ok: false, msg: "Lobby does not exist" };
-        this.client.setex(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
+        this.client.SETEX(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
         return {
             ok: true,
             msg: "Lobby updated"
         };
     }
 }
+
+module.exports.HotStorageClient = HotStorageClient;

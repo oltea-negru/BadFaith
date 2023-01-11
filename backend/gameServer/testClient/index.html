@@ -9,12 +9,14 @@
 </head>
 <body>
   <h1>Single User Websocket Demo</h1>
+  <h2>Server Params</h2>
   <p>
     <label for="status">Status: </label>
     <input type="text" id="status"
       name="status" value="Disconnected"
       readonly="readonly" style="width: 300px;"
     />
+    <label for="port">Port: </label>
     <input type="text" id="port"
       name="port" value="" style="width: 300px;"
     />
@@ -25,6 +27,37 @@
     </button>
     <button id="disconnect" onclick="disconnect()" disabled>
       Disconnect
+    </button>
+  </p>
+  <h1>Game Server Params</h1>
+  <p>
+    <label for="playerID">PlayerID: </label>
+    <input type="text" id="playerID"
+      name="playerID"
+      style="width: 300px;"
+    />
+    <label for="nickname">nickname: </label>
+    <input type="text" id="nickname"
+      name="nickname" value="" style="width: 300px;"
+    />
+    <label for="lobbyCode">Lobby Code: </label>
+    <input type="text" id="lobbyCode"
+      name="lobbyCode" value="" style="width: 300px;"
+    />
+    <label for="chat">Chat: </label>
+    <input type="text" id="chat"
+      name="chat" value="" style="width: 300px;"
+    />
+  </p>
+  <p>
+    <button id="connect" onclick="createLobby()">
+      Create Lobby
+    </button>
+    <button id="connect" onclick="joinLobby()">
+      Join Lobby
+    </button>
+    <button id="connect" onclick="ready()">
+      Ready Up
     </button>
     <button id="chat" onclick="chat()">
       Chat
