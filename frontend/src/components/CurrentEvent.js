@@ -1,4 +1,4 @@
-import EventMap, { OutsideEvent } from "../components/eventMap";
+import EventMap, { OutsideEvent } from "./eventMap";
 
 export function CurrentEvent({current_event}) {
     // const lobby = useState([]);

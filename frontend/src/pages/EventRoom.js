@@ -1,5 +1,5 @@
 import { EventGenMap } from "../components/eventMap";
-import {CurrentEvent, EventWaiting } from "./CurrentEvent";
+import {CurrentEvent, EventWaiting } from "../components/CurrentEvent";
 
 export default function EventRoom({lobby_state}) {
     
@@ -67,7 +67,7 @@ const dummylobbyState = {
     "host": "",
     "code": "",
     "events": [],
-
+    "state": 0,
     "event_history": [],
     "current_event": {}
 }
