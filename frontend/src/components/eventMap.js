@@ -676,7 +676,7 @@ export function OutsideEvent({ event_data }) {
             <div className="absolute top-[700px] left-[370px] w-[385px] h-[100px] grid content-center text-center text-4xl text-white font-another">
                 ReplaceWithAvatar
             </div>
-            <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
+            <div className="absolute bottom-0 h-[816px] w-[650px] right-[1000px] overflow-y-hidden ">
                 <div id="eventSlide"
                     className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full ">
                     <img src={WaitingList} alt="sdas" className="h-full" />

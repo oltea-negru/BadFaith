@@ -45,22 +45,22 @@ function Lobby()
                                         codeCreated === ''
                                             ?
                                             <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-blue-500 border-4 border-black justify-between'>
-                                                <p className='text-4xl text-white mt-10'>CREATE LOBBY</p>
+                                                <p className='font-another text-4xl text-white mt-10'>CREATE LOBBY</p>
                                                 <div className='flex flex-col h-3/5 w-2/3 justify-around'>
                                                     <div className='flex flex-row justify-between'>
-                                                        <p className='text-2xl text-white'>Number of Players:</p>
+                                                        <p className='font-another text-2xl text-white'>Number of Players:</p>
                                                         <input type="number" className=' text-center text-2xl w-[50px] font-another h-10 border-2 border-black' value={numberOfPlayers} onChange={(e) => setNumberOfPlayers(e.target.value)} />
                                                     </div>
                                                     <div className='flex flex-row justify-between'>
-                                                        <p className='text-2xl text-white'>Time Limit:</p>
+                                                        <p className='font-another text-2xl text-white'>Time Limit:</p>
                                                         <input type="number" className=' text-center text-2xl w-[50px] font-another h-10 border-2 border-black' value={timeLimit} onChange={(e) => setTimeLimit(e.target.value)} />
                                                     </div>
                                                     <div className='flex flex-row justify-between'>
-                                                        <p className='text-2xl text-white'>Private Lobby:</p>
+                                                        <p className='font-another text-2xl text-white'>Private Lobby:</p>
                                                         <input type="checkbox" className='w-6 focus:outline-none' value={privateLobby} onChange={(e) => setPrivateLobby(e.target.value)} />
                                                     </div>
                                                 </div>
-                                                <button className='bg-white mb-10 h-14 text-4xl hover:text-5xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { setCodeCreated('random code') }}>Create Code</button>
+                                                <button className='font-another bg-white mb-10 h-14 text-4xl hover:text-5xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { setCodeCreated('random code') }}>Create Code</button>
                                             </div> :
                                             <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-blue-500 border-4 border-black justify-evenly'>
                                                 <p className='text-4xl text-white mt-10'>LOBBY CODE</p>

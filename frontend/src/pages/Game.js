@@ -47,7 +47,7 @@ export default function Game({ lobby_state }) {
 
 
 
-const inEvent = true
+const inEvent = false
 const dummylobbyState = {
     "inEvent": inEvent,
     "id": "",
@@ -87,7 +87,7 @@ const dummylobbyState = {
     "host": "",
     "code": "",
     "events": [],
-    "state": 6,
+    "state": 4,
     "event_history": [],
     "current_event": {}
 }
