@@ -3,13 +3,14 @@ import WaitingRoom from "./WaitingRoom";
 import EventRoom from "./EventRoom";
 import { EventGenMap } from "../components/eventMap";
 import { useSelector } from 'react-redux'
+import Endgame from "./Endgame.js";
 export default function Game({ lobby_state }) {
 
     const { lobby } = useSelector(state => state.game);
     var used_state = lobby_state
     // if (used_state == null) 
     used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("PrivateDiscussion", {
+    dummylobbyState.current_event = EventGenMap("Blackmailed", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
         original: "Enemy",
@@ -31,7 +32,7 @@ export default function Game({ lobby_state }) {
             case 6:// Voting
                 return (<Voting />)
             case 7:// Results
-                return (<WaitingRoom />)
+                return (<Endgame />)
         }
     }
 
@@ -86,7 +87,7 @@ const dummylobbyState = {
     "host": "",
     "code": "",
     "events": [],
-    "state": 4,
+    "state": 6,
     "event_history": [],
     "current_event": {}
 }
