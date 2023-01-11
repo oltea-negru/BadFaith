@@ -17,7 +17,6 @@ const pubClient = createClient({ url: `redis://${redisHost}:${redisPort}` })
 const subClient = pubClient.duplicate()
 
 const PORT = process.env.PORT || 9000;
-
 io.attach(server);
 
 Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
@@ -83,7 +82,6 @@ io.on('connection', async (socket) => {
     hostDetails.socketID = socket.id
     const result = await createLobby(lobbyCode, hostDetails)
     socket.join(lobbyCode)
-    console.log('Sockets in room', io.adapter.rooms, socket.adapter.rooms)
     const callbackObj = result.ok ? {...result, lobbyCode} : {...result} 
     acknowledgement(callbackObj)
   })
@@ -92,7 +90,6 @@ io.on('connection', async (socket) => {
     playerDetails.socketID = socket.id
     const result = await joinLobby(lobbyCode, playerDetails)
     socket.join(lobbyCode)
-    console.log('Sockets in room', io.sockets.adapter.rooms)
     acknowledgement(result)
   })
 
@@ -115,8 +112,7 @@ io.on('connection', async (socket) => {
   socket.on('chat', message => {
     console.log('Chat event', Array.from(socket.rooms.keys())[1])
     const lobbyCode = Array.from(socket.rooms.keys())[1]
-    console.log('Sockets in room', io.sockets.adapter.rooms)
-    socket.to(lobbyCode).emit(message);
+    socket.to(lobbyCode).emit('chat', message);
   })
 
   socket.on('disconnect', () => {
