@@ -65,8 +65,12 @@ export default class HotStorageClient {
 
     async addReady(lobbyCode, socket, ready) {
         var lobbyDoc = await this.getLobby(lobbyCode)
-        lobbyDoc.readyUp++
         const playerID = lobbyDoc.socketToPlayers[socket]
+        if(ready) {
+            lobbyDoc.readyUp++
+        } else {
+            lobbyDoc.readyUp--
+        }
         lobbyDoc.players[playerID].ready = ready
         return this.updateLobby(lobbyCode, lobbyDoc)
     }
