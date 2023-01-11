@@ -81,7 +81,7 @@ const dummylobbyState = {
     "host": "",
     "code": "",
     "events": [],
-    "state": 6,
+    "state": 4,
     "event_history": [],
     "current_event": {}
 }
