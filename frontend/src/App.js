@@ -7,7 +7,9 @@ import Lobby from "./pages/Lobby";
 import WaitingRoom from "./pages/WaitingRoom";
 import LoginRoom from "./pages/Home.js";
 import Game from "./pages/Game";
-import {
+import Endgame from "./pages/Endgame";
+import
+{
 	BrowserRouter as Router,
 	Route,
 	Routes,
@@ -23,6 +25,7 @@ function App() {
 				<Route path="/login" element={<PLogin />} />
 				<Route path="/register" element={<PRegister />} />
 				<Route path="/voting" element={<Voting />} />
+				<Route path="/endgame" element={<Endgame />} />
 				<Route path="/chat" element={<Chat />} />
 				<Route path="/lobby" element={<Lobby />} />
 				<Route path="/settings" element={<Settings />} />
