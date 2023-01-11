@@ -50,12 +50,6 @@ const Events = {
         BlindInfo: "Select a player to swap roles with",
         Details: "Select a player to swap roles with"
     },
-    PrivateDiscussion: {
-        BlindName: "Private Discussion",
-        EventTitle: "Private Discussion",
-        BlindInfo: "Select a player to share your secrets with",
-        Details: "Select a player to share your secrets with"
-    },
     GagOrder: {
         BlindName: "Gag Order",
         EventTitle: "Gag Order",
@@ -357,85 +351,7 @@ function PickPocketEvent({ event_data }) {
     );
 }
 
-function PrivateDiscussionEvent({ event_data }) {
-    const [discussionPlayers, updateDiscussion] = useState([]);
 
-    function DiscussionDisplay(player) {
-
-        const selectBox = document.querySelector("#SelectBox");
-        const discussionBox = document.querySelector("#Discussion");
-        selectBox.classList.toggle("hidden");//Hide selection
-        discussionBox.classList.toggle("hidden");//Show details for each player
-    }
-    function showSelection() {
-        const chat = document.querySelector("#eventSlide");
-        chat.classList.toggle("translate-y-full");
-        console.log("Toggled");
-    }
-    return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">{event_data.details}</strong>
-            </div>
-            <div className="absolute p-2 text-2xl overflow-hidden top-[50vh] w-[21vh] right-[43.3vw]">
-                <button
-                    className="font-another -rotate-6 hover:text-[#ff0000]"
-                    id="chatButton"
-                    onClick={() => {
-                        // UpdateChat(chatMessage)
-                        // setMessage('');
-                        showSelection();
-                    }}>Choose Target</button>
-            </div>
-            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
-                <div id="eventSlide"
-                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full ">
-                    <img src={WaitingList} alt="sdas" className="h-full" />
-
-                    <div id="SelectBox"
-                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
-                        {event_data.extra_players.map((player) =>
-                            <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                                onClick={() => {
-                                    let temp = [...discussionPlayers];
-                                    temp.push(event_data.player);
-                                    temp.push(player);
-                                    updateDiscussion(temp);
-                                    console.log(discussionPlayers);
-                                    DiscussionDisplay(player);
-                                }
-                                }
-                            >{player.nickname}</button>)}
-                    </div>
-                    <div id="Discussion"
-                        className="hidden flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
-                        {discussionPlayers.map((player) => {
-                            return <div className="rounded-2xl p-1 bg-white justify-center m-auto">
-                                <strong className="font-another text-xl text-[#ff0000]">{player.nickname}</strong>
-                                <br />
-                                <strong className="font-another text-xl">Allegience: <strong className="font-another text-[#ff0000]">{player.allegiance}</strong></strong>
-                            </div>
-                        }
-                        )}
-                    </div>
-                </div>
-            </div>
-
-            <div className="flex">
-                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh] hover:text-[#ff0000]"
-                    onClick={() => {
-                        endEvent();
-                    }}
-                >Done
-                </button>
-            </div>
-        </div>
-    );
-}
 
 
 
@@ -640,8 +556,6 @@ export default function EventMap(current_event) {
             return <BackgroundCheckEvent event_data={current_event} />;
         case "PickPocket":
             return <PickPocketEvent event_data={current_event} />;
-        case "PrivateDiscussion":
-            return <PrivateDiscussionEvent event_data={current_event} />;
         case "GagOrder":
             return <GagOrderEvent event_data={current_event} />;
         case "BlackMark":
@@ -704,9 +618,6 @@ export function EventGenMap(eventName, player, players) {
             extra_players = SinglePlayer(valid);
             break;
         case "PickPocket": // Swap allegiences with player of choice, if possible
-            extra_players = valid;
-            break;
-        case "PrivateDiscussion": //Compare allegience with another player
             extra_players = valid;
             break;
         case "GagOrder": //Prevent a player of choice from voting

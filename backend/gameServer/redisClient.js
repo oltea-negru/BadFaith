@@ -255,6 +255,14 @@ class HotStorageClient {
             player: lobbyDoc.players[playerID]
         }
     }
+
+    async updatePlayer(lobbyCode, playerDetails) {
+        const lobby = this.getLobby(lobbyCode)
+        const playerID = lobby.socketToPlayers[playerDetails.socketID]
+        lobby.players[playerID] = playerDetails
+        this.updateLobby(lobbyCode, lobby)
+    }
+
     async getUsername(lobbyCode, socket) {
         var lobbyDoc = await this.getLobby(lobbyCode)
         var playerID = lobbyDoc.socketToPlayers[socket]
