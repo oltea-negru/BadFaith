@@ -111,10 +111,6 @@ io.on('connection', async (socket) => {
     
   })
 
-  socket.on('retrieveState', lobbyCode => {
-    updateAll(lobbyCode);
-  })
-
   socket.on('vote', async (lobbyCode,target, acknowledgement) => {
     acknowledgement(await addVote(lobbyCode,target))
   })
