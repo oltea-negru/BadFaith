@@ -67,9 +67,9 @@ class HotStorageClient {
     async addReady(lobbyCode, socket, ready) {
         var lobbyDoc = await this.getLobby(lobbyCode)
         const playerID = lobbyDoc.socketToPlayers[socket]
-        if(ready) {
+        if(!ready && lobbyDoc.players[playerID].ready) {
             lobbyDoc.readyUp++
-        } else {
+        } else if(ready && !lobbyDoc.players[playerID].ready) {
             lobbyDoc.readyUp--
         }
         lobbyDoc.players[playerID].ready = ready
