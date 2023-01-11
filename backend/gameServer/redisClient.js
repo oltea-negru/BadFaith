@@ -25,12 +25,12 @@ export default class HotStorageClient {
         if (lobbyExists == null) {
             this.client.setex(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
             return {
-                result: true,
+                ok: true,
                 msg: "Lobby created: " + lobbyCode
             }
         }
         return {
-            result: false,
+            ok: false,
             msg: "Lobby with code already exists"
         };
     }
@@ -40,7 +40,7 @@ export default class HotStorageClient {
         var lobbyDoc = await this.getLobby(lobbyCode)
         if (lobbyDoc.players[hostDetails.playerID]) {
             return {
-                result: false,
+                ok: false,
                 msg: "Player is already in lobby"
             }
         }
@@ -74,11 +74,11 @@ export default class HotStorageClient {
     async getReadyCounter(lobbyCode) {
         const lobby = await this.getLobby(lobbyCode)
         if (lobby == null) return {
-            result: false,
+            ok: false,
             msg: "Lobby does not exist"
         };
         return {
-            result: true,
+            ok: true,
             ready: lobbyDoc.readyUp
         }
     }
@@ -86,12 +86,12 @@ export default class HotStorageClient {
     async getActivePlayerNumber(lobbyCode) {
         const lobby = await this.getLobby(lobbyCode)
         if (lobby == null) return {
-            result: false,
+            ok: false,
             msg: "Lobby does not exist"
         };
         const activePlayers = lobbyDoc.currentEvent.extra_players.length + 1
         return {
-            result: true,
+            ok: true,
             players: activePlayers
         }
     }
@@ -99,7 +99,7 @@ export default class HotStorageClient {
     async progressGameState(lobbyCode) {
         const lobby = this.getLobby(lobbyCode)
         if (lobby == null) return {
-            result: false,
+            ok: false,
             msg: "Lobby does not exist"
         };
         switch (lobby.state) {
@@ -107,19 +107,19 @@ export default class HotStorageClient {
                 // check that number of 'readys' is equal to number of 
                 if (lobby.readyUp != Object.keys(lobby.players).length) {
                     return {
-                        result: false,
+                        ok: false,
                         msg: "Not enough players ready"
                     }
                 }
                 console.log("Lobby " + lobbyCode + ": progressing to start game phase")
                 lobby.state = 2
                 await this.updateLobby(lobbyCode, lobby)
-                return { result: true, msg: "Progressed to starting game" }
+                return { ok: true, msg: "Progressed to starting game" }
             case 2: // Starting to between events
                 if (lobby.events.length != Object.keys(lobby.players).length) {
                     // the wrong number of events has been generated
                     return {
-                        result: false,
+                        ok: false,
                         msg: "Incorrect number of events to progress: " + lobby.events.length
                     }
                 }
@@ -128,7 +128,7 @@ export default class HotStorageClient {
                     if (data.allegiance == "") {
                         //Player has not been allocated a team
                         return {
-                            result: false,
+                            ok: false,
                             msg: "Player: " + player + " has not been allocated a team"
                         }
                     }
@@ -137,7 +137,7 @@ export default class HotStorageClient {
                 lobby.state = 3
                 await this.updateLobby(lobbyCode, lobby)
                 return {
-                    result: true,
+                    ok: true,
                     msg: "Lobby events and players initialised, progressing to between events"
                 }
             case 3: // Between events
@@ -146,7 +146,7 @@ export default class HotStorageClient {
                     lobby.state = 5
                     await this.updateLobby(lobbyCode, lobby)
                     return {
-                        result: true,
+                        ok: true,
                         msg: "Progressed to discussion"
                     }
                 } else { // moving to next event
@@ -156,7 +156,7 @@ export default class HotStorageClient {
                     lobby.state = 4
                     await this.updateLobby(lobbyCode, lobby)
                     return {
-                        result: true,
+                        ok: true,
                         msg: "Progressed to next event"
                     }
                 }
@@ -166,7 +166,7 @@ export default class HotStorageClient {
                 lobby.state = 3
                 this.updateLobby(lobbyCode, lobby)
                 return {
-                    result: true,
+                    ok: true,
                     msg: "Current event completed, progressing to between events"
                 }
             case 5: // Discussion to voting
@@ -174,13 +174,13 @@ export default class HotStorageClient {
                 lobby.state = 6
                 this.updateLobby(lobbyCode, lobby)
                 return {
-                    result: true,
+                    ok: true,
                     msg: "Discussion phase complete, progressing to voting phase"
                 }
             case 6: // Voting to results
                 if (lobby.voteLimit != Object.keys(lobby.votes).length) {
                     return {
-                        result: false,
+                        ok: false,
                         msg: "Not enough players voted"
                     }
                 }
@@ -188,7 +188,7 @@ export default class HotStorageClient {
                 lobby.state = 7
                 this.updateLobby(lobbyCode, lobby)
                 return {
-                    result: true,
+                    ok: true,
                     msg: "Voting phase complete, progressing to results phase"
                 }
             case 7: // Results to Ending Game
@@ -196,7 +196,7 @@ export default class HotStorageClient {
                 lobby.state = 8
                 this.updateLobby(lobbyCode, lobby)
                 return {
-                    result: true,
+                    ok: true,
                     msg: "Results phase complete, progressing to end phase"
                 }
             case 8: // Starting to Starting
@@ -212,7 +212,7 @@ export default class HotStorageClient {
         var lobbyDoc = await this.getLobby(lobbyCode)
         var playerID = lobbyDoc.socketToPlayers[socket]
         return {
-            result: true,
+            ok: true,
             username: playerID
         }
     }
@@ -222,7 +222,7 @@ export default class HotStorageClient {
         var playerID = lobbyDoc.socketToPlayers[socket]
         const nickname = lobbyDoc.players[playerID]
         return {
-            result: true,
+            ok: true,
             nickname: nickname
         }
     }
@@ -237,15 +237,15 @@ export default class HotStorageClient {
         const lobby = await this.client.get(lobbyCode)
         if (lobby.state != 2) {
             return {
-                result: false,
+                ok: false,
                 msg: "Game State is incorrect for storing events"
             }
         }
         lobby.events = eventArray
         const updateResult = await this.updateLobby(lobbyCode, lobby)
-        if (updateResult.result) {
+        if (updateResult.ok) {
             return {
-                result: true,
+                ok: true,
                 msg: "Events stored successfully"
             }
         }
@@ -255,7 +255,7 @@ export default class HotStorageClient {
         const lobby = await this.client.get(lobbyCode)
         if (!lobby.players[target]) {
             return {
-                result: false,
+                ok: false,
                 msg: "Player does not exist"
             }
         }
@@ -266,7 +266,7 @@ export default class HotStorageClient {
         }
         await this.updateLobby(lobbyCode, lobby)
         return {
-            result: true,
+            ok: true,
             msg: "Vote added"
         }
 
@@ -286,10 +286,10 @@ export default class HotStorageClient {
     // if lobby exists, update and return true
     async updateLobby(lobbyCode, lobbyDoc) {
         const lobby = await this.getLobby(lobbyCode)
-        if (lobby == null) return { result: false, msg: "Lobby does not exist" };
+        if (lobby == null) return { ok: false, msg: "Lobby does not exist" };
         this.client.setex(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
         return {
-            result: true,
+            ok: true,
             msg: "Lobby updated"
         };
     }
