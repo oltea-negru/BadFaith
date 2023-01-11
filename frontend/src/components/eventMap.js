@@ -363,7 +363,7 @@ function PrivateDiscussionEvent({ event_data }) {
 
         const selectBox = document.querySelector("#SelectBox");
         const discussionBox = document.querySelector("#Discussion");
-        selectBox.classList.toggle("toggle");//Hide selection
+        selectBox.classList.toggle("hidden");//Hide selection
         discussionBox.classList.toggle("flex-wrap absolute flex justify-between p-2 top-[16vh] w-[21vh] right-[43.5vh] rounded-2xl h-[20vh]");//Show details for each player
     }
     function showSelection() {

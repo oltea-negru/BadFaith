@@ -224,16 +224,21 @@ export default class HotStorageClient {
         delete lobby.events
         delete lobby.votes
         delete lobby.voteLimit
-        if (lobby.currentEvent.player == playerID)
-        {
+        if (lobby.currentEvent.player == playerID) {
             return lobby
         } else {
-            let temp = {
-                blind_name: lobby.currentEvent.blind_name,
-                blind_info: lobby.currentEvent.blind_info,
-                player: lobby.currentEvent.player
-            }
-            lobby.currentEvent = temp
+            delete lobby.currentEvent.details
+            delete lobby.currentEvent.extra_players
+            delete lobby.currentEvent.event_function
+            delete lobby.currentEvent.event_name
+
+            Object.keys(lobby.players).foreach(player =>  { //Players should not know the details more than what is needed outside the event
+                delete lobby.players[player].socketId
+                delete lobby.players[player].allegiance
+                delete lobby.players[player].role
+                delete lobby.players[player].target
+                delete lobby.players[player].ready
+            })
             return lobby
         }
     }
