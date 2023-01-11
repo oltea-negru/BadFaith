@@ -649,7 +649,7 @@ export function EventGenMap(eventName, player, players) {
 }
 
 function GenerateEvents({ lobby_state }) {
-    let events = new Array();
+    let events = [];
     lobby_state.players.forEach(player => {
         const eventName = RandomUniqueEvent(events);
         const event = EventGenMap(eventName, player, lobby_state.players);
