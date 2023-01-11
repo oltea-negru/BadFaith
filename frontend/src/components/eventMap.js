@@ -415,9 +415,9 @@ function PrivateDiscussionEvent({ event_data }) {
                         className="hidden flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {discussionPlayers.map((player) => {
                             return <div className="rounded-2xl p-1 bg-white justify-center m-auto">
-                                <strong className="font-another text-[#ff0000]">{player.nickname}</strong>
+                                <strong className="font-another text-xl text-[#ff0000]">{player.nickname}</strong>
                                 <br />
-                                <strong className="font-another">Allegience: <strong className="font-another text-[#ff0000]">{player.allegiance}</strong></strong>
+                                <strong className="font-another text-xl">Allegience: <strong className="font-another text-[#ff0000]">{player.allegiance}</strong></strong>
                             </div>
                         }
                         )}
