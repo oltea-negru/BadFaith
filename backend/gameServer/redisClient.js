@@ -38,8 +38,6 @@ export default class HotStorageClient {
 
     //Attempts to add player to lobby
     async joinLobby(lobbyCode, hostDetails) {
-        await this.setActivePlayer(hostDetails.playerID, hostDetails.socketID, lobbyCode)
-
         var lobbyDoc = await this.getLobby(lobbyCode)
         if (lobbyDoc.players[hostDetails.playerID]) {
             return {
@@ -47,6 +45,7 @@ export default class HotStorageClient {
                 msg: "Player is already in lobby"
             }
         }
+        await this.setActivePlayer(hostDetails.playerID, hostDetails.socketID, lobbyCode)
         var playerDetails = schema.player
         playerDetails.socketID = hostDetails.socketID
         playerDetails.nickname = hostDetails.nickname
