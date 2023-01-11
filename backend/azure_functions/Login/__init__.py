@@ -5,7 +5,8 @@ import json
 import azure.functions as func
 import azure.cosmos as cosmos
 import azure.cosmos.exceptions as exceptions
-from azure_functions import config
+# from azure_functions import config
+import os
 
 # import importlib
 # config = importlib.import_module("azure_functions.config")
@@ -22,11 +23,45 @@ from azure_functions import config
 #     'event_container' : 'event'
 # }
 
-db_URI = config.settings['db_URI']
-db_id = config.settings['db_id']
-db_key = config.settings['db_key']
-player_cont =config.settings['player_container']
-lobby_cont = config.settings['lobby_container']
+#local testing
+# db_URI = config.settings['db_URI']
+# db_id = config.settings['db_id']
+# db_key = config.settings['db_key']
+# player_cont =config.settings['player_container']
+# lobby_cont = config.settings['lobby_container']
+
+# online testing
+db_URI = os.environ['db_URI']
+db_id = os.environ['db_id']
+db_key = os.environ['db_key']
+player_cont =os.environ['player_container']
+lobby_cont = os.environ['lobby_container']
+
+##USER STRUCTURE
+
+    # user = {    
+    #             "id":"",
+    #             "player" : {
+    #                 "nickname" : "",
+    #                 "password" : "",
+    #                 "friends" : [],
+    #                 "history" : []
+    #             },
+    #             "lobby" : {
+    #                 "players" : [],
+    #                 "invited" : [],
+    #                 "code" : "",
+    #                 "events" : [],
+    #                 "current_event" : "event"
+    #             },
+    #             "event" : {
+    #                 "extra_targets" : [],
+    #                 "executions" : [],
+    #                 "blind_info" : "",
+    #                 "details" : ""
+    #             }
+    #         }
+
 
 print(db_URI)
 
@@ -42,9 +77,9 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     player = req.get_json()
 
-    if "username" in player:
+    if "email" in player:
 
-        player['id'] = player["username"]
+        player['id'] = player["email"]
 
         if "password" in player:
             user = []
@@ -58,17 +93,18 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
             if len(user) > 0:
                 logging.info("user exists")
                 onlyUser = json.loads(user[0])
-                if onlyUser['password'] == player['password']:
+                logging.info(onlyUser)
+                if onlyUser["player"]["password"] == player['password']:
                     logging.info("password matches")
                     return func.HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}))
                 else:
                     logging.info("password is incorrect")
-                    return func.HttpResponse(body=json.dumps({"result": False , "msg": "Username or password incorrect"}))
+                    return func.HttpResponse(body=json.dumps({"result": False , "msg": "email or password incorrect"}))
             else:
-                logging.info("username not there")
-                return func.HttpResponse(body=json.dumps({"result": False , "msg": "Username or password incorrect"}))
+                logging.info("email not there")
+                return func.HttpResponse(body=json.dumps({"result": False , "msg": "email or password incorrect"}))
         else:
             return func.HttpResponse(body = json.dumps({"result": False , "msg": "No password provided"}))
     
     else:
-        return func.HttpResponse(body = json.dumps({"result": False , "msg": "No username provided"}))
+        return func.HttpResponse(body = json.dumps({"result": False , "msg": "No email provided"}))

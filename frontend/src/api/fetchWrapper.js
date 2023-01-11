@@ -1,4 +1,4 @@
-import {apiEndpoint} from './config.json'
+import config from './config.json'
 
 /**
  * Wrapper for the fetch function. Provide the input body, route, request type, 
@@ -15,7 +15,7 @@ const handleFetch = async(route, body, requestType, headers={}) => {
     headers['x-functions-key'] = process.env['APP_KEY']
 
     // fetch is like the `requests.` function in our python tests for azure
-    return fetch(apiEndpoint + route, {
+    return fetch(config.apiEndpoint + route, {
         method: requestType,
         headers,
         body: JSON.stringify(body)
