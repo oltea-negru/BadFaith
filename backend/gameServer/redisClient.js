@@ -66,13 +66,20 @@ export default class HotStorageClient {
     async addReady(lobbyCode, socket, ready) {
         var lobbyDoc = await this.getLobby(lobbyCode)
         const playerID = lobbyDoc.socketToPlayers[socket]
-        if(ready) {
+        if (ready) {
             lobbyDoc.readyUp++
         } else {
             lobbyDoc.readyUp--
         }
         lobbyDoc.players[playerID].ready = ready
-        return this.updateLobby(lobbyCode, lobbyDoc)
+        const readyResult = await this.updateLobby(lobbyCode, lobbyDoc)
+        const progressResult = await this.progressGameState(lobbyCode)
+        if (progressResult.ok)
+            return {
+                progressState: true
+            }
+        else
+            return readyResult
     }
 
     async getReadyCounter(lobbyCode) {
@@ -100,9 +107,11 @@ export default class HotStorageClient {
         }
     }
 
+    // TODO Remove inbetweeen state -> add seamless event to event progression
     async progressGameState(lobbyCode) {
+        let result
         const lobby = this.getLobby(lobbyCode)
-        if (lobby == null) return {
+        if (lobby == null) result = {
             ok: false,
             msg: "Lobby does not exist"
         };
@@ -110,7 +119,7 @@ export default class HotStorageClient {
             case 1: // Joining to Starting
                 // check that number of 'readys' is equal to number of 
                 if (lobby.readyUp != Object.keys(lobby.players).length) {
-                    return {
+                    result = {
                         ok: false,
                         msg: "Not enough players ready"
                     }
@@ -118,11 +127,11 @@ export default class HotStorageClient {
                 console.log("Lobby " + lobbyCode + ": progressing to start game phase")
                 lobby.state = 2
                 await this.updateLobby(lobbyCode, lobby)
-                return { ok: true, msg: "Progressed to starting game" }
+                result = { ok: true, msg: "Progressed to starting game" }
             case 2: // Starting to between events
                 if (lobby.events.length != Object.keys(lobby.players).length) {
                     // the wrong number of events has been generated
-                    return {
+                    result = {
                         ok: false,
                         msg: "Incorrect number of events to progress: " + lobby.events.length
                     }
@@ -131,7 +140,7 @@ export default class HotStorageClient {
                     console.log(player + ": " + data.allegiance)
                     if (data.allegiance == "") {
                         //Player has not been allocated a team
-                        return {
+                        result = {
                             ok: false,
                             msg: "Player: " + player + " has not been allocated a team"
                         }
@@ -140,7 +149,7 @@ export default class HotStorageClient {
                 console.log("Lobby " + lobbyCode + ": progressing to in between events")
                 lobby.state = 3
                 await this.updateLobby(lobbyCode, lobby)
-                return {
+                result = {
                     ok: true,
                     msg: "Lobby events and players initialised, progressing to between events"
                 }
@@ -149,7 +158,7 @@ export default class HotStorageClient {
                     console.log("Lobby " + lobbyCode + ": progressing to discussion phase")
                     lobby.state = 5
                     await this.updateLobby(lobbyCode, lobby)
-                    return {
+                    result = {
                         ok: true,
                         msg: "Progressed to discussion"
                     }
@@ -159,7 +168,7 @@ export default class HotStorageClient {
                     lobby.currentEvent = lobby.events.shift()
                     lobby.state = 4
                     await this.updateLobby(lobbyCode, lobby)
-                    return {
+                    result = {
                         ok: true,
                         msg: "Progressed to next event"
                     }
@@ -169,7 +178,7 @@ export default class HotStorageClient {
                 console.log("Lobby " + lobbyCode + ": progressing to in between events")
                 lobby.state = 3
                 this.updateLobby(lobbyCode, lobby)
-                return {
+                result = {
                     ok: true,
                     msg: "Current event completed, progressing to between events"
                 }
@@ -177,13 +186,13 @@ export default class HotStorageClient {
                 console.log("Lobby " + lobbyCode + ": progressing to voting phase")
                 lobby.state = 6
                 this.updateLobby(lobbyCode, lobby)
-                return {
+                result = {
                     ok: true,
                     msg: "Discussion phase complete, progressing to voting phase"
                 }
             case 6: // Voting to results
                 if (lobby.voteLimit != Object.keys(lobby.votes).length) {
-                    return {
+                    result = {
                         ok: false,
                         msg: "Not enough players voted"
                     }
@@ -191,7 +200,7 @@ export default class HotStorageClient {
                 console.log("Lobby " + lobbyCode + ": progressing to results phase")
                 lobby.state = 7
                 this.updateLobby(lobbyCode, lobby)
-                return {
+                result = {
                     ok: true,
                     msg: "Voting phase complete, progressing to results phase"
                 }
@@ -199,13 +208,14 @@ export default class HotStorageClient {
                 console.log("Lobby " + lobbyCode + ": progressing to end phase")
                 lobby.state = 8
                 this.updateLobby(lobbyCode, lobby)
-                return {
+                result = {
                     ok: true,
                     msg: "Results phase complete, progressing to end phase"
                 }
             case 8: // Starting to Starting
                 break;
         }
+        return result
     }
 
     async getUserState(lobbyCode, socket) {
