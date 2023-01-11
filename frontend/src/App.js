@@ -5,22 +5,15 @@ import Voting from "./pages/Voting.js";
 import Chat from "./pages/ChatTest";
 import Lobby from "./pages/Lobby";
 import WaitingRoom from "./pages/WaitingRoom";
-import
-{
+import LoginRoom from "./pages/Home.js";
+import Game from "./pages/Game";
+import {
 	BrowserRouter as Router,
 	Route,
 	Routes,
-
 } from "react-router-dom";
 
-import LoginRoom from "./pages/Home.js";
-// import PlayerLogin from "./pages"
-import EventRoom from "./pages/EventRoom";
-import Game from "./pages/Game";
-
-
-function App()
-{
+function App() {
 	return (
 		<Router>
 			<Routes>

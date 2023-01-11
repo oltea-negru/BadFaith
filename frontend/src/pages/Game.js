@@ -2,13 +2,14 @@ import Voting from "./Voting.js";
 import WaitingRoom from "./WaitingRoom";
 import EventRoom from "./EventRoom";
 import { EventGenMap } from "../components/eventMap";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 export default function Game({ lobby_state }) {
 
-    const { game } = useSelector(state => state.game);
+    const { lobby } = useSelector(state => state.game);
     var used_state = lobby_state
-    if (used_state == null) used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("GagOrder", {
+    // if (used_state == null) 
+    used_state = dummylobbyState
+    dummylobbyState.current_event = EventGenMap("PrivateDiscussion", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
         original: "Enemy",
@@ -33,10 +34,10 @@ export default function Game({ lobby_state }) {
                 return (<WaitingRoom />)
         }
     }
-    
+
     return (
         <div>
-            {setFunction(game.lobby)}
+            {setFunction(used_state)}
         </div>
     )
 }
@@ -90,7 +91,7 @@ const dummylobbyState = {
     "current_event": {}
 }
 function getPlayerArray() {
-    let playerArray = new Array();
+    let playerArray = [];
     Object.keys(dummylobbyState.players).forEach(player => {
         playerArray.push(dummylobbyState.players[player]);
     })

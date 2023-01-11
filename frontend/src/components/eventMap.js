@@ -53,7 +53,8 @@ const Events = {
     PrivateDiscussion: {
         BlindName: "Private Discussion",
         EventTitle: "Private Discussion",
-        BlindInfo: "Select a player to share your secrets with"
+        BlindInfo: "Select a player to share your secrets with",
+        Details: "Select a player to share your secrets with"
     },
     GagOrder: {
         BlindName: "Gag Order",
@@ -364,7 +365,7 @@ function PrivateDiscussionEvent({ event_data }) {
         const selectBox = document.querySelector("#SelectBox");
         const discussionBox = document.querySelector("#Discussion");
         selectBox.classList.toggle("hidden");//Hide selection
-        discussionBox.classList.toggle("flex-wrap absolute flex justify-between p-2 top-[16vh] w-[21vh] right-[43.5vh] rounded-2xl h-[20vh]");//Show details for each player
+        discussionBox.classList.toggle("hidden");//Show details for each player
     }
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
@@ -406,24 +407,24 @@ function PrivateDiscussionEvent({ event_data }) {
                                     updateDiscussion(temp);
                                     console.log(discussionPlayers);
                                     DiscussionDisplay(player);
-                                    showSelection();
                                 }
                                 }
                             >{player.nickname}</button>)}
                     </div>
+                    <div id="Discussion"
+                        className="hidden flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
+                        {discussionPlayers.map((player) => {
+                            return <div className="rounded-2xl p-1 bg-white justify-center m-auto">
+                                <strong className="font-another text-[#ff0000]">{player.nickname}</strong>
+                                <br />
+                                <strong className="font-another">Allegience: <strong className="font-another text-[#ff0000]">{player.allegiance}</strong></strong>
+                            </div>
+                        }
+                        )}
+                    </div>
                 </div>
             </div>
-            <div id="Discussion"
-                className="hidden p-1 rounded-2xl">
-                {discussionPlayers.map((player) => {
-                    return <div className="rounded-2xl p-1 bg-white justify-center m-auto">
-                        <strong className="font-another text-[#ff0000]">{player.nickname}</strong>
-                        <br />
-                        <strong className="font-another">Allegience: <strong className="font-another text-[#ff0000]">{player.allegiance}</strong></strong>
-                    </div>
-                }
-                )}
-            </div>
+
             <div className="flex">
                 <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh] hover:text-[#ff0000]"
                     onClick={() => {
@@ -653,15 +654,12 @@ export default function EventMap(current_event) {
             return <BodyGuardEvent event_data={current_event} />;
         default:
             break;
-
     }
-
 }
 
 function endEvent() {
     const eventInfo = document.querySelector("#Event-Info");
     eventInfo.classList.toggle("hidden");
-
     //insert emits to progress game state
 }
 
@@ -685,7 +683,6 @@ function OriginalEnemies(player) {
 
 export function EventGenMap(eventName, player, players) {
     const event = Events[eventName];//fetch event strings
-
     const valid = players.filter(excludePlayer(player));
     let extra_players;
     switch (eventName) {
@@ -728,7 +725,6 @@ export function EventGenMap(eventName, player, players) {
             extra_players = SinglePlayer(valid);
             break;
     }
-
     let eventObject = { //arrange data into expected format for events
         player: player,
         extra_players: extra_players,
@@ -738,8 +734,6 @@ export function EventGenMap(eventName, player, players) {
         details: event.Details,
         event_function: eventName
     };
-
-
     return eventObject;
 }
 
@@ -750,8 +744,6 @@ function GenerateEvents({ lobby_state }) {
         const event = EventGenMap(eventName, player, lobby_state.players);
         events.push(event);
     });
-
-
 }
 
 export function OutsideEvent({ event_data }) {
@@ -819,5 +811,4 @@ function RandomUniqueEvent(events) {
         event = Events[keys[Math.floor((Math.random() * keys.length))]];
     }
     return event;
-
 }
