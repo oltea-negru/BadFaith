@@ -58,6 +58,7 @@ function Settings()
             {
                 setAvatarInput(avatar);
                 setShowOptions(false);
+                setAvatarInput(avatars.indexOf(avatar))
             }}
             alt="Avatar"
             className="h-32 hover:transition ease-out duration-500  rounded-lg hover:h-44  hover:cursor-pointer"
