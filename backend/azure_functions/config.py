@@ -7,5 +7,6 @@ settings = {
     'db_id' : 'badfaith' ,
     'player_container' : 'player',
     'lobby_container': 'lobby',
-    'event_container' : 'event'
+    'event_container' : 'event',
+    'login_container' : 'login'
 }
