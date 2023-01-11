@@ -230,7 +230,7 @@ export default class HotStorageClient {
     //fetch individual lobby json
     async getLobby(lobbyCode) {
         const lobby = await this.client.get(lobbyCode)
-        return lobby
+        return JSON.parse(lobby)
     }
 
     async setLobbyEvents(lobbyCode, eventArray) {
