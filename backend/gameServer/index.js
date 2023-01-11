@@ -67,9 +67,13 @@ async function addVote(lobbyCode, target) {
   const result = await gameStoreClient.addVote(lobbyCode,target)
 }
 
-async function emitGameState(lobbyCode){
-  for(const socket of io.sockets.adapter.rooms.get(lobbyCode)){
-    socket.emit('state', gameStoreClient.getUserState(lobbyCode, socket.id))
+async function emitGameState(lobbyCode, socket){
+  io.to(socket).emit('state', await gameStoreClient.getUserState(lobbyCode, socket.id))
+}
+
+async function updateAll(lobbyCode){
+  for(const socket of await gameStoreClient.getSockets(lobbyCode)){
+    emitGameState(lobbyCode, socket)
   }
 }
 
@@ -95,14 +99,20 @@ io.on('connection', async (socket) => {
 
   socket.on('readyUp', async (lobbyCode, acknowledgement) => {
     const result = await readyUp(lobbyCode, socket)
-    if(result.progressState)
-      emitGameState(lobbyCode)
+    if(result.progressState){
+      updateAll(lobbyCode);
+      acknowledgement(result)
+    }
     else
       acknowledgement(result)
   })
 
   socket.on('action', () => {
     
+  })
+
+  socket.on('retrieveState', lobbyCode => {
+    updateAll(lobbyCode);
   })
 
   socket.on('vote', async (lobbyCode,target, acknowledgement) => {

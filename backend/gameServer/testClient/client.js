@@ -32,6 +32,10 @@ const connect = () => {
     console.log('ID Ping Received:', id)
   })
 
+  socket.on('state', state => {
+    console.log('Updated state', state);
+  })
+  
   socket.open();
 };
 
@@ -71,7 +75,7 @@ const joinLobby = () => {
 const ready = () => {
   console.log('Ready Up');
   const lobbyCode = document.getElementById('lobbyCode').value
-  socket.emit('joinLobby', lobbyCode, (response) => {
+  socket.emit('readyUp', lobbyCode, (response) => {
     console.log('ReadyUp response', response)
   })
 }
