@@ -222,6 +222,8 @@ export default class HotStorageClient {
         const lobby = this.getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[socket]
         delete lobby.events
+        delete lobby.votes
+        delete lobby.voteLimit
         if (lobby.currentEvent.player == playerID)
         {
             return lobby
