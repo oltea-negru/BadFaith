@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "azure-cosmos": "^0.0.1-security.3",
-    "azure-functions": "^1.0.2",
-    "tailwind": "^4.0.0"
-  }
-}
