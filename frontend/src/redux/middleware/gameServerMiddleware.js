@@ -1,15 +1,17 @@
-export let gameSocket;
+import { useDispatch } from "react-redux";
 import { io } from "socket.io-client";
+import { AddMessage } from "../slices/chatSlice";
 
-export const gsConnect = host => ({ type: 'GS_CONNECT', host });
+export const gsConnect = () => ({type: 'GS_CONNECT'});
 export const gsConnecting = host => ({ type: 'GS_CONNECTING', host });
+export const sendChatAction = message => ({ type: 'CHAT', message})
 
-const socketMiddleware = () => {
+const gameServerMiddleware = () => {
   let socket = null;
 
-  const onChat = message => {
-      //TODO Add chat to redux state and use redux state for chat
+  const onChat = (dispatch, message) => {
       console.log('Chat received: ', message)
+      dispatch(AddMessage(message))
   }
 
   const onGameState = gameState => {
@@ -24,20 +26,27 @@ const socketMiddleware = () => {
         }
 
         // connect to the remote host
-        socket = new io.connect(action.host);
-    
-        gameSocket.on('chat', message => {
-            onChat()
+        socket = new io('localhost:9000', {
+          transports: ['websocket']
         })
 
-        gameSocket.on('state', state => {
+        socket.on('connect', () => {
+          console.log('Connected');
+        });
+    
+        socket.on('chat', message => {
+            onChat(store.dispatch, message)
+        })
+
+        socket.on('state', state => {
             onGameState()
         })
 
-        gameSocket.on('disconnect', (reason) => {
+        socket.on('disconnect', (reason) => {
             //TODO Game socket disconnect
         })
 
+        socket.open()
         break;
       case 'GS_DISCONNECT':
         if (socket !== null) {
@@ -84,8 +93,8 @@ const socketMiddleware = () => {
         socket.emit('action', action.payload)
         break;
       case 'CHAT':
-        console.log('Chat', action.payload);
-        socket.emit('chat', action.payload)
+        console.log('Chat Socket Emit', action.message);
+        socket.emit('chat', action.message)
         break;
       default:
         console.log('Next action:', action);

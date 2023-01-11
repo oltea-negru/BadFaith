@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import JoinLobbyCard from '../assets/svg/JoinLobbyComponent.svg'
 import CreateLobbyCard from '../assets/svg/CreateLobbyComponent.svg'

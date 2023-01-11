@@ -115,10 +115,11 @@ io.on('connection', async (socket) => {
     acknowledgement(await addVote(lobbyCode,target))
   })
 
-  socket.on('chat', message => {
-    console.log('Chat event', Array.from(socket.rooms.keys())[1])
+  socket.on('chat', async message => {
+    console.log('Chat event')
     const lobbyCode = Array.from(socket.rooms.keys())[1]
-    socket.to(lobbyCode).emit('chat', message);
+    const player = (await gameStoreClient.getNickname(lobbyCode, socket.id)).nickname
+    socket.to(lobbyCode).emit('chat', {player, message});
   })
 
   socket.on('disconnect', () => {
