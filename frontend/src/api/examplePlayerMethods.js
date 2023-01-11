@@ -65,8 +65,8 @@ const _handleLoginStatus = async (email, password) => {
 
 const _handleLoginRemove = async (email, password) => {
     const body = {
-        email: email,
-        password: password
+        email,
+        password
     }
     const response = await handleFetch("/api/loginremove", body, 'POST')
 

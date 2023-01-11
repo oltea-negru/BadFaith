@@ -25,25 +25,20 @@ import EventRoom from "./pages/EventRoom";
 function App()
 {
 	const { email, password } = useSelector(state => state.user)
-	// async function removeUser() {
-	// 	await login_remove(email, password);
-	// }
-
-	useEffect (() => {	
-		const handleTabClose = async event => {
+	useEffect (() => {
+		const beforeUnloadListener = async (event) => {
 			event.preventDefault();
-			await login_remove(email, password);
-			console.log('beforeunload event triggered');	
-	  
-			return (event.returnValue = 'Are you sure you want to exit?');
-		  };
-		  
-		window.addEventListener('beforeunload', () => handleTabClose());
+			await login_remove(email, password)
+			return event.returnValue = "Are you sure you want to exit?";
+		};
+		window.addEventListener('beforeunload', beforeUnloadListener);
 	
 		return () => {
-		  window.removeEventListener('beforeunload', () => handleTabClose());
-		};
-	  }, []);
+		  window.removeEventListener('beforeunload', beforeUnloadListener)
+		}
+	  }, [email, password]);
+
+
 	return (
 		<Router>
 			<Routes>
