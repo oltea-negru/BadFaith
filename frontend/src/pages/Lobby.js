@@ -78,7 +78,7 @@ function Lobby()
                         <img src={Settings} alt="" className='absolute h-[30%] bottom-[10%] right-[42%] -rotate-12 hover:h-[35%] hover:cursor-pointer' onClick={() => navigate("/settings")} />
                     </div>
             }
-            <button className='active:text-4xl focus:outline-none absolute bottom-20 left-20 text-3xl text-white' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
+            <button className='font-another active:text-4xl focus:outline-none absolute bottom-20 left-20 text-3xl text-white' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
         </div>
     );
 
