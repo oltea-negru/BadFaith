@@ -46,16 +46,16 @@ export default class HotStorageClient {
             }
         }
         await this.setActivePlayer(hostDetails.playerID, hostDetails.socketID, lobbyCode)
-        var playerDetails = schema.player
-        playerDetails.socketID = hostDetails.socketID
-        playerDetails.nickname = hostDetails.nickname
-        lobbyDoc.players[hostDetails.playerID] = playerDetails
+        if (!lobbyDoc.players[hostDetails.playerID]) { //if player is not in the game already
+            lobbyDoc.players[hostDetails.playerID] = schema.player
+            lobbyDoc.players[hostDetails.playerID].nickname = hostDetails.nickname
+            lobbyDoc.voteLimit++;
+        }
 
-        lobbyDoc.voteLimit++;
-
+        lobbyDoc.players[hostDetails.playerID].socketID = hostDetails.socketID
         lobbyDoc.socketToPlayers[hostDetails.socketID] = hostDetails.playerID
         lobbyDoc.playerToSockets[hostDetails.playerID] = hostDetails.socketID
-        console.log("Lobby " + lobbyCodeAdding + ": " + hostDetails.playerID)
+        console.log("Lobby " + lobbyCode + ": adding " + hostDetails.playerID + " with " + hostDetails.socketID)
         return this.updateLobby(lobbyCode, lobbyDoc)
     }
 
