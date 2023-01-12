@@ -87,7 +87,8 @@ const gameServerMiddleware = () => {
             console.log('Join Lobby', action.lobbyCode, action.playerDetails);
             socket.emit('joinLobby', action.lobbyCode, action.playerDetails, (response) => {
                 if (response.ok) {
-                    store.dispatch(updatePlayerID(store.user.email))
+                    store.dispatch(updateLobbyCode(response.lobbyCode))
+                    store.dispatch(updatePlayerID(action.playerDetails.playerID))
                 }
                 else{
                     store.dispatch(setError(response.message))
