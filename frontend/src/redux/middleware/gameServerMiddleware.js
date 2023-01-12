@@ -12,8 +12,8 @@ export const joinLobby = (lobbyCode, playerDetails) => ({ type: 'JOIN_LOBBY', lo
 export const votePlayer = (lobbyCode, target) => ({ type: 'VOTE', lobbyCode, target })
 export const readyUp = lobbyCode => ({ type: 'READY', lobbyCode })
 
-const serverHost = process.env.SERVER_HOST || "localhost"
-const serverPort = process.env.SERVER_PORT || "9000"
+const serverHost = "34.142.27.158"
+const serverPort = "9000"
 
 const gameServerMiddleware = () => {
     let socket = null;
@@ -35,7 +35,6 @@ const gameServerMiddleware = () => {
             console.log('Socket is already open!')
             
             // connect to the remote host
-            console.log(serverHost, serverPort)
             socket = new io(`${serverHost}:${serverPort}`, {
                 transports: ['websocket']
             })
