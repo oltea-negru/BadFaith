@@ -16,12 +16,13 @@ import Avatar7 from "../assets/avatars/avatar-7.svg";
 export default function Voting()
 {
   const [votedPlayer, setVotedPlayer] = React.useState(null);
+  const [haveIVoted, setHaveIVoted] = React.useState(false);
   const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
   function playerFrame(name, avatar)
   {
     return votedPlayer === name ?
-      <div onClick={() => setVotedPlayer(null)} className='w-[20%] flex flex-col justify-center mx-4 hover:cursor-pointer animate-pulse transform duration-300 ease-in-out'>
+      <div onClick={() => { if (haveIVoted === false) setVotedPlayer(null) }} className='w-[20%] flex flex-col justify-center mx-4 hover:cursor-pointer animate-pulse transform duration-300 ease-in-out'>
         <div className='grid place-items-center'>
           <img src={Frame} alt='Frame' className='w-fit' />
           <img src={avatars[avatar]} alt='Avatar' className='w-[50%] rounded-full absolute' />
@@ -32,7 +33,7 @@ export default function Voting()
         </div>
       </div >
       :
-      <div onClick={() => setVotedPlayer(name)} className='w-[15%] flex flex-col justify-center mx-4 hover:w-[17%] hover:cursor-pointer transform duration-300 ease-in-out'>
+      <div onClick={() => { if (haveIVoted === false) { setVotedPlayer(name); setHaveIVoted(true); } }} className='w-[15%] flex flex-col justify-center mx-4 hover:w-[17%] hover:cursor-pointer transform duration-300 ease-in-out'>
         <div className='grid place-items-center'>
           <img src={Frame} alt='Frame' className='w-fit' />
           <img src={avatars[avatar]} alt='Avatar' className='w-[50%] rounded-full absolute' />
