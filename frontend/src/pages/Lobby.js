@@ -73,6 +73,7 @@ function Lobby()
                                                 </div>
                                                 <button className='font-another bg-white mb-10 h-14 text-4xl hover:text-5xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { 
                                                     dispatch(createLobby({playerID: email, nickname}))
+                                                    // navigate('/game')
                                                 }}>Create Code</button>
                                             </div> :
                                             <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-blue-500 border-4 border-black justify-evenly'>

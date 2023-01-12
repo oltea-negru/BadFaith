@@ -7,15 +7,15 @@ import Endgame from "./Endgame.js";
 export default function Game({ lobby_state }) {
 
     const { lobby } = useSelector(state => state.game);
-    var used_state = lobby_state
-    // if (used_state == null) 
-    used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("Blackmailed", {
-        nickname: "LoremIpsum",
-        icon: "Figure this out",
-        original: "Enemy",
-        allegiance: "Enemy"
-    }, getPlayerArray())
+    // var used_state = lobby_state
+    // // if (used_state == null) 
+    // used_state = dummylobbyState
+    // dummylobbyState.current_event = EventGenMap("Blackmailed", {
+    //     nickname: "LoremIpsum",
+    //     icon: "Figure this out",
+    //     original: "Enemy",
+    //     allegiance: "Enemy"
+    // }, getPlayerArray())
 
     const setFunction = (used_state) => {
         switch (used_state.state) {
@@ -38,7 +38,7 @@ export default function Game({ lobby_state }) {
 
     return (
         <div>
-            {setFunction(used_state)}
+            {setFunction(lobby)}
         </div>
     )
 }
