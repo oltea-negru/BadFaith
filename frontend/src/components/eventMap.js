@@ -511,10 +511,9 @@ function GagOrderEvent({ event_data }) {
     function gagPlayer(target) {
         const { lobby } = useSelector(state => state.game)
         const details = target
-        details.vote = "NoVote"
+        details.role = "NoVote"
         eventAction('update', details)
     }
-    const [gagSelect, setGag] = useState();
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -553,7 +552,7 @@ function GagOrderEvent({ event_data }) {
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
-                                    setGag(player);
+                                    gagPlayer(player);
                                     //EmitGag();
                                     endEvent();
                                 }}
@@ -569,6 +568,11 @@ function GagOrderEvent({ event_data }) {
 }
 
 function BlackMarkEvent({ event_data }) {
+    function markPlayer(target) {
+        const { lobby } = useSelector(state => state.game)
+        const details = target
+        eventAction('vote', details)
+    }
     const [mark, setMark] = useState();
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
@@ -613,7 +617,7 @@ function BlackMarkEvent({ event_data }) {
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
-                                    setMark(player);
+                                    markPlayer(player);
                                     //EmitMark();
                                     endEvent();
                                 }}
@@ -629,8 +633,19 @@ function BlackMarkEvent({ event_data }) {
 }
 
 function CoupEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "vote";
+    const { player, lobby } = useSelector(state => state.game)
+    const details = player
+    function getUserName() {
+        const players = lobby.players
+        Object.keys(players).forEach(player => {
+            if(event_data.extra_players[0].nickname = players[player].nickname) {
+                return player
+            }
+        })
+    }
+    details.target = getUserName()
+    details.role = "Coup"
+    eventAction('update',details)
 
     return (
         <div className="p-4 m-auto">
@@ -668,8 +683,19 @@ function CoupEvent({ event_data }) {
 }
 
 function BlackmailedEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "win";
+    const { player, lobby } = useSelector(state => state.game)
+    const details = player
+    function getUserName() {
+        const players = lobby.players
+        Object.keys(players).forEach(player => {
+            if(event_data.extra_players[0].nickname = players[player].nickname) {
+                return player
+            }
+        })
+    }
+    details.target = getUserName()
+    details.role = "Blackmail"
+    eventAction('update',details)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -712,8 +738,19 @@ function BlackmailedEvent({ event_data }) {
 }
 
 function BodyGuardEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "lives";
+    const { player, lobby } = useSelector(state => state.game)
+    const details = player
+    function getUserName() {
+        const players = lobby.players
+        Object.keys(players).forEach(player => {
+            if(event_data.extra_players[0].nickname = players[player].nickname) {
+                return player
+            }
+        })
+    }
+    details.target = getUserName()
+    details.role = "Guard"
+    eventAction('update',details)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -787,7 +824,7 @@ export default function EventMap(current_event) {
 }
 
 function eventAction(type, playerChanges) {
-    const { lobbyCode, player } = useSelector(state => state.game)
+    const { lobbyCode } = useSelector(state => state.game)
     dispatch(sendAction(lobbyCode, type, playerChanges))
 }
 
