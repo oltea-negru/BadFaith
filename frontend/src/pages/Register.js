@@ -52,15 +52,15 @@ export default function PlayerRegister()
   }
 
   return (
-    <div className='bg-register bg-cover grid place-items-center h-screen'>
+    <div className='bg-register bg-cover bg-center bg-top grid place-items-center h-screen'>
       <form className='flex flex-col justify-evenly h-1/3'>
         <input type="text" id="email" name="email" placeholder="Email" className='input' value={emailInput} onChange={event => setEmail(event.target.value)} />
         <input type="password" id="password" name="password" placeholder="Password (8-30 chars)" className='input' value={passwordInput} onChange={event => setPassword(event.target.value)} />
       </form>
-      <img src={Create} alt="Register Button" className="hover:cursor-pointer absolute right-[5%] h-36 bottom-[10%] hover:h-40 transition" onClick={() => handleRegister({ email: emailInput, password: passwordInput })} />
+      <img src={Create} alt="Register Button" className="custom-transition hover:cursor-pointer absolute right-[5%] h-36 bottom-[10%] hover:h-40" onClick={() => handleRegister({ email: emailInput, password: passwordInput })} />
       <div className='absolute bottom-20 left-20 flex flex-col hover:cursor-pointer '>
         <button className='focus:outline-none text-3xl  text-white ' onClick={() => navigateToHome()}>Back</button>
-        <img src={Return} alt="Return Button" className="h-10 hover:h-12 transition" onClick={() => navigateToHome()} />
+        <img src={Return} alt="Return Button" className="h-10 hover:h-12 custom-transition" onClick={() => navigateToHome()} />
       </div>
     </div >
   )

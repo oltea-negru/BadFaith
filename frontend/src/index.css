@@ -36,7 +36,11 @@
 }
 
 .input {
-    @apply rounded-lg px-10 bg-white h-[50px] w-[300px] ml-3 font-another text-2xl;
+    @apply border-black border-4 text-center rounded-lg px-6 bg-white h-[70px] w-[350px] font-another text-2xl;
+}
+
+.input:focus {
+    @apply outline-yellow-400 shadow-md shadow-white border-none;
 }
 
 .custom-transition {
