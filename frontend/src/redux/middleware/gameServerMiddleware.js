@@ -35,7 +35,7 @@ const gameServerMiddleware = () => {
             console.log('Socket is already open!')
             
             // connect to the remote host
-            socket = new io(`34.142.27.158:9000`, {
+            socket = new io(`${serverHost}:${serverPort}`, {
                 transports: ['websocket']
             })
 
