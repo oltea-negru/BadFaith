@@ -12,5 +12,6 @@ backend/azure_functions/pyvenv.cfg
 backend/Lib/
 backend/pyvenv.cfg
 backend/Scripts/
+backend/.vscode/
 
 node_modules

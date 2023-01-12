@@ -28,18 +28,19 @@ export default function WaitingRoom()
     // }, []);
 
     return (
-        <div className="bg-waiting_lobby bg-cover h-screen w-screen">
+        <div className="bg-waiting_lobby bg-cover h-screen">
+            <Chat />
             <div className="bottom-0 left-14 h-5/6 absolute">
-                <img src={WaitingList} alt="sdas" className="h-full" />
+                <img src={WaitingList} alt="waiting list" className="h-full" />
                 <div className="absolute top-[15%] h-[45%] left-1/3 ">
                     {dummyPlayers.map((player) => <p className="text-white font-another text-3xl "> {player.nickname}</p>)}
                 </div>
-                
+
             </div>
             <div className="flex flex-row ml-[30%] mt-[20%] absolute">
                 {dummyPlayers.map((player, index) => <PlayerWaiting text={player.nickname} color={colors[index]} index={index + 1} />)}
             </div>
-            <Chat/>
+
         </div>
 
     );

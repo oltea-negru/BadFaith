@@ -18,7 +18,8 @@ const handleFetch = async(route, body, requestType, headers={}) => {
     return fetch(config.apiEndpoint + route, {
         method: requestType,
         headers,
-        body: JSON.stringify(body)
+        body: JSON.stringify(body),
+        keepalive: true
     })
 }
 

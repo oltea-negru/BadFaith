@@ -1,23 +1,18 @@
 import EventMap, { OutsideEvent } from "./eventMap";
 
-export function CurrentEvent({current_event}) {
+export function CurrentEvent({ current_event })
+{
     // const lobby = useState([]);
     return (
-        <div>
-            <div id="Event-Info">
-                <div>
-                    {EventMap(current_event)}
-                </div>
-            </div>
-
+        <div >
+            {EventMap(current_event)}
         </div>
     );
 }
 
-export function EventWaiting({current_event}) {
+export function EventWaiting({ current_event })
+{
     return (
-        <div>
-            <OutsideEvent event_data={current_event} />
-        </div>
+        <OutsideEvent event_data={current_event} />
     );
 }

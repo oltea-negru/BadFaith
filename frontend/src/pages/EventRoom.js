@@ -16,15 +16,13 @@ export default function EventRoom({ lobby_state }) {
     if (used_state.state == 4) {
         if (used_state.inEvent) {
             return (
-                <div className="bg-event_room h-screen w-screen bg-cover">
+                <div className="bg-event_room h-screen bg-cover bg-bottom">
                     <CurrentEvent current_event={used_state.current_event} />
                 </div>
             )
         } else {
             return (
-                <div className="bg-event_waiting h-screen w-screen bg-cover">
-                    <EventWaiting current_event={used_state.current_event} />
-                </div>
+                <EventWaiting current_event={used_state.current_event} />
             )
         }
     }
