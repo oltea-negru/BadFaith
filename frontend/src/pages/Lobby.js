@@ -18,9 +18,7 @@ function Lobby()
     const navigate = useNavigate()
 
     const { email, nickname } = useSelector(state => state.user)
-    const { lobbyCode } = useSelector(state => state.game)
-
-
+    const { lobbyCode, lobby } = useSelector(state => state.game)
 
     // Connect game socket on joining page
     const dispatch = useDispatch()
@@ -29,8 +27,11 @@ function Lobby()
     }, [])
 
     useEffect(() => {
-        setCodeCreated(lobbyCode)
+        if(lobbyCode!="")
+            navigate("/game")
     }, [lobbyCode])
+
+
 
 
     return (
