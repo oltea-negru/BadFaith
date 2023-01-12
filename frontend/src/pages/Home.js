@@ -31,13 +31,13 @@ export default function LoginRoom()
 
 
   return <div className="bg-login_room bg-cover bg-center h-screen">
-    <img onClick={playerLogin} src={Login} alt="Login player" className="hover:h-[90%] clickable absolute right-[5%] bottom-0 h-[85%]  transition" />
+    <img onClick={playerLogin} src={Login} alt="Login player" className="hover:h-[90%]  clickable absolute right-[5%] bottom-0 h-[85%]  custom-transition" />
     <img src={Logo} alt="Logo" className="py-4 ml-[25%]  h-1/3" />
-    <div className="absolute bottom-0 left-40">
-      <img src={Settings} alt="Welcome" className="ml-[70%]" />
-      <img src={Table} alt="Table" className="h-56 " />
+    <div className="absolute flex flex-col justify-end bottom-0 lg:left-[5%] left-[25%] h-1/2 w-2/3">
+      <img src={Settings} alt="Welcome" className="ml-[50%] lg:ml-[30%] h-1/2 max-h-[200px]" />
+      <img src={Table} alt="Table" className="h-fit w-full max-h-[350px]" />
     </div>
-    <img onClick={playerRegister} src={Register} alt="Register player" className="hover:h-[40%] clickable absolute h-1/3 top-[10%] left-[5%]  transition" />
-  </div>
+    <img onClick={playerRegister} src={Register} alt="Register player" className="hover:h-[40%] clickable absolute h-1/3 top-[10%] left-[5%]  custom-transition" />
+  </div >
 
 }

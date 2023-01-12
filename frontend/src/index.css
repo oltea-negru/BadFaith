@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* * {
+* {
     border: 1px solid red;
-} */
+}
 
 /* .slowAnim {
     @apply hover: transition duration-700 ease-in-out;
@@ -37,6 +37,10 @@
 
 .input {
     @apply rounded-lg px-10 bg-white h-[50px] w-[300px] ml-3 font-another text-2xl;
+}
+
+.custom-transition {
+    @apply duration-300 ease-in-out;
 }
 
 @font-face {
