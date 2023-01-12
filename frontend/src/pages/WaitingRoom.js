@@ -4,17 +4,17 @@ import PlayerWaiting from "../components/player_waiting";
 import { readyUp } from "../redux/middleware/gameServerMiddleware";
 import Chat from "./ChatTest";
 
-export default function WaitingRoom({ lobby_state }) {
+export default function WaitingRoom() {
     const { lobbyCode, lobby } = useSelector(state => state.game)
     const dispatch = useDispatch()
     const colors = ['#813b45', '#7f6a8b', '#6f98aa', '#FF8042', '#7c6434', '#e3bd73', '#5a2b32', '#8c9c83'];
 
     function readPlayers() {
         const players = []
-        if (lobby_state) {
-            console.log(lobby_state.players)
-            for (const key in lobby_state.players) {
-                players.push(lobby_state.players[key])
+        if (lobby) {
+            console.log(lobby.players)
+            for (const key in lobby.players) {
+                players.push(lobby.players[key])
             }
         } else {
             

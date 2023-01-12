@@ -17,6 +17,6 @@ export function CurrentEvent() {
 export function EventWaiting() {
     const { lobby } = useSelector(state => state.game)
     return (
-        <OutsideEvent event_data={lobby.currentEvent} />
+        <OutsideEvent />
     );
 }

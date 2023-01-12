@@ -438,7 +438,9 @@ class HotStorageClient {
     }
 
     async addVote(lobbyCode, target) {
-        const username = this.getUsername(target.socket)
+        console.log('VoteLobbyCode',lobbyCode)
+        console.log('VoteTarget',target)
+        const username = this.getUsername(lobbyCode,target.socket)
         const lobby = await this.client.get(lobbyCode)
         if (!lobby.players[username]) {
             return {
@@ -655,6 +657,14 @@ function getPlayerArray(players) {
         playerArray.push(players[player]);
     })
     return playerArray;
+}
+
+function OriginalAllies(player)
+{
+    return function (p)
+    {
+        return p.original === player.original;
+    };
 }
 
 module.exports.HotStorageClient = HotStorageClient;

@@ -5,8 +5,7 @@ import SeeEnemies from "./SeeEnemies.js";
 import { EventGenMap } from "../components/eventMap";
 import { useSelector } from 'react-redux'
 import Endgame from "./Endgame.js";
-export default function Game({ lobby_state })
-{
+export default function Game({ lobby_state }) {
 
     const { lobby } = useSelector(state => state.game);
     // if (used_state == null) 
@@ -26,11 +25,11 @@ export default function Game({ lobby_state })
             case 2:// Starting
                 return (<WaitingRoom />)
             case 3:// See enemies
-                return (<SeeEnemies lobby_state={used_state} />)
+                return (<SeeEnemies />)
             case 4:// Between Events
-                return (<WaitingRoom lobby_state={used_state} />)
+                return (<WaitingRoom />)
             case 5:// Events
-                return (<EventRoom lobby_state={used_state} />)
+                return (<EventRoom />)
             case 6:// Discussion
                 return (<WaitingRoom />)
             case 7:// Voting
@@ -95,11 +94,9 @@ const dummylobbyState = {
     "event_history": [],
     "current_event": {}
 }
-function getPlayerArray()
-{
+function getPlayerArray() {
     let playerArray = [];
-    Object.keys(dummylobbyState.players).forEach(player =>
-    {
+    Object.keys(dummylobbyState.players).forEach(player => {
         playerArray.push(dummylobbyState.players[player]);
     })
     return playerArray;

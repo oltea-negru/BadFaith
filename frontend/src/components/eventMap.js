@@ -5,7 +5,7 @@ import Avatar from "../assets/avatars/avatar-1.svg";
 import { useDispatch, useSelector } from 'react-redux'
 import { readyUp, sendAction } from "../redux/middleware/gameServerMiddleware";
 
-
+const parser = new DOMParser()
 const PrivateCall = [
     "There is a private phone call for this player.",
     <br />,
@@ -118,21 +118,21 @@ const Events = {
     },
 };
 
-function OldEnemiesEvent({ event_data }) {
+function OldEnemiesEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
-            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{event_data.details}</strong>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
             <strong className="font-another text-[#ff0000]  font-bold bg-white object w-fit p-1 rounded-md">
-                {event_data.extra_players[0].nickname + " "}
+                {lobby.currentEvent.extra_players[0].nickname + " "}
 
                 is an old enemy of
                 <strong className="font-another text-[#ff0000]  font-bold bg-white object w-fit p-1 rounded-md">
-                    {" " + event_data.extra_players[1].nickname}
+                    {" " + lobby.currentEvent.extra_players[1].nickname}
                 </strong> </strong>
             <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">
                 They would never knowingly work together.
@@ -153,22 +153,22 @@ function OldEnemiesEvent({ event_data }) {
     );
 }
 
-function OldAlliesEvent({ event_data }) {
+function OldAlliesEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    // console.log(event_data.extra_players);
+    // console.log(lobby.currentEvent.extra_players);
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
-            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{event_data.details}</strong>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
             <strong className=" text-[#ff0000] font-another font-bold bg-white object w-fit p-1 rounded-md">
-                {event_data.extra_players[0].nickname + " "}
+                {lobby.currentEvent.extra_players[0].nickname + " "}
 
                 is an old ally of{" "}
                 <strong className="font-another text-[#ff0000]">
-                    {event_data.extra_players[1].nickname}
+                    {lobby.currentEvent.extra_players[1].nickname}
                 </strong>
             </strong>
             <p className="font-another font-bold bg-white object w-fit p-1 rounded-md">Their last meeting was as friends.</p>
@@ -188,10 +188,10 @@ function OldAlliesEvent({ event_data }) {
     );
 }
 
-function DeepStateEvent({ event_data }) {
+function DeepStateEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    const details = player
+    var details = player
     switch (details.allegiance) {
         case "Ally":
             details.allegiance = "Enemy"
@@ -205,7 +205,7 @@ function DeepStateEvent({ event_data }) {
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
             <p className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">Your mission is over</p>
 
@@ -219,7 +219,7 @@ function DeepStateEvent({ event_data }) {
                     <br />{" "}
                 </strong>
                 <strong className="font-another text-[#ff0000]">
-                    {event_data.player.allegiance}
+                    {lobby.currentEvent.player.allegiance}
                 </strong>
             </div>
 
@@ -237,16 +237,16 @@ function DeepStateEvent({ event_data }) {
     );
 }
 
-function SplinterCellEvent({ event_data }) {
+function SplinterCellEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    const details = player
+    var details = player
     details.allegiance = "Splinter"
     eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
             <p className="font-another font-bold  bg-white object w-fit p-1 rounded-md">
                 You have broken away from all allegiances and now stand alone.
@@ -262,8 +262,7 @@ function SplinterCellEvent({ event_data }) {
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -274,11 +273,11 @@ function SplinterCellEvent({ event_data }) {
     );
 }
 
-function BackroomDealEvent({ event_data }) {
+function BackroomDealEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function Betray() { // Swap
-        const details = player
+        var details = player
         switch (details.allegiance) {
             case "Ally":
                 details.allegiance = "Enemy"
@@ -298,10 +297,10 @@ function BackroomDealEvent({ event_data }) {
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
             <div className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                <strong className="font-another">{event_data.details}</strong>
+                <strong className="font-another">{lobby.currentEvent.details}</strong>
 
             </div>
             <strong className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
@@ -309,14 +308,13 @@ function BackroomDealEvent({ event_data }) {
                 Your Team:
 
                 <strong className="font-another font-bold text-2xl bg-white text-red-500 object w-fit p-1 rounded-md">
-                    {" " + event_data.player.allegiance}
+                    {" " + lobby.currentEvent.player.allegiance}
                 </strong>
             </strong>
             <div className="flex">
                 <button
                     className="font-another text-2xl  mr-3 text-white bg-green-900 object w-fit p-2 rounded-md"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         Remain();
                     }}
                 >
@@ -324,8 +322,7 @@ function BackroomDealEvent({ event_data }) {
                 </button>
                 <button
                     className="font-another text-2xl  text-white bg-red-900 object w-fit p-2 rounded-md"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         Betray();
                     }}
                 >
@@ -337,19 +334,19 @@ function BackroomDealEvent({ event_data }) {
     );
 }
 
-function MartyrEvent({ event_data }) {
+function MartyrEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    const details = player
+    var details = player
     details.allegiance = "Splinter"
     details.role = "Martyr"
     eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
-            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{event_data.details}</strong>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
             <div className="font-another font-bold bg-white object w-fit p-1 rounded-md">
 
                 If you win,{" "}
@@ -375,24 +372,24 @@ function MartyrEvent({ event_data }) {
     );
 }
 
-function BackgroundCheckEvent({ event_data }) {
+function BackgroundCheckEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
 
             <strong className="font-another font-bold  bg-white object w-fit p-1 rounded-md">
                 According to the latest intel,</strong>
 
             <strong className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md text-[#ff0000]">
-                {event_data.extra_players[0].nickname + " "}
+                {lobby.currentEvent.extra_players[0].nickname + " "}
 
                 is an{" "}
                 <strong className="font-another text-[#ff0000]">
-                    {event_data.extra_players[0].allegiance}
+                    {lobby.currentEvent.extra_players[0].allegiance}
 
                     .</strong>{" "}
             </strong>
@@ -414,12 +411,13 @@ function BackgroundCheckEvent({ event_data }) {
     );
 }
 
-function PickPocketEvent({ event_data }) {
+function PickPocketEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function PickPocket(target) {
-        const details1 = player
-        const details2 = lobby.players[target]
+        console.log('Target',target)
+        var details1 = player
+        var details2 = lobby.players[target]
         details1.role = lobby.players[target].role
         details1.allegiance = lobby.players[target].allegiance
         details1.target = lobby.players[target].target
@@ -429,8 +427,7 @@ function PickPocketEvent({ event_data }) {
         eventAction(dispatch, lobbyCode, 'update', details1)
         eventAction(dispatch, lobbyCode, 'update', details2)
     }
-    function showSelection()
-    {
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
@@ -438,18 +435,17 @@ function PickPocketEvent({ event_data }) {
     return (
         <div className="overflow-hidden font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
 
 
             <div className="font-another font-bold  bg-white object w-fit p-1 rounded-md">
-                <strong className="font-another">{event_data.details}</strong>
+                <strong className="font-another">{lobby.currentEvent.details}</strong>
             </div>
             <button
                 className="bg-red-900 p-1 w-36 text-white rounded-lg"
                 id="chatButton"
-                onClick={() =>
-                {
+                onClick={() => {
                     // UpdateChat(chatMessage)
                     // setMessage('');
                     showSelection();
@@ -468,11 +464,10 @@ function PickPocketEvent({ event_data }) {
                     id="SelectBox"
                     className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
                 >
-                    {event_data.extra_players.map((player) => (
+                    {lobby.currentEvent.extra_players.map((player) => (
                         <button
                             className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                            onClick={() =>
-                            {
+                            onClick={() => {
                                 PickPocket(player);
                                 endEvent();
                             }}
@@ -485,7 +480,7 @@ function PickPocketEvent({ event_data }) {
                         id="SelectBox"
                         className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
                     >
-                        {event_data.extra_players.map((player) => (
+                        {lobby.currentEvent.extra_players.map((player) => (
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
@@ -503,8 +498,7 @@ function PickPocketEvent({ event_data }) {
             <div className="flex">
                 <button
                     className="bg-red-900 p-1 w-20 text-white rounded-lg"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -516,7 +510,7 @@ function PickPocketEvent({ event_data }) {
 }
 
 
-function GagOrderEvent({ event_data }) {
+function GagOrderEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function showSelection() {
@@ -525,28 +519,26 @@ function GagOrderEvent({ event_data }) {
         console.log("Toggled");
     }
     function gagPlayer(target) {
-        const details = target
+        var details = target
         details.role = "NoVote"
         eventAction(dispatch, lobbyCode, 'update', details)
     }
     return (
         <div className="overflow-hidden  font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
-            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{event_data.details}</strong>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
 
             <button
                 className="bg-green-900 p-1 w-36 text-white rounded-lg"
                 id="chatButton"
-                onClick={() =>
-                {
+                onClick={() => {
                     // UpdateChat(chatMessage)
                     // setMessage('');
                     showSelection();
                 }}
-            >
-                Choose Target
+            >Choose Target
             </button>
             <div
                 id="eventSlide"
@@ -558,11 +550,10 @@ function GagOrderEvent({ event_data }) {
                     id="SelectBox"
                     className="flex-wrap absolute justify-center w-1/2 top-[11%] left-[25%] space-y-2"
                 >
-                    {event_data.extra_players.map((player) => (
+                    {lobby.currentEvent.extra_players.map((player) => (
                         <button
                             className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                            onClick={() =>
-                            {
+                            onClick={() => {
                                 gagPlayer(player);
                                 //EmitGag();
                                 endEvent();
@@ -578,49 +569,22 @@ function GagOrderEvent({ event_data }) {
             <div className="flex">
                 <button
                     className="bg-red-900 p-1 w-20 text-white rounded-lg"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
                     Done
                 </button>
             </div>
-            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
-                <div
-                    id="eventSlide"
-                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
-                >
-                    <img src={WaitingList} alt="sdas" className="h-full" />
-
-                    <div
-                        id="SelectBox"
-                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
-                    >
-                        {event_data.extra_players.map((player) => (
-                            <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                                onClick={() => {
-                                    gagPlayer(player);
-                                    //EmitGag();
-                                    endEvent(dispatch, lobbyCode);
-                                }}
-                            >
-                                {player.nickname}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
 
-function BlackMarkEvent({ event_data }) {
+function BlackMarkEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function markPlayer(target) {
-        const details = target
+        var details = target
         eventAction(dispatch, lobbyCode, 'vote', details)
     }
     function showSelection() {
@@ -631,15 +595,14 @@ function BlackMarkEvent({ event_data }) {
     return (
         <div className="overflow-hidden  font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
-            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{event_data.details}</strong>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
 
             <button
                 className="bg-green-900 p-1 w-36 text-white rounded-lg"
                 id="chatButton"
-                onClick={() =>
-                {
+                onClick={() => {
                     // UpdateChat(chatMessage)
                     // setMessage('');
                     showSelection();
@@ -657,11 +620,10 @@ function BlackMarkEvent({ event_data }) {
                     id="SelectBox"
                     className="flex-wrap absolute justify-center w-1/2 top-[11%] left-[25%] space-y-2"
                 >
-                    {event_data.extra_players.map((player) => (
+                    {lobby.currentEvent.extra_players.map((player) => (
                         <button
                             className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                            onClick={() =>
-                            {
+                            onClick={() => {
                                 markPlayer(player);
                                 //EmitGag();
                                 endEvent();
@@ -676,7 +638,7 @@ function BlackMarkEvent({ event_data }) {
                         id="eventSlide"
                         className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
                     >
-                        {event_data.extra_players.map((player) => (
+                        {lobby.currentEvent.extra_players.map((player) => (
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
@@ -696,8 +658,7 @@ function BlackMarkEvent({ event_data }) {
             <div className="flex">
                 <button
                     className="bg-red-900 p-1 w-20 text-white rounded-lg"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -710,14 +671,14 @@ function BlackMarkEvent({ event_data }) {
     );
 }
 
-function CoupEvent({ event_data }) {
+function CoupEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    const details = player
+    var details = player
     function getUserName() {
         const players = lobby.players
         Object.keys(players).forEach(player => {
-            if (event_data.extra_players[0].nickname = players[player].nickname) {
+            if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
                 return player
             }
         })
@@ -729,13 +690,13 @@ function CoupEvent({ event_data }) {
     return (
         <div className="overflow-hidden  font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
 
             <div className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
                 <strong className="font-another">
                     <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[0].nickname}
+                        {lobby.currentEvent.extra_players[0].nickname}
                     </strong>{" "}
                     has outlived the need for their service.
                 </strong>
@@ -760,14 +721,14 @@ function CoupEvent({ event_data }) {
     );
 }
 
-function BlackmailedEvent({ event_data }) {
+function BlackmailedEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    const details = player
+    var details = player
     function getUserName() {
         const players = lobby.players
         Object.keys(players).forEach(player => {
-            if (event_data.extra_players[0].nickname = players[player].nickname) {
+            if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
                 return player
             }
         })
@@ -778,9 +739,9 @@ function BlackmailedEvent({ event_data }) {
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
-            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{event_data.details}</strong>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
 
 
             <p className="font-another font-bold  bg-white object w-fit p-1 rounded-md">Until you can prevent what they know from spreading, they must come
@@ -790,7 +751,7 @@ function BlackmailedEvent({ event_data }) {
 
 
             <strong className="text-[#ff0000] font-another font-bold bg-white object w-fit p-1 rounded-md">
-                {event_data.extra_players[0].nickname} knows too much.</strong>{" "}
+                {lobby.currentEvent.extra_players[0].nickname} knows too much.</strong>{" "}
 
             <div className="flex">
                 <button
@@ -806,14 +767,14 @@ function BlackmailedEvent({ event_data }) {
     );
 }
 
-function BodyGuardEvent({ event_data }) {
+function BodyGuardEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    const details = player
+    var details = player
     function getUserName() {
         const players = lobby.players
         Object.keys(players).forEach(player => {
-            if (event_data.extra_players[0].nickname = players[player].nickname) {
+            if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
                 return player
             }
         })
@@ -824,13 +785,13 @@ function BodyGuardEvent({ event_data }) {
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
-                {event_data.event_name}
+                {lobby.currentEvent.event_name}
             </h1>
 
 
             <strong className="font-another font-bold text-xl bg-white object w-fit p-1 rounded-md">
                 <strong className="font-another text-[#ff0000]">
-                    {event_data.extra_players[0].nickname}
+                    {lobby.currentEvent.extra_players[0].nickname}
                 </strong>{" "}
                 has employed your protection.
             </strong>
@@ -857,37 +818,35 @@ function BodyGuardEvent({ event_data }) {
     );
 }
 
-export default function EventMap(current_event)
-{
-    const key = current_event.event_function;
-    switch (key)
-    {
+export default function EventMap() {
+    const { lobby } = useSelector(state => state.game)
+    switch (lobby.currentEvent.event_function) {
         case "OldEnemies":
-            return <OldEnemiesEvent event_data={current_event} />;
+            return <OldEnemiesEvent />;
         case "OldAllies":
-            return <OldAlliesEvent event_data={current_event} />;
+            return <OldAlliesEvent />;
         case "DeepState":
-            return <DeepStateEvent event_data={current_event} />;
+            return <DeepStateEvent />;
         case "SplinterCell":
-            return <SplinterCellEvent event_data={current_event} />;
+            return <SplinterCellEvent />;
         case "BackroomDeal":
-            return <BackroomDealEvent event_data={current_event} />;
+            return <BackroomDealEvent />;
         case "Martyr":
-            return <MartyrEvent event_data={current_event} />;
+            return <MartyrEvent />;
         case "BackgroundCheck":
-            return <BackgroundCheckEvent event_data={current_event} />;
+            return <BackgroundCheckEvent />;
         case "PickPocket":
-            return <PickPocketEvent event_data={current_event} />;
+            return <PickPocketEvent />;
         case "GagOrder":
-            return <GagOrderEvent event_data={current_event} />;
+            return <GagOrderEvent />;
         case "BlackMark":
-            return <BlackMarkEvent event_data={current_event} />;
+            return <BlackMarkEvent />;
         case "Coup":
-            return <CoupEvent event_data={current_event} />;
+            return <CoupEvent />;
         case "Blackmailed":
-            return <BlackmailedEvent event_data={current_event} />;
+            return <BlackmailedEvent />;
         case "BodyGuard":
-            return <BodyGuardEvent event_data={current_event} />;
+            return <BodyGuardEvent />;
         default:
             break;
     }
@@ -898,44 +857,33 @@ function eventAction(dispatch, lobbyCode, type, playerChanges) {
 }
 
 function endEvent(dispatch, lobbyCode,) {
-    const eventInfo = document.querySelector("#Event-Info");
-    eventInfo.classList.toggle("hidden");
     dispatch(sendAction(lobbyCode, 'progress'))
-    //insert emits to progress game state
 }
 
-function excludePlayer(player)
-{
-    return function (p)
-    {
+function excludePlayer(player) {
+    return function (p) {
         return p.nickname != player.nickname;
     };
 }
 
-function OriginalAllies(player)
-{
-    return function (p)
-    {
+function OriginalAllies(player) {
+    return function (p) {
         return p.original === player.original;
     };
 }
 
-function OriginalEnemies(player)
-{
-    return function (p)
-    {
+function OriginalEnemies(player) {
+    return function (p) {
         return p.original != player.original;
     };
 }
 
-export function EventGenMap(eventName, player, players)
-{
+export function EventGenMap(eventName, player, players) {
     const event = Events[eventName]; //fetch event strings
 
     const valid = players.filter(excludePlayer(player));
     let extra_players;
-    switch (eventName)
-    {
+    switch (eventName) {
         case "OldAllies": //Started game on the same team
             extra_players = getSameStartTeam(valid);
             break;
@@ -981,28 +929,25 @@ export function EventGenMap(eventName, player, players)
         extra_players: extra_players,
         blind_name: event.BlindName,
         event_name: event.EventTitle,
-        blind_info: event.BlindInfo,
+        blind_info: parser.parseFromString(event.BlindInfo,"text/html"),
         details: event.Details,
         event_function: eventName,
     };
     return eventObject;
 }
 
-function GenerateEvents({ lobby_state })
-{
+function GenerateEvents({ lobby_state }) {
     let events = [];
-    lobby_state.players.forEach(player =>
-    {
+    lobby_state.players.forEach(player => {
         const eventName = RandomUniqueEvent(events);
         const event = EventGenMap(eventName, player, lobby_state.players);
         events.push(event);
     });
 }
 
-export function OutsideEvent({ event_data })
-{
-    function showSelection()
-    {
+export function OutsideEvent() {
+    const { lobby } = useSelector(state => state.game)
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
@@ -1011,17 +956,17 @@ export function OutsideEvent({ event_data })
 
         <div className="bg-event_waiting h-screen bg-cover">
             <div className="absolute bottom-0 left-[10%] h-4/5 ">
-                <p className="font-another text-white text-3xl absolute bg-yellow-700 text-center w-[80%] ml-[10%] mt-[10%]">{event_data.blind_name}</p>
+                <p className="font-another text-white text-3xl absolute bg-yellow-700 text-center w-[80%] ml-[10%] mt-[10%]">{lobby.currentEvent.blind_name}</p>
                 <img src={Avatar} alt="player in the room" className="absolute rounded-full bg-transparent h-[20%] mt-[30%] ml-[30%]" />
                 {/* avatar of user inside bro idk how to access it! */}
-                <img src={OpenDoor} alt="Open Door" className="h-full hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" onClick={showSelection()} />
+                <img src={OpenDoor} alt="Open Door" className="h-full hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" onClick={() => showSelection()} />
             </div>
             <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
                 <div id="eventSlide"
                     className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full ">
                     <img src={WaitingList} alt="sdas" className="h-full" />
                     <div className="w-[430px] m-auto max-w-[430px]">
-                        <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">{event_data.blind_info}</strong>
+                        <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">{lobby.currentEvent.blind_info}</strong>
                     </div>
                 </div>
             </div>
@@ -1029,8 +974,7 @@ export function OutsideEvent({ event_data })
     );
 }
 
-function getSameStartTeam(players)
-{
+function getSameStartTeam(players) {
     console.log(players);
     const p1 = players[Math.floor(Math.random() * players.length)]; //select valid players
     console.log(p1);
@@ -1042,28 +986,23 @@ function getSameStartTeam(players)
     return [p1, p2];
 }
 
-function getOppStartTeams(players)
-{
+function getOppStartTeams(players) {
     const p1 = players[Math.floor(Math.random() * players.length)]; //select valid players
-    const validSecond = players.filter((p) =>
-    {
+    const validSecond = players.filter((p) => {
         return p.original != p1.original;
     });
     const p2 = validSecond[Math.floor(Math.random() * validSecond.length)];
     return [p1, p2];
 }
 
-function SinglePlayer(players)
-{
+function SinglePlayer(players) {
     return [players[Math.floor(Math.random() * players.length)]]; //select valid players
 }
 
-function RandomUniqueEvent(events)
-{
+function RandomUniqueEvent(events) {
     let keys = Object.keys(Events);
     let event = Events[keys[Math.floor(Math.random() * keys.length)]];
-    while (events.includes(event))
-    {
+    while (events.includes(event)) {
         event = Events[keys[Math.floor(Math.random() * keys.length)]];
     }
     return event;
