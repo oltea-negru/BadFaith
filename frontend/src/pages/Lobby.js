@@ -36,9 +36,9 @@ function Lobby()
                         {
                             whichCard === "join" ?
                                 <div className='h-[400px] w-[800px] rounded-2xl border-2 border-black  bg-white text-center justify-between flex flex-col'>
-                                    <p className='text-4xl mt-10 font-another  '>ENTER CODE:</p>
-                                    <input type="text" className='bg-gray-300 mx-36 text-center text-2xl font-another h-10 border-2 border-black' value={joinCode} onChange={(e) => setJoinCode(e.target.value)} />
-                                    <button className='bg-black mb-10 h-14 text-4xl hover:text-5xl text-white active:text-4xl font-another   focus:outline-none' onClick={() => { setOpenCard(false); setWhichCard('') }}>Join</button>
+                                    <p className='text-5xl mt-10 font-another '>ENTER CODE:</p>
+                                    <input type="text" className='bg-gray-300 focus:border-[#f5bc4d] focus:bg-white mx-36 focus:outline-none text-center text-3xl font-another h-20 border-4 border-black' value={joinCode} onChange={(e) => setJoinCode(e.target.value)} />
+                                    <button className='bg-black mb-10 h-14 text-4xl hover:text-5xl text-white active:text-4xl font-another custom-transition  focus:outline-none' onClick={() => { setOpenCard(false); setWhichCard('') }}>Join Game</button>
                                 </div>
                                 :
                                 <div>
