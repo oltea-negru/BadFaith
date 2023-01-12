@@ -4,7 +4,7 @@ export function CurrentEvent({ current_event })
 {
     // const lobby = useState([]);
     return (
-        <div id="Event-Info">
+        <div >
             {EventMap(current_event)}
         </div>
     );
