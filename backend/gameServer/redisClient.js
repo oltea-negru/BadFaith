@@ -8,7 +8,7 @@ const redisHost = process.env.REDIS_HOST || 'localhost'
 const redisPort = process.env.REDIS_PORT || '6379'
 DEFAULT_EXPIRATIION = 3600
 
-const PrivateCall = ["There is a private phone call for this player." , '<br />', "They will be with back shortly."]
+const PrivateCall = ["There is a private phone call for this player.", '<br />', "They will be with back shortly."]
 
 const Events = {
     OldAllies: {
@@ -38,8 +38,8 @@ const Events = {
     BackroomDeal: {
         BlindName: "Backroom Deal",
         EventTitle: "Backroom Deal",
-        BlindInfo: ["Their loyalty is being put to the test." , '<br />', "Is it strong enough?"],
-        Details: ["You have the option to switch teams, but if you do so you cannot vote." , '<br />', "Do you accept?"]
+        BlindInfo: ["Their loyalty is being put to the test.", '<br />', "Is it strong enough?"],
+        Details: ["You have the option to switch teams, but if you do so you cannot vote.", '<br />', "Do you accept?"]
     },
     Martyr: {
         BlindName: "Private Call",
@@ -80,13 +80,13 @@ const Events = {
     Blackmailed: {
         BlindName: "Blackmailed",
         EventTitle: "Blackmailed",
-        BlindInfo: ["Another player has some dirt on you that cannot come to light." , '<br />', "You will only win if they do."],
-        Details: ["Another player has some dirt on you that cannot come to light." , '<br />', "You will only win if they do."],
+        BlindInfo: ["Another player has some dirt on you that cannot come to light.", '<br />', "You will only win if they do."],
+        Details: ["Another player has some dirt on you that cannot come to light.", '<br />', "You will only win if they do."],
     },
     BodyGuard: {
         BlindName: "Bodyguard",
         EventTitle: "Bodyguard",
-        BlindInfo: ["You have been employed to protect another." , '<br />', "They cannot be voted out."]
+        BlindInfo: ["You have been employed to protect another.", '<br />', "They cannot be voted out."]
     }
 }
 
@@ -217,7 +217,7 @@ class HotStorageClient {
                 await this.updateLobby(lobbyCode, lobby)
                 return { ok: true, msg: "Progressed to starting game" }
             case 2: // Starting to between events
-                lobby.events = this.GenerateEvents(lobby)
+                lobby.events = GenerateEvents(lobby)
                 if (lobby.events.length != Object.keys(lobby.players).length) {
                     // the wrong number of events has been generated
                     return {
@@ -422,17 +422,18 @@ class HotStorageClient {
     }
 
     async addVote(lobbyCode, target) {
+        const username = this.getUsername(target.socket)
         const lobby = await this.client.get(lobbyCode)
-        if (!lobby.players[target]) {
+        if (!lobby.players[username]) {
             return {
                 ok: false,
                 msg: "Player does not exist"
             }
         }
-        if (lobby.votes[target]) {
-            lobby.votes[target]++
+        if (lobby.votes[username]) {
+            lobby.votes[username]++
         } else {
-            lobby.votes[target] = 1
+            lobby.votes[username] = 1
         }
         await this.updateLobby(lobbyCode, lobby)
         return {
@@ -464,101 +465,134 @@ class HotStorageClient {
         };
     }
 
-    GenerateEvents({ lobby_state }) {
-        let events = [];
-        lobby_state.players.forEach(player => {
-            const eventName = RandomUniqueEvent(events);
-            const event = EventGenMap(eventName, player, lobby_state.players);
-            events.push(event);
-        });
-        return events
-    }
 
-    EventGenMap(eventName, player, players) {
-        const event = Events[eventName];//fetch event strings
-        const valid = players.filter(excludePlayer(player));
-        let extra_players;
-        switch (eventName) {
-            case "OldAllies": //Started game on the same team
-                extra_players = getSameStartTeam(valid);
-                break;
-            case "OldEnemies": //Started the game as enemies
-                extra_players = getOppStartTeams(valid);
-                break;
-            case "DeepState": // Swap team- Hidden event
-                break;
-            case "SplinterCell": // Turns player to standalone - Hidden event
-                break;
-            case "BackroomDeal": // Can choose to betray team, cannot vote if so
-                break;
-            case "Martyr": //Will die for the cause - Hidden event
-                break;
-            case "BackgroundCheck": // Current appeared allegience
-                extra_players = SinglePlayer(valid);
-                break;
-            case "PickPocket": // Swap allegiences with player of choice, if possible
-                extra_players = valid;
-                break;
-            case "GagOrder": //Prevent a player of choice from voting
-                extra_players = valid;
-                break;
-            case "BlackMark": //Give an extra vote to player of choice
-                extra_players = valid;
-                break;
-            case "Coup": //Given player must be elminated to win - Hidden event
-                extra_players = SinglePlayer(valid);
-                break;
-            case "Blackmailed": //Given player must win in order to win
-                extra_players = SinglePlayer(valid);
-                break;
-            case "BodyGuard": //Given player cannot be voted out in order to win
-                extra_players = SinglePlayer(valid);
-                break;
-        }
-        let eventObject = { //arrange data into expected format for events
-            player: player,
-            extra_players: extra_players,
-            blind_name: event.BlindName,
-            event_name: event.EventTitle,
-            blind_info: event.BlindInfo,
-            details: event.Details,
-            event_function: eventName
-        };
-        return eventObject;
-    }
-    getSameStartTeam(players) {
-        console.log(players);
-        const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
-        console.log(p1);
-        const valid = players.filter(excludePlayer(p1));
-        console.log(valid);
-        const validSecond = valid.filter(OriginalAllies(p1));
-        console.log(validSecond);
-        const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
-        return [p1, p2];
-    }
 
-    getOppStartTeams(players) {
-        const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
-        const validSecond = players.filter(p => {
-            return p.original != p1.original;
-        });
-        const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
-        return [p1, p2];
-    }
 
-    SinglePlayer(players) {
-        return [players[Math.floor((Math.random() * players.length))]]; //select valid players
+
+
+
+
+
+
+
+
+
+}
+
+function GenerateEvents({ lobby_state }) {
+    let events = [];
+    lobby_state.players.forEach(player => {
+        const eventName = RandomUniqueEvent(events);
+        const event = EventGenMap(eventName, player, lobby_state.players);
+        events.push(event);
+    });
+    return events
+}
+
+function excludePlayer(player) {
+    return function (p) {
+        return p.nickname != player.nickname;
+    };
+}
+
+function EventGenMap(eventName, player, players) {
+    const event = Events[eventName];//fetch event strings
+    const playerArray = getPlayerArray(players)
+    const valid = playerArray.filter(excludePlayer(player));
+    let extra_players;
+    switch (eventName) {
+        case "OldAllies": //Started game on the same team
+            extra_players = getSameStartTeam(valid);
+            break;
+        case "OldEnemies": //Started the game as enemies
+            extra_players = getOppStartTeams(valid);
+            break;
+        case "DeepState": // Swap team- Hidden event
+            break;
+        case "SplinterCell": // Turns player to standalone - Hidden event
+            break;
+        case "BackroomDeal": // Can choose to betray team, cannot vote if so
+            break;
+        case "Martyr": //Will die for the cause - Hidden event
+            break;
+        case "BackgroundCheck": // Current appeared allegience
+            extra_players = SinglePlayer(valid);
+            break;
+        case "PickPocket": // Swap allegiences with player of choice, if possible
+            extra_players = valid;
+            break;
+        case "GagOrder": //Prevent a player of choice from voting
+            extra_players = valid;
+            break;
+        case "BlackMark": //Give an extra vote to player of choice
+            extra_players = valid;
+            break;
+        case "Coup": //Given player must be elminated to win - Hidden event
+            extra_players = SinglePlayer(valid);
+            break;
+        case "Blackmailed": //Given player must win in order to win
+            extra_players = SinglePlayer(valid);
+            break;
+        case "BodyGuard": //Given player cannot be voted out in order to win
+            extra_players = SinglePlayer(valid);
+            break;
     }
-    
-    RandomUniqueEvent(events) {
-        let keys = Object.keys(Events);
-        let event = Events[keys[Math.floor((Math.random() * keys.length))]];
-        while (events.includes(event)) {
-            event = Events[keys[Math.floor((Math.random() * keys.length))]];
-        }
-        return event;
+    let eventObject = { //arrange data into expected format for events
+        player: player,
+        extra_players: extra_players,
+        blind_name: event.BlindName,
+        event_name: event.EventTitle,
+        blind_info: event.BlindInfo,
+        details: event.Details,
+        event_function: eventName
+    };
+    return eventObject;
+}
+
+function getSameStartTeam(players) {
+    console.log(players);
+    const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
+    console.log(p1);
+    const valid = players.filter(excludePlayer(p1));
+    console.log(valid);
+    const validSecond = valid.filter(OriginalAllies(p1));
+    console.log(validSecond);
+    const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
+    return [p1, p2];
+}
+
+function getOppStartTeams(players) {
+    const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
+    const validSecond = players.filter(p => {
+        return p.original != p1.original;
+    });
+    const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
+    return [p1, p2];
+}
+
+function SinglePlayer(players) {
+    return [players[Math.floor((Math.random() * players.length))]]; //select valid players
+}
+
+function objectToArray(object) {
+    array = Object.entries(object).map((e) => ({ [e[0]]: e[1] }))
+    return array
+}
+
+function RandomUniqueEvent(events) {
+    let keys = Object.keys(Events);
+    let event = Events[keys[Math.floor((Math.random() * keys.length))]];
+    while (events.includes(event)) {
+        event = Events[keys[Math.floor((Math.random() * keys.length))]];
     }
+    return event;
+}
+function getPlayerArray(players) {
+    let playerArray = [];
+    Object.keys(players).forEach(player => {
+        playerArray.push(players[player]);
+    })
+    return playerArray;
 }
 
 module.exports.HotStorageClient = HotStorageClient;
