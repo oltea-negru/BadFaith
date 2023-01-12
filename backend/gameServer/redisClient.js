@@ -523,10 +523,12 @@ function SetAllegiences({ lobby_state }) {
             index = [Math.floor((Math.random() * players.length))]
         }
         updatedPlayers[players[index]].allegiance = "Enenmy"
+        updatedPlayers[players[index]].original = "Enenmy"
     }
     for (let i = 0; i < players.length; i++) {
         if (updatedPlayers[players[i]].allegiance == "") {
             updatedPlayers[players[i]].allegiance = "Ally"
+            updatedPlayers[players[i]].original = "Ally"
         }
     }
 
