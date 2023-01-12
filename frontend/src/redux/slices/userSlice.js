@@ -30,6 +30,8 @@ export const userSlice = createSlice({
         {
             state.email = action.payload.email
             state.password = action.payload.password
+            state.avatar = action.payload.avatar
+            console.log("AvatarInt" + state.avatar)
             console.log(state.email)
             console.log(state.password)
         },

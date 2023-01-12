@@ -96,7 +96,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 logging.info(onlyUser)
                 if onlyUser["player"]["password"] == player['password']:
                     logging.info("password matches")
-                    return func.HttpResponse(body=json.dumps({"result": True , "msg" : "OK"}))
+                    return func.HttpResponse(body=json.dumps({"result": True , "msg" : "OK", "avatarInt": onlyUser["player"]["avatar"]}))
                 else:
                     logging.info("password is incorrect")
                     return func.HttpResponse(body=json.dumps({"result": False , "msg": "email or password incorrect"}))

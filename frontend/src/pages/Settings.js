@@ -32,7 +32,7 @@ function Settings()
     );
 
     const [nicknameInput, setNickname] = useState(nickname);
-    const [passwordInput, passwordChange] = useState("");
+    const [passwordInput, passwordChange] = useState(password);
     // const [passwordChange, setNewPassword] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -119,7 +119,7 @@ function Settings()
                 className="w-2/5 h-screen min-h-[600px] min-w-[550px]"
             />
 
-            <div className="absolute flex-col text-white text-3xl font-another w-1/3 min-w-[300px] h-2/3 justify-between  mt-28 items-center flex ">
+            <div className="absolute flex-col text-white text-3xl font-another w-1/3 min-w-[300px] h-[62%] justify-between  mt-28 items-center flex ">
                 <div>
                     <img src={avatars[avatarInput]} alt="Avatar" className="h-36 rounded-lg " />
                     <div className="flex flex-row">
