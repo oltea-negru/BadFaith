@@ -217,7 +217,9 @@ class HotStorageClient {
                 await this.updateLobby(lobbyCode, lobby)
                 return { ok: true, msg: "Progressed to starting game" }
             case 2: // Starting to between events
+                lobby.players = SetAllegiences(lobby)
                 lobby.events = GenerateEvents(lobby)
+                lobby.enemyCount = GetEnemyCount(lobby)
                 if (lobby.events.length != Object.keys(lobby.players).length) {
                     // the wrong number of events has been generated
                     return {
@@ -242,10 +244,17 @@ class HotStorageClient {
                     ok: true,
                     msg: "Lobby events and players initialised, progressing to between events"
                 }
-            case 3: // Between events
+            case 3: // Enemies see each other
+                lobby.state = 4
+                this.updateLobby(lobbyCode, lobby)
+                return {
+                    ok: true,
+                    msg: "Enemey meetup "
+                }
+            case 4: // Between events
                 if (lobby.events.length == 0) { // no more events, progress to discussion
                     console.log("Lobby " + lobbyCode + ": progressing to discussion phase")
-                    lobby.state = 5
+                    lobby.state = 6
                     await this.updateLobby(lobbyCode, lobby)
                     return {
                         ok: true,
@@ -255,31 +264,31 @@ class HotStorageClient {
                     console.log("Lobby " + lobbyCode + ": progressing to next event")
                     if (lobby.currentEvent != null) lobby.eventHistory.add(lobby.currentEvent);
                     lobby.currentEvent = lobby.events.shift()
-                    lobby.state = 4
+                    lobby.state = 5
                     await this.updateLobby(lobbyCode, lobby)
                     return {
                         ok: true,
                         msg: "Progressed to next event"
                     }
                 }
-            case 4: // In event to inbetween
+            case 5: // In event to inbetween
                 //conditions needed
                 console.log("Lobby " + lobbyCode + ": progressing to in between events")
-                lobby.state = 3
+                lobby.state = 4
                 this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Current event completed, progressing to between events"
                 }
-            case 5: // Discussion to voting
+            case 6: // Discussion to voting
                 console.log("Lobby " + lobbyCode + ": progressing to voting phase")
-                lobby.state = 6
+                lobby.state = 7
                 this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Discussion phase complete, progressing to voting phase"
                 }
-            case 6: // Voting to results
+            case 7: // Voting to results
                 if (lobby.voteLimit != Object.keys(lobby.votes).length) {
                     return {
                         ok: false,
@@ -287,21 +296,21 @@ class HotStorageClient {
                     }
                 }
                 console.log("Lobby " + lobbyCode + ": progressing to results phase")
-                lobby.state = 7
+                lobby.state = 8
                 this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Voting phase complete, progressing to results phase"
                 }
-            case 7: // Results to Ending Game
+            case 8: // Results to Ending Game
                 console.log("Lobby " + lobbyCode + ": progressing to end phase")
-                lobby.state = 8
+                lobby.state = 9
                 this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Results phase complete, progressing to end phase"
                 }
-            case 8: // Starting to Starting
+            case 9: // Starting to Starting
                 break;
         }
     }
@@ -464,19 +473,64 @@ class HotStorageClient {
             msg: "Lobby updated"
         };
     }
+}
 
+function GetEnemyCount({ lobby_state }) {
+    const players = lobby_state.players.keys()
+    switch (players.length) {
+        case 4:
+            return 1
+        case 5:
+            return 1
+        case 6:
+            return 1
+        case 7:
+            return 2
+        case 8:
+            return 2
+        case 9:
+            return 3
+    }
+}
 
+function SetAllegiences({ lobby_state }) {
+    const players = lobby_state.players.keys()
+    const updatedPlayers = lobby_state.players
+    let enemyNo = 0
+    switch (players.length) {
+        case 4:
+            enemyNo = 1
+        case 5:
+            enemyNo = 1
+            break;
+        case 6:
+            enemyNo = 1
+            break;
+        case 7:
+            enemyNo = 2
+            break;
+        case 8:
+            enemyNo = 2
+            break;
+        case 9:
+            enemyNo = 3
+            break;
+    }
+    //set enemies
+    for (let i = 0; i < enemyNo; i++) {
+        let index = [Math.floor((Math.random() * players.length))]
+        while (updatedPlayers[players[index]].allegiance != "") {
+            index = [Math.floor((Math.random() * players.length))]
+        }
+        updatedPlayers[players[index]].allegiance = "Enenmy"
+    }
+    for (let i = 0; i < players.length; i++) {
+        if (updatedPlayers[players[i]].allegiance == "") {
+            updatedPlayers[players[i]].allegiance = "Ally"
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
+    return updatedPlayers
 }
 
 function GenerateEvents({ lobby_state }) {
