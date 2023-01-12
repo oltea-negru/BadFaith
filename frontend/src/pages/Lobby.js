@@ -47,7 +47,7 @@ function Lobby()
                                     <button className='bg-black mb-10 h-14 text-4xl hover:text-5xl text-white active:text-4xl focus:outline-none' onClick={() => { 
                                         setOpenCard(false) 
                                         setWhichCard('')
-                                        dispatch(joinLobby(joinCode)) 
+                                        dispatch(joinLobby(joinCode, {playerID: email, nickname})) 
                                     }}>Join</button>
                                 </div>
                                 :
