@@ -4,21 +4,24 @@ import EventRoom from "./EventRoom";
 import { EventGenMap } from "../components/eventMap";
 import { useSelector } from 'react-redux'
 import Endgame from "./Endgame.js";
-export default function Game({ lobby_state }) {
+export default function Game({ lobby_state })
+{
 
     const { lobby } = useSelector(state => state.game);
     var used_state = lobby_state
     // if (used_state == null) 
     used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("Blackmailed", {
+    dummylobbyState.current_event = EventGenMap("BodyGuard", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
         original: "Enemy",
         allegiance: "Enemy"
     }, getPlayerArray())
 
-    const setFunction = (used_state) => {
-        switch (used_state.state) {
+    const setFunction = (used_state) =>
+    {
+        switch (used_state.state)
+        {
             case 1:// Joining
                 return (<WaitingRoom />)
             case 2:// Starting
@@ -47,7 +50,7 @@ export default function Game({ lobby_state }) {
 
 
 
-const inEvent = false
+const inEvent = true
 const dummylobbyState = {
     "inEvent": inEvent,
     "id": "",
@@ -91,9 +94,11 @@ const dummylobbyState = {
     "event_history": [],
     "current_event": {}
 }
-function getPlayerArray() {
+function getPlayerArray()
+{
     let playerArray = [];
-    Object.keys(dummylobbyState.players).forEach(player => {
+    Object.keys(dummylobbyState.players).forEach(player =>
+    {
         playerArray.push(dummylobbyState.players[player]);
     })
     return playerArray;
