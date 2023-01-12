@@ -32,7 +32,7 @@ function Settings()
     );
 
     const [nicknameInput, setNickname] = useState(nickname);
-    const [passwordInput, passwordChange] = useState("");
+    const [passwordInput, passwordChange] = useState(password);
     // const [passwordChange, setNewPassword] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
