@@ -239,7 +239,7 @@ function Settings()
                 </button>
 
             </div>
-            <button className='bg-black p-2 rounded-lg active:text-4xl hover:text-4xl focus:outline-none absolute bottom-10 left-20 text-3xl text-white' onClick={() => navigateToLobby()}>Back</button>
+            <button className='font-another bg-black p-2 rounded-lg active:text-4xl hover:text-4xl focus:outline-none absolute bottom-10 left-20 text-3xl text-white' onClick={() => navigateToLobby()}>Back</button>
         </div>
     );
 }

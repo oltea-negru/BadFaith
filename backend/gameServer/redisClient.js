@@ -80,7 +80,7 @@ class HotStorageClient {
             return {
                 progressState: true
             }
-        if(readyResult.ok) 
+        if (readyResult.ok)
             return {
                 isReady: lobbyDoc.players[playerID].ready
             }
@@ -132,6 +132,7 @@ class HotStorageClient {
                 await this.updateLobby(lobbyCode, lobby)
                 return { ok: true, msg: "Progressed to starting game" }
             case 2: // Starting to between events
+                lobby.events = this.GenerateEvents(lobby)
                 if (lobby.events.length != Object.keys(lobby.players).length) {
                     // the wrong number of events has been generated
                     return {
@@ -376,6 +377,184 @@ class HotStorageClient {
             ok: true,
             msg: "Lobby updated"
         };
+    }
+
+    PrivateCall = ["There is a private phone call for this player.", <br />, "They will be with back shortly."];
+
+    Events = {
+        OldAllies: {
+            BlindName: "Old Allies",
+            EventTitle: "Old Allies",
+            BlindInfo: "Two players are revelead to have appeared as the same team at the start",
+            Details: "Two players are revelead to have appeared as the same team at the start"
+        },
+        OldEnemies: {
+            BlindName: "Old Enemies",
+            EventTitle: "Old Enemies",
+            BlindInfo: "Two players are revelead to have appeared on opposite teams at the start",
+            Details: "Two players are revelead to have appeared on opposite teams at the start",
+        },
+        DeepState: {
+            BlindName: "Private Call",
+            EventTitle: "Deep State",
+            BlindInfo: PrivateCall,
+            Details: "Deep State",
+        },
+        SplinterCell: {
+            BlindName: "Private Call",
+            EventTitle: "Splinter Cell",
+            BlindInfo: PrivateCall,
+            Details: "Splinter Cell"
+        },
+        BackroomDeal: {
+            BlindName: "Backroom Deal",
+            EventTitle: "Backroom Deal",
+            BlindInfo: ["Their loyalty is being put to the test.", <br />, "Is it strong enough?"],
+            Details: ["You have the option to switch teams, but if you do so you cannot vote.", <br />, "Do you accept?"]
+        },
+        Martyr: {
+            BlindName: "Private Call",
+            EventTitle: "Martyr",
+            BlindInfo: PrivateCall,
+            Details: "You have been chosen as a Martyr, get yourself voted and you will be rewarded."
+        },
+        BackgroundCheck: {
+            BlindName: "Background Check",
+            EventTitle: "Background Check",
+            BlindInfo: "We have done a little digging. Here is what we know..."
+        },
+        PickPocket: {
+            BlindName: "Pick Pocket",
+            EventTitle: "Pick Pocket",
+            BlindInfo: "Select a player to swap roles with",
+            Details: "Select a player to swap roles with"
+        },
+        GagOrder: {
+            BlindName: "Gag Order",
+            EventTitle: "Gag Order",
+            BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
+            Details: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
+        },
+        BlackMark: {
+            BlindName: "Black Mark",
+            EventTitle: "Black Mark",
+            BlindInfo: "Choose a player to add an extra vote against",
+            Details: "Choose a player to add an extra vote against"
+        },
+        Coup: {
+            BlindName: "Private Call",
+            BlindInfo: PrivateCall,
+            EventTitle: "Coup d'etat",
+            Details: "Coup d'etat"
+
+        },
+        Blackmailed: {
+            BlindName: "Blackmailed",
+            EventTitle: "Blackmailed",
+            BlindInfo: ["Another player has some dirt on you that cannot come to light.", <br />, "You will only win if they do."],
+            Details: ["Another player has some dirt on you that cannot come to light.", <br />, "You will only win if they do."],
+        },
+        BodyGuard: {
+            BlindName: "Bodyguard",
+            EventTitle: "Bodyguard",
+            BlindInfo: ["You have been employed to protect another.", <br />, "They cannot be voted out."]
+        }
+    };
+
+    GenerateEvents({ lobby_state }) {
+        let events = [];
+        lobby_state.players.forEach(player => {
+            const eventName = RandomUniqueEvent(events);
+            const event = EventGenMap(eventName, player, lobby_state.players);
+            events.push(event);
+        });
+        return events
+    }
+
+    EventGenMap(eventName, player, players) {
+        const event = Events[eventName];//fetch event strings
+        const valid = players.filter(excludePlayer(player));
+        let extra_players;
+        switch (eventName) {
+            case "OldAllies": //Started game on the same team
+                extra_players = getSameStartTeam(valid);
+                break;
+            case "OldEnemies": //Started the game as enemies
+                extra_players = getOppStartTeams(valid);
+                break;
+            case "DeepState": // Swap team- Hidden event
+                break;
+            case "SplinterCell": // Turns player to standalone - Hidden event
+                break;
+            case "BackroomDeal": // Can choose to betray team, cannot vote if so
+                break;
+            case "Martyr": //Will die for the cause - Hidden event
+                break;
+            case "BackgroundCheck": // Current appeared allegience
+                extra_players = SinglePlayer(valid);
+                break;
+            case "PickPocket": // Swap allegiences with player of choice, if possible
+                extra_players = valid;
+                break;
+            case "GagOrder": //Prevent a player of choice from voting
+                extra_players = valid;
+                break;
+            case "BlackMark": //Give an extra vote to player of choice
+                extra_players = valid;
+                break;
+            case "Coup": //Given player must be elminated to win - Hidden event
+                extra_players = SinglePlayer(valid);
+                break;
+            case "Blackmailed": //Given player must win in order to win
+                extra_players = SinglePlayer(valid);
+                break;
+            case "BodyGuard": //Given player cannot be voted out in order to win
+                extra_players = SinglePlayer(valid);
+                break;
+        }
+        let eventObject = { //arrange data into expected format for events
+            player: player,
+            extra_players: extra_players,
+            blind_name: event.BlindName,
+            event_name: event.EventTitle,
+            blind_info: event.BlindInfo,
+            details: event.Details,
+            event_function: eventName
+        };
+        return eventObject;
+    }
+    getSameStartTeam(players) {
+        console.log(players);
+        const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
+        console.log(p1);
+        const valid = players.filter(excludePlayer(p1));
+        console.log(valid);
+        const validSecond = valid.filter(OriginalAllies(p1));
+        console.log(validSecond);
+        const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
+        return [p1, p2];
+    }
+
+    getOppStartTeams(players) {
+        const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
+        const validSecond = players.filter(p => {
+            return p.original != p1.original;
+        });
+        const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
+        return [p1, p2];
+    }
+
+    SinglePlayer(players) {
+        return [players[Math.floor((Math.random() * players.length))]]; //select valid players
+    }
+    
+    RandomUniqueEvent(events) {
+        let keys = Object.keys(Events);
+        let event = Events[keys[Math.floor((Math.random() * keys.length))]];
+        while (events.includes(event)) {
+            event = Events[keys[Math.floor((Math.random() * keys.length))]];
+        }
+        return event;
     }
 }
 

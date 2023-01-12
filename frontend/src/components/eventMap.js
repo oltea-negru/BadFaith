@@ -114,8 +114,7 @@ const Events = {
     },
 };
 
-function OldEnemiesEvent({ event_data })
-{
+function OldEnemiesEvent({ event_data }) {
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -142,8 +141,7 @@ function OldEnemiesEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -154,8 +152,7 @@ function OldEnemiesEvent({ event_data })
     );
 }
 
-function OldAlliesEvent({ event_data })
-{
+function OldAlliesEvent({ event_data }) {
     // console.log(event_data.extra_players);
     return (
         <div className="p-4 m-auto">
@@ -183,8 +180,7 @@ function OldAlliesEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -195,14 +191,11 @@ function OldAlliesEvent({ event_data })
     );
 }
 
-function DeepStateEvent({ event_data })
-{
+function DeepStateEvent({ event_data }) {
     //update state to switch player allegiance
-    if (event_data.player.allegiance == "Enemy")
-    {
+    if (event_data.player.allegiance == "Enemy") {
         event_data.player.allegiance = "Ally";
-    } else if (event_data.player.allegiance == "Ally")
-    {
+    } else if (event_data.player.allegiance == "Ally") {
         event_data.player.allegiance = "Enemy";
     }
     return (
@@ -235,8 +228,7 @@ function DeepStateEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -247,8 +239,7 @@ function DeepStateEvent({ event_data })
     );
 }
 
-function SplinterCellEvent({ event_data })
-{
+function SplinterCellEvent({ event_data }) {
     event_data.player.allegiance = "Splinter";
     return (
         <div className="p-4 m-auto">
@@ -273,8 +264,7 @@ function SplinterCellEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -285,23 +275,18 @@ function SplinterCellEvent({ event_data })
     );
 }
 
-function BackroomDealEvent({ event_data })
-{
-    function Betray()
-    {
-        if (event_data.player.allegiance == "Ally")
-        {
+function BackroomDealEvent({ event_data }) {
+    function Betray() {
+        if (event_data.player.allegiance == "Ally") {
             event_data.player.allegiance = "Enemy";
-        } else if (event_data.player.allegiance == "Enemy")
-        {
+        } else if (event_data.player.allegiance == "Enemy") {
             event_data.player.allegiance = "Ally";
         }
         // DisableVote(event_data.player); prevent this player from being able to vote
         endEvent();
     }
 
-    function Remain()
-    {
+    function Remain() {
         endEvent();
     }
 
@@ -330,8 +315,7 @@ function BackroomDealEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute p-1 bg-transparent justify-center m-auto text-2xl top-[50vh] right-[38.5vw] w-[4.5vw] h-[6.8vh] min-w-[75px] hover:text-[#ff0000]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         Remain();
                     }}
                 >
@@ -339,8 +323,7 @@ function BackroomDealEvent({ event_data })
                 </button>
                 <button
                     className="font-another absolute p-1 bg-transparent justify-center m-auto text-2xl top-[46.1vh] right-[21.4vw] w-[4vw] h-[10.5vh] min-w-[75px] -rotate-10 hover:text-[#ff0000]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         Betray();
                     }}
                 >
@@ -351,8 +334,7 @@ function BackroomDealEvent({ event_data })
     );
 }
 
-function MartyrEvent({ event_data })
-{
+function MartyrEvent({ event_data }) {
     event_data.player.allegiance = "Splinter";
     return (
         <div className="p-4 m-auto">
@@ -377,8 +359,7 @@ function MartyrEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -389,8 +370,7 @@ function MartyrEvent({ event_data })
     );
 }
 
-function BackgroundCheckEvent({ event_data })
-{
+function BackgroundCheckEvent({ event_data }) {
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -417,8 +397,7 @@ function BackgroundCheckEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -429,18 +408,15 @@ function BackgroundCheckEvent({ event_data })
     );
 }
 
-function PickPocketEvent({ event_data })
-{
-    function PickPocket(target)
-    {
+function PickPocketEvent({ event_data }) {
+    function PickPocket(target) {
         const op1 = event_data.player;
         const op2 = target;
         /*
             State changes: allegience role and target of op1 to be swapped with op2
             */
     }
-    function showSelection()
-    {
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
@@ -459,8 +435,7 @@ function PickPocketEvent({ event_data })
                 <button
                     className="font-another -rotate-6 hover:text-[#ff0000]"
                     id="chatButton"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         // UpdateChat(chatMessage)
                         // setMessage('');
                         showSelection();
@@ -483,8 +458,7 @@ function PickPocketEvent({ event_data })
                         {event_data.extra_players.map((player) => (
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                                onClick={() =>
-                                {
+                                onClick={() => {
                                     PickPocket(player);
                                     endEvent();
                                 }}
@@ -500,10 +474,8 @@ function PickPocketEvent({ event_data })
 }
 
 
-function GagOrderEvent({ event_data })
-{
-    function showSelection()
-    {
+function GagOrderEvent({ event_data }) {
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
@@ -523,8 +495,7 @@ function GagOrderEvent({ event_data })
                 <button
                     className="font-another -rotate-6 hover:text-[#ff0000]"
                     id="chatButton"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         // UpdateChat(chatMessage)
                         // setMessage('');
                         showSelection();
@@ -547,8 +518,7 @@ function GagOrderEvent({ event_data })
                         {event_data.extra_players.map((player) => (
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                                onClick={() =>
-                                {
+                                onClick={() => {
                                     setGag(player);
                                     //EmitGag();
                                     endEvent();
@@ -564,11 +534,9 @@ function GagOrderEvent({ event_data })
     );
 }
 
-function BlackMarkEvent({ event_data })
-{
+function BlackMarkEvent({ event_data }) {
     const [mark, setMark] = useState();
-    function showSelection()
-    {
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
@@ -587,8 +555,7 @@ function BlackMarkEvent({ event_data })
                 <button
                     className="font-another rotate-6 hover:text-[#ff0000]"
                     id="chatButton"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         // UpdateChat(chatMessage)
                         // setMessage('');
                         showSelection();
@@ -611,8 +578,7 @@ function BlackMarkEvent({ event_data })
                         {event_data.extra_players.map((player) => (
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                                onClick={() =>
-                                {
+                                onClick={() => {
                                     setMark(player);
                                     //EmitMark();
                                     endEvent();
@@ -628,8 +594,7 @@ function BlackMarkEvent({ event_data })
     );
 }
 
-function CoupEvent({ event_data })
-{
+function CoupEvent({ event_data }) {
     event_data.player.target = event_data.extra_players[0];
     event_data.player.type = "vote";
 
@@ -657,8 +622,7 @@ function CoupEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -669,8 +633,7 @@ function CoupEvent({ event_data })
     );
 }
 
-function BlackmailedEvent({ event_data })
-{
+function BlackmailedEvent({ event_data }) {
     event_data.player.target = event_data.extra_players[0];
     event_data.player.type = "win";
     return (
@@ -703,8 +666,7 @@ function BlackmailedEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -715,8 +677,7 @@ function BlackmailedEvent({ event_data })
     );
 }
 
-function BodyGuardEvent({ event_data })
-{
+function BodyGuardEvent({ event_data }) {
     event_data.player.target = event_data.extra_players[0];
     event_data.player.type = "lives";
     return (
@@ -746,8 +707,7 @@ function BodyGuardEvent({ event_data })
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         endEvent();
                     }}
                 >
@@ -758,11 +718,9 @@ function BodyGuardEvent({ event_data })
     );
 }
 
-export default function EventMap(current_event)
-{
+export default function EventMap(current_event) {
     const key = current_event.event_function;
-    switch (key)
-    {
+    switch (key) {
         case "OldEnemies":
             return <OldEnemiesEvent event_data={current_event} />;
         case "OldAllies":
@@ -794,45 +752,36 @@ export default function EventMap(current_event)
     }
 }
 
-function endEvent()
-{
+function endEvent() {
     const eventInfo = document.querySelector("#Event-Info");
     eventInfo.classList.toggle("hidden");
     //insert emits to progress game state
 }
 
-function excludePlayer(player)
-{
-    return function (p)
-    {
+function excludePlayer(player) {
+    return function (p) {
         return p.nickname != player.nickname;
     };
 }
 
-function OriginalAllies(player)
-{
-    return function (p)
-    {
+function OriginalAllies(player) {
+    return function (p) {
         return p.original === player.original;
     };
 }
 
-function OriginalEnemies(player)
-{
-    return function (p)
-    {
+function OriginalEnemies(player) {
+    return function (p) {
         return p.original != player.original;
     };
 }
 
-export function EventGenMap(eventName, player, players)
-{
+export function EventGenMap(eventName, player, players) {
     const event = Events[eventName]; //fetch event strings
 
     const valid = players.filter(excludePlayer(player));
     let extra_players;
-    switch (eventName)
-    {
+    switch (eventName) {
         case "OldAllies": //Started game on the same team
             extra_players = getSameStartTeam(valid);
             break;
@@ -871,7 +820,7 @@ export function EventGenMap(eventName, player, players)
         default:
             break;
     }
-    
+
     //arrange data into expected format for events
     let eventObject = {
         player: player,
@@ -885,21 +834,17 @@ export function EventGenMap(eventName, player, players)
     return eventObject;
 }
 
-function GenerateEvents({ lobby_state })
-{
-    let events = new Array();
-    lobby_state.players.forEach((player) =>
-    {
+function GenerateEvents({ lobby_state }) {
+    let events = [];
+    lobby_state.players.forEach(player => {
         const eventName = RandomUniqueEvent(events);
         const event = EventGenMap(eventName, player, lobby_state.players);
         events.push(event);
     });
 }
 
-export function OutsideEvent({ event_data })
-{
-    function showSelection()
-    {
+export function OutsideEvent({ event_data }) {
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
@@ -917,8 +862,7 @@ export function OutsideEvent({ event_data })
     );
 }
 
-function getSameStartTeam(players)
-{
+function getSameStartTeam(players) {
     console.log(players);
     const p1 = players[Math.floor(Math.random() * players.length)]; //select valid players
     console.log(p1);
@@ -930,28 +874,23 @@ function getSameStartTeam(players)
     return [p1, p2];
 }
 
-function getOppStartTeams(players)
-{
+function getOppStartTeams(players) {
     const p1 = players[Math.floor(Math.random() * players.length)]; //select valid players
-    const validSecond = players.filter((p) =>
-    {
+    const validSecond = players.filter((p) => {
         return p.original != p1.original;
     });
     const p2 = validSecond[Math.floor(Math.random() * validSecond.length)];
     return [p1, p2];
 }
 
-function SinglePlayer(players)
-{
+function SinglePlayer(players) {
     return [players[Math.floor(Math.random() * players.length)]]; //select valid players
 }
 
-function RandomUniqueEvent(events)
-{
+function RandomUniqueEvent(events) {
     let keys = Object.keys(Events);
     let event = Events[keys[Math.floor(Math.random() * keys.length)]];
-    while (events.includes(event))
-    {
+    while (events.includes(event)) {
         event = Events[keys[Math.floor(Math.random() * keys.length)]];
     }
     return event;
