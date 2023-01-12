@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import WaitingList from "../assets/svg/EventBoardComponent.svg";
 import OpenDoor from "../assets/svg/EnterEventDoorComponent.svg";
 import Avatar from "../assets/avatars/avatar-1.svg";
-import { useDispatch } from 'react-redux'
-import { readyUp } from "../redux/middleware/gameServerMiddleware";
+import { useDispatch, useSelector } from 'react-redux'
+import { readyUp, sendAction } from "../redux/middleware/gameServerMiddleware";
 
+const dispatch = useDispatch()
 const PrivateCall = [
     "There is a private phone call for this player.",
     <br />,
@@ -195,12 +196,18 @@ function OldAlliesEvent({ event_data }) {
 }
 
 function DeepStateEvent({ event_data }) {
-    //update state to switch player allegiance
-    if (event_data.player.allegiance == "Enemy") {
-        event_data.player.allegiance = "Ally";
-    } else if (event_data.player.allegiance == "Ally") {
-        event_data.player.allegiance = "Enemy";
+    const { player } = useSelector(state => state.game)
+    const details = player
+    switch (details.allegiance) {
+        case "Ally":
+            details.allegiance = "Enemy"
+            break;
+        case "Enemy":
+            details.allegiance = "Ally"
+            break;
     }
+    eventAction('update', details)
+
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -243,7 +250,10 @@ function DeepStateEvent({ event_data }) {
 }
 
 function SplinterCellEvent({ event_data }) {
-    event_data.player.allegiance = "Splinter";
+    const { player } = useSelector(state => state.game)
+    const details = player
+    details.allegiance = "Splinter"
+    eventAction('update', details)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -279,14 +289,19 @@ function SplinterCellEvent({ event_data }) {
 }
 
 function BackroomDealEvent({ event_data }) {
-    function Betray() {
-        if (event_data.player.allegiance == "Ally") {
-            event_data.player.allegiance = "Enemy";
-        } else if (event_data.player.allegiance == "Enemy") {
-            event_data.player.allegiance = "Ally";
+    function Betray() { // Swap
+        const { player } = useSelector(state => state.game)
+        const details = player
+        switch (details.allegiance) {
+            case "Ally":
+                details.allegiance = "Enemy"
+                break;
+            case "Enemy":
+                details.allegiance = "Ally"
+                break;
         }
-        // DisableVote(event_data.player); prevent this player from being able to vote
-        endEvent();
+        details.role = "Betray"
+        eventAction('update', details)
     }
 
     function Remain() {
@@ -338,7 +353,11 @@ function BackroomDealEvent({ event_data }) {
 }
 
 function MartyrEvent({ event_data }) {
-    event_data.player.allegiance = "Splinter";
+    const { player } = useSelector(state => state.game)
+    const details = player
+    details.allegiance = "Splinter"
+    details.role = "Martyr"
+    eventAction('update', details)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -413,11 +432,17 @@ function BackgroundCheckEvent({ event_data }) {
 
 function PickPocketEvent({ event_data }) {
     function PickPocket(target) {
-        const op1 = event_data.player;
-        const op2 = target;
-        /*
-            State changes: allegience role and target of op1 to be swapped with op2
-            */
+        const { player, lobby } = useSelector(state => state.game)
+        const details1 = player
+        const details2 = lobby.players[target]
+        details1.role = lobby.players[target].role
+        details1.allegiance = lobby.players[target].allegiance
+        details1.target = lobby.players[target].target
+        details2.role = player.role
+        details2.allegiance = player.allegiance
+        details2.target = player.target
+        eventAction('update', details1)
+        eventAction('update', details2)
     }
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
@@ -482,6 +507,12 @@ function GagOrderEvent({ event_data }) {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
+    }
+    function gagPlayer(target) {
+        const { lobby } = useSelector(state => state.game)
+        const details = target
+        details.vote = "NoVote"
+        eventAction('update', details)
     }
     const [gagSelect, setGag] = useState();
     return (
@@ -755,9 +786,16 @@ export default function EventMap(current_event) {
     }
 }
 
+function eventAction(type, playerChanges) {
+    const { lobbyCode, player } = useSelector(state => state.game)
+    dispatch(sendAction(lobbyCode, type, playerChanges))
+}
+
 function endEvent() {
+    const { lobbyCode } = useSelector(state => state.game)
     const eventInfo = document.querySelector("#Event-Info");
     eventInfo.classList.toggle("hidden");
+    dispatch(sendAction(lobbyCode, 'progress'))
     //insert emits to progress game state
 }
 
@@ -859,7 +897,16 @@ export function OutsideEvent({ event_data }) {
                 <p className="font-another text-white text-3xl absolute bg-yellow-700 text-center w-[80%] ml-[10%] mt-[10%]">{event_data.blind_name}</p>
                 <img src={Avatar} alt="player in the room" className="absolute rounded-full bg-transparent h-[20%] mt-[30%] ml-[30%]" />
                 {/* avatar of user inside bro idk how to access it! */}
-                <img src={OpenDoor} alt="Open Door" className="h-full hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" />
+                <img src={OpenDoor} alt="Open Door" className="h-full hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" onClick={showSelection()} />
+            </div>
+            <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
+                <div id="eventSlide"
+                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full ">
+                    <img src={WaitingList} alt="sdas" className="h-full" />
+                    <div className="w-[430px] m-auto max-w-[430px]">
+                        <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">{event_data.blind_info}</strong>
+                    </div>
+                </div>
             </div>
         </div>
     );
