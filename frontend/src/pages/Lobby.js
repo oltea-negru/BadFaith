@@ -45,7 +45,7 @@ function Lobby()
                                     {
                                         codeCreated === ''
                                             ?
-                                            <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-blue-500 border-4 border-black justify-between'>
+                                            <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-[#1880bb] border-4 border-black justify-between'>
                                                 <p className='font-another text-4xl text-white mt-10'>CREATE LOBBY</p>
                                                 <div className='flex flex-col h-3/5 w-2/3 justify-around'>
                                                     <div className='flex flex-row justify-between'>
@@ -58,14 +58,14 @@ function Lobby()
                                                     </div>
                                                     <div className='flex flex-row justify-between'>
                                                         <p className='font-another text-2xl text-white'>Private Lobby :</p>
-                                                        <input type="checkbox" className='w-14 focus:outline-none' value={privateLobby} onChange={(e) => setPrivateLobby(e.target.value)} />
+                                                        <input type="checkbox" className='w-16 focus:outline-none' value={privateLobby} onChange={(e) => setPrivateLobby(e.target.value)} />
                                                     </div>
                                                 </div>
-                                                <button className='font-another bg-white mb-10 h-14 text-4xl hover:text-5xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { setCodeCreated('random code') }}>Create Code</button>
+                                                <button className='font-another custom-transition border-black border-y-4 bg-white mb-10 h-14 text-3xl hover:text-4xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { setCodeCreated('random code') }}>Create Code</button>
                                             </div> :
-                                            <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-blue-500 border-4 border-black justify-evenly'>
+                                            <div className='flex flex-col text-center place-items-center h-[400px] w-[600px] bg-[#1880bb] border-4 border-black justify-start'>
                                                 <p className='font-another text-4xl text-white mt-10'>LOBBY CODE</p>
-                                                <p className='font-another text-4xl'>{codeCreated}</p>
+                                                <p className='font-another text-6xl p-5 border-black border-4 text-white mt-16'>{codeCreated}</p>
 
                                             </div>
                                     }
