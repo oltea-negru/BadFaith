@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import JoinLobbyCard from '../assets/svg/JoinLobbyComponent.svg'
 import CreateLobbyCard from '../assets/svg/CreateLobbyComponent.svg'
-import Settings from '../assets/svg/SettingsExpanded.svg'
+import Settings from '../assets/svg/Settings.svg'
 import { gsConnect } from '../redux/middleware/gameServerMiddleware'
 import { useDispatch } from 'react-redux'
 
@@ -21,10 +21,11 @@ function Lobby()
     const dispatch = useDispatch()
 
     //Connect game socket on joining page
-    useEffect(() => {
+    useEffect(() =>
+    {
         const host = `TODO gamesocket url here`;
         dispatch(gsConnect(host));
-     }, [dispatch])
+    }, [dispatch])
 
 
     return (
