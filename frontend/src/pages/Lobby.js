@@ -79,11 +79,12 @@ function Lobby()
                         <img src={Settings} alt="" className='custom-transition absolute h-[30%] bottom-[10%] right-[42%] -rotate-12 hover:h-[35%] hover:cursor-pointer' onClick={() => navigate("/settings")} />
                     </div>
             }
-            <div className='absolute bottom-10 left-10  flex flex-col hover:cursor-pointer '>
-                <button className='focus:outline-none text-3xl  text-white ' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
-                <img src={Return} alt="Return Button" className="h-10 hover:h-12 custom-transition" onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }} />
-            </div>
-
+            {openCard ?
+                <div className='absolute bottom-10 left-10  flex flex-col hover:cursor-pointer '>
+                    <button className='focus:outline-none text-3xl  text-white ' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
+                    <img src={Return} alt="Return Button" className="h-10 hover:h-12 custom-transition" onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }} />
+                </div> : null
+            }
         </div>
     );
 
