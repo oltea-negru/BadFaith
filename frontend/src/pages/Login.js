@@ -5,6 +5,7 @@ import EnterButton from "../assets/svg/Enter.svg";
 import { useSelector, useDispatch, } from 'react-redux'
 import { setCredentials } from "../redux/slices/userSlice";
 import { player_Login } from "../api/examplePlayerMethods.js";
+import { login_status } from "../api/examplePlayerMethods.js";
 
 export default function PlayerLogin()
 {
@@ -24,10 +25,17 @@ export default function PlayerLogin()
         console.log(message.msg)
         if (message.msg === 'OK')
         {
-            console.log("User LogedIn, Dispatching credentials")
-            dispatch(setCredentials({ email: emailInput, password: passwordInput }))
-            alert("Logged In successfully!");
-            navigateToLobby();
+            const status = await (login_status(emailInput, passwordInput))
+            console.log(status.msg)
+            if (status.msg === 'OK'){
+                console.log("User LogedIn, Dispatching credentials")
+                dispatch(setCredentials({ email: emailInput, password: passwordInput }))
+                alert("Logged In successfully!");
+                navigateToLobby();
+            }
+            else {
+                alert("Login failed!" + status.msg);
+            }
         } else
         {
             alert(message.msg);

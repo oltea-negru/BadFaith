@@ -47,12 +47,62 @@ const _handlePlayerLogin = async (email, password) => {
     return data;
 }
 
+const _handleLoginStatus = async (email, password) => {
+    const body = {
+        email: email,
+        password: password
+    }
+    const response = await handleFetch("/api/loginstatus", body, 'POST')
+
+    if(!response.ok) {
+        throw response.statusText
+    } 
+    
+    // Otherwise, it'll return the response body
+    const data = await response.json()
+    return data;
+}
+
+const _handleLoginRemove = async (email, password) => {
+    const body = {
+        email,
+        password
+    }
+    const response = await handleFetch("/api/loginremove", body, 'POST')
+
+    if(!response.ok) {
+        throw response.statusText
+    } 
+    
+    // Otherwise, it'll return the response body
+    const data = await response.json()
+    return data;
+}
+
+const _handlePlayerSettings = async (email, nickname, password, avatar) => {
+    const body = {
+        email: email,
+        nickname: nickname,
+        password: password,
+        avatar: avatar
+    }
+    const response = await handleFetch("/api/settings", body, 'POST')
+
+    if(!response.ok) {
+        throw response.statusText
+    } 
+    
+    // Otherwise, it'll return the response body
+    const data = await response.json()
+    return data;
+}
+
 // export is so that we can access the function from other js files. 
 export const player_Register = async(email, password) => {
     // We put this in a try catch because `handlePlayerRegister` could throw an error 
     // and we want to catch it.
     try{
-        const message = _handlePlayerRegister(email, password)
+        const message = await _handlePlayerRegister(email, password)
         // Wherever we call this function, if it worked, we want to know, so we can
         // display meaningful UI. Doesn't need to be a boolean, but makes sense here
         console.log('Player register message: ' + message)
@@ -74,7 +124,7 @@ export const player_Login = async(email, password) => {
     // We put this in a try catch because `handlePlayerRegister` could throw an error 
     // and we want to catch it.
     try{
-        const message = _handlePlayerLogin(email, password)
+        const message = await _handlePlayerLogin(email, password)
         // Wherever we call this function, if it worked, we want to know, so we can
         // display meaningful UI. Doesn't need to be a boolean, but makes sense here
         console.log('Player Login message: ' + message)
@@ -82,6 +132,54 @@ export const player_Login = async(email, password) => {
     }
     catch(errorMsg){
         console.error('Could not register player due to the following error: ' + errorMsg);
+        return false;
+    }
+}
+
+export const login_status = async(email, password) => {
+    // We put this in a try catch because `handlePlayerRegister` could throw an error 
+    // and we want to catch it.
+    try{
+        const message = await _handleLoginStatus(email, password)
+        // Wherever we call this function, if it worked, we want to know, so we can
+        // display meaningful UI. Doesn't need to be a boolean, but makes sense here
+        console.log('Login status message: ' + message)
+        return message;
+    }
+    catch(errorMsg){
+        console.error('Player cannot login: ' + errorMsg);
+        return false;
+    }
+}
+
+export const login_remove = async(email, password) => {
+    // We put this in a try catch because `handlePlayerRegister` could throw an error 
+    // and we want to catch it.
+    try{
+        const message = await _handleLoginRemove(email, password)
+        // Wherever we call this function, if it worked, we want to know, so we can
+        // display meaningful UI. Doesn't need to be a boolean, but makes sense here
+        console.log('Login remove message: ' + message)
+        return message;
+    }
+    catch(errorMsg){
+        console.error('Login Remove unsuccessful: ' + errorMsg);
+        return false;
+    }
+}
+
+export const player_Settings = async(email, nickname, password, avatar) => {
+    // We put this in a try catch because `handlePlayerRegister` could throw an error 
+    // and we want to catch it.
+    try{
+        const message = _handlePlayerSettings(email, nickname, password, avatar)
+        // Wherever we call this function, if it worked, we want to know, so we can
+        // display meaningful UI. Doesn't need to be a boolean, but makes sense here
+        console.log('Player Settings message: ' + message)
+        return message;
+    }
+    catch(errorMsg){
+        console.error('Could not change the player settings due to the following error: ' + errorMsg);
         return false;
     }
 }

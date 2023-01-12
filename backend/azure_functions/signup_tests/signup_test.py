@@ -42,8 +42,8 @@ class TestFunction(unittest.TestCase):
 
         #Checking for a valid signup input and duplicate password
         input4 = {
-                'email' : "ga02huudewy3@morinng.com",
-                "password" : "Honalulu"
+                'email' : "wellmanPacers@gmail.com",
+                "password" : "wellmanPacers"
             }
 
         #invalid dictionary format

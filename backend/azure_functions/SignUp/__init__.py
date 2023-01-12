@@ -47,7 +47,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                     "history" : [],
                     "wins": 0,
                     "losses": 0,
-                    "avatar" : ""
+                    "avatar" : 0
                 },
                 "lobby" : {
                     "players" : [],
