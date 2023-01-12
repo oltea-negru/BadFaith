@@ -105,7 +105,8 @@ io.on('connection', async (socket) => {
         const result = await joinLobby(lobbyCode, playerDetails)
         socket.join(lobbyCode)
         emitGameState(lobbyCode, socket.id)
-        acknowledgement(result)
+        const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
+        acknowledgement(callbackObj)
     })
 
     socket.on('readyUp', async (lobbyCode, acknowledgement) => {
