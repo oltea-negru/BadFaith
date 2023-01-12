@@ -1,15 +1,15 @@
 import Voting from "./Voting.js";
 import WaitingRoom from "./WaitingRoom";
 import EventRoom from "./EventRoom";
+import SeeEnemies from "./SeeEnemies.js";
 import { EventGenMap } from "../components/eventMap";
 import { useSelector } from 'react-redux'
 import Endgame from "./Endgame.js";
-export default function Game({ lobby_state }) {
+export default function Game() {
 
     const { lobby } = useSelector(state => state.game);
-    var used_state = lobby_state
     // if (used_state == null) 
-    used_state = dummylobbyState
+    const used_state = dummylobbyState
     dummylobbyState.current_event = EventGenMap("Blackmailed", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
@@ -23,22 +23,24 @@ export default function Game({ lobby_state }) {
                 return (<WaitingRoom />)
             case 2:// Starting
                 return (<WaitingRoom />)
-            case 3:// Between Events
+            case 3:// See enemies
+                return (<SeeEnemies lobby_state={used_state}/>)
+            case 4:// Between Events
                 return (<WaitingRoom />)
-            case 4:// Events
+            case 5:// Events
                 return (<EventRoom lobby_state={used_state} />)
-            case 5:// Discussion
+            case 6:// Discussion
                 return (<WaitingRoom />)
-            case 6:// Voting
+            case 7:// Voting
                 return (<Voting />)
-            case 7:// Results
+            case 8:// Results
                 return (<Endgame />)
         }
     }
 
     return (
         <div>
-            {setFunction(used_state)}
+            {setFunction(lobby)}
         </div>
     )
 }
@@ -87,7 +89,7 @@ const dummylobbyState = {
     "host": "",
     "code": "",
     "events": [],
-    "state": 4,
+    "state": 1,
     "event_history": [],
     "current_event": {}
 }

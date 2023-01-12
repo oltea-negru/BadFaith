@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import WaitingList from "../assets/svg/EventBoardComponent.svg";
 import OpenDoor from "../assets/svg/EnterEventDoorComponent.svg";
 import Avatar from "../assets/avatars/avatar-1.svg";
-import { useDispatch } from 'react-redux'
-import { readyUp } from "../redux/middleware/gameServerMiddleware";
+import { useDispatch, useSelector } from 'react-redux'
+import { readyUp, sendAction } from "../redux/middleware/gameServerMiddleware";
+
 
 const PrivateCall = [
     "There is a private phone call for this player.",
@@ -118,6 +119,8 @@ const Events = {
 };
 
 function OldEnemiesEvent({ event_data }) {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -145,7 +148,7 @@ function OldEnemiesEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -156,6 +159,8 @@ function OldEnemiesEvent({ event_data }) {
 }
 
 function OldAlliesEvent({ event_data }) {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     // console.log(event_data.extra_players);
     return (
         <div className="p-4 m-auto">
@@ -184,7 +189,7 @@ function OldAlliesEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -195,12 +200,19 @@ function OldAlliesEvent({ event_data }) {
 }
 
 function DeepStateEvent({ event_data }) {
-    //update state to switch player allegiance
-    if (event_data.player.allegiance == "Enemy") {
-        event_data.player.allegiance = "Ally";
-    } else if (event_data.player.allegiance == "Ally") {
-        event_data.player.allegiance = "Enemy";
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    const details = player
+    switch (details.allegiance) {
+        case "Ally":
+            details.allegiance = "Enemy"
+            break;
+        case "Enemy":
+            details.allegiance = "Ally"
+            break;
     }
+    eventAction(dispatch, lobbyCode, 'update', details)
+
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -232,7 +244,7 @@ function DeepStateEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -243,7 +255,11 @@ function DeepStateEvent({ event_data }) {
 }
 
 function SplinterCellEvent({ event_data }) {
-    event_data.player.allegiance = "Splinter";
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    const details = player
+    details.allegiance = "Splinter"
+    eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -268,7 +284,7 @@ function SplinterCellEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -279,18 +295,24 @@ function SplinterCellEvent({ event_data }) {
 }
 
 function BackroomDealEvent({ event_data }) {
-    function Betray() {
-        if (event_data.player.allegiance == "Ally") {
-            event_data.player.allegiance = "Enemy";
-        } else if (event_data.player.allegiance == "Enemy") {
-            event_data.player.allegiance = "Ally";
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function Betray() { // Swap
+        const details = player
+        switch (details.allegiance) {
+            case "Ally":
+                details.allegiance = "Enemy"
+                break;
+            case "Enemy":
+                details.allegiance = "Ally"
+                break;
         }
-        // DisableVote(event_data.player); prevent this player from being able to vote
-        endEvent();
+        details.role = "Betray"
+        eventAction(dispatch, lobbyCode, 'update', details)
     }
 
     function Remain() {
-        endEvent();
+        endEvent(dispatch, lobbyCode);
     }
 
     return (
@@ -338,7 +360,12 @@ function BackroomDealEvent({ event_data }) {
 }
 
 function MartyrEvent({ event_data }) {
-    event_data.player.allegiance = "Splinter";
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    const details = player
+    details.allegiance = "Splinter"
+    details.role = "Martyr"
+    eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -363,7 +390,7 @@ function MartyrEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -374,6 +401,8 @@ function MartyrEvent({ event_data }) {
 }
 
 function BackgroundCheckEvent({ event_data }) {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -401,7 +430,7 @@ function BackgroundCheckEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -412,12 +441,19 @@ function BackgroundCheckEvent({ event_data }) {
 }
 
 function PickPocketEvent({ event_data }) {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function PickPocket(target) {
-        const op1 = event_data.player;
-        const op2 = target;
-        /*
-            State changes: allegience role and target of op1 to be swapped with op2
-            */
+        const details1 = player
+        const details2 = lobby.players[target]
+        details1.role = lobby.players[target].role
+        details1.allegiance = lobby.players[target].allegiance
+        details1.target = lobby.players[target].target
+        details2.role = player.role
+        details2.allegiance = player.allegiance
+        details2.target = player.target
+        eventAction(dispatch, lobbyCode, 'update', details1)
+        eventAction(dispatch, lobbyCode, 'update', details2)
     }
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
@@ -463,7 +499,7 @@ function PickPocketEvent({ event_data }) {
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
                                     PickPocket(player);
-                                    endEvent();
+                                    endEvent(dispatch, lobbyCode);
                                 }}
                             >
                                 {player.nickname}
@@ -478,12 +514,18 @@ function PickPocketEvent({ event_data }) {
 
 
 function GagOrderEvent({ event_data }) {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
     }
-    const [gagSelect, setGag] = useState();
+    function gagPlayer(target) {
+        const details = target
+        details.role = "NoVote"
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -522,9 +564,9 @@ function GagOrderEvent({ event_data }) {
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
-                                    setGag(player);
+                                    gagPlayer(player);
                                     //EmitGag();
-                                    endEvent();
+                                    endEvent(dispatch, lobbyCode);
                                 }}
                             >
                                 {player.nickname}
@@ -538,7 +580,12 @@ function GagOrderEvent({ event_data }) {
 }
 
 function BlackMarkEvent({ event_data }) {
-    const [mark, setMark] = useState();
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function markPlayer(target) {
+        const details = target
+        eventAction(dispatch, lobbyCode, 'vote', details)
+    }
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
@@ -582,9 +629,9 @@ function BlackMarkEvent({ event_data }) {
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
-                                    setMark(player);
+                                    markPlayer(player);
                                     //EmitMark();
-                                    endEvent();
+                                    endEvent(dispatch, lobbyCode);
                                 }}
                             >
                                 {player.nickname}
@@ -598,8 +645,20 @@ function BlackMarkEvent({ event_data }) {
 }
 
 function CoupEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "vote";
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    const details = player
+    function getUserName() {
+        const players = lobby.players
+        Object.keys(players).forEach(player => {
+            if (event_data.extra_players[0].nickname = players[player].nickname) {
+                return player
+            }
+        })
+    }
+    details.target = getUserName()
+    details.role = "Coup"
+    eventAction(dispatch, lobbyCode, 'update', details)
 
     return (
         <div className="p-4 m-auto">
@@ -626,7 +685,7 @@ function CoupEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -637,8 +696,20 @@ function CoupEvent({ event_data }) {
 }
 
 function BlackmailedEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "win";
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    const details = player
+    function getUserName() {
+        const players = lobby.players
+        Object.keys(players).forEach(player => {
+            if (event_data.extra_players[0].nickname = players[player].nickname) {
+                return player
+            }
+        })
+    }
+    details.target = getUserName()
+    details.role = "Blackmail"
+    eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -670,7 +741,7 @@ function BlackmailedEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -681,8 +752,20 @@ function BlackmailedEvent({ event_data }) {
 }
 
 function BodyGuardEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "lives";
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    const details = player
+    function getUserName() {
+        const players = lobby.players
+        Object.keys(players).forEach(player => {
+            if (event_data.extra_players[0].nickname = players[player].nickname) {
+                return player
+            }
+        })
+    }
+    details.target = getUserName()
+    details.role = "Guard"
+    eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="p-4 m-auto">
             <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
@@ -711,7 +794,7 @@ function BodyGuardEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -755,9 +838,14 @@ export default function EventMap(current_event) {
     }
 }
 
-function endEvent() {
+function eventAction(dispatch, lobbyCode, type, playerChanges) {
+    dispatch(sendAction(lobbyCode, type, playerChanges))
+}
+
+function endEvent(dispatch, lobbyCode,) {
     const eventInfo = document.querySelector("#Event-Info");
     eventInfo.classList.toggle("hidden");
+    dispatch(sendAction(lobbyCode, 'progress'))
     //insert emits to progress game state
 }
 
@@ -859,7 +947,16 @@ export function OutsideEvent({ event_data }) {
                 <p className="font-another text-white text-3xl absolute bg-yellow-700 text-center w-[80%] ml-[10%] mt-[10%]">{event_data.blind_name}</p>
                 <img src={Avatar} alt="player in the room" className="absolute rounded-full bg-transparent h-[20%] mt-[30%] ml-[30%]" />
                 {/* avatar of user inside bro idk how to access it! */}
-                <img src={OpenDoor} alt="Open Door" className="h-full hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" />
+                <img src={OpenDoor} alt="Open Door" className="h-full hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" onClick={showSelection()} />
+            </div>
+            <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
+                <div id="eventSlide"
+                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full ">
+                    <img src={WaitingList} alt="sdas" className="h-full" />
+                    <div className="w-[430px] m-auto max-w-[430px]">
+                        <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">{event_data.blind_info}</strong>
+                    </div>
+                </div>
             </div>
         </div>
     );

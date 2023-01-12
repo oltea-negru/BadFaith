@@ -123,7 +123,7 @@ io.on('connection', async (socket) => {
         let result;
         switch (type) {
             case 'vote':
-                result = await addVote(lobbyCode, actionDetails.target)
+                result = await addVote(lobbyCode, actionDetails)
                 break;
             case 'update':
                 /*
@@ -138,11 +138,12 @@ io.on('connection', async (socket) => {
                 */
                 result = await updatePlayerGoal(lobbyCode, actionDetails)
                 break;
+            case 'progress':
+                result = await gameStoreClient.progressGameState(lobbyCode)
             default:
                 break;
         }
         acknowledgement(result)
-        await gameStoreClient.progressGameState(lobbyCode)
         await updateAll(lobbyCode) 
     })
 
