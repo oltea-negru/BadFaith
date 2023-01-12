@@ -1,32 +1,25 @@
 import { EventGenMap } from "../components/eventMap";
 import { CurrentEvent, EventWaiting } from "../components/CurrentEvent";
+import { useSelector } from "react-redux";
 
-export default function EventRoom({ lobby_state })
+export default function EventRoom()
 {
+    const{lobby,player} = useSelector(state => state.game);
 
 
-    var used_state = lobby_state
-    if (used_state == null) used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("GagOrder", {
-        nickname: "LoremIpsum",
-        icon: "Figure this out",
-        original: "Enemy",
-        allegiance: "Enemy"
-    }, getPlayerArray())
-
-    if (used_state.state == 4)
+    if (lobby.state == 5)
     {
-        if (used_state.inEvent)
+        if (lobby.currentEvent.player.socketID == player.socketID)
         {
             return (
                 <div className=" bg-event_room h-screen bg-cover bg-bottom">
-                    <CurrentEvent current_event={used_state.current_event} />
+                    <CurrentEvent />
                 </div>
             )
         } else
         {
             return (
-                <EventWaiting current_event={used_state.current_event} />
+                <EventWaiting />
             )
         }
     }
@@ -71,7 +64,7 @@ const dummylobbyState = {
     "events": [],
     "state": 4,
     "event_history": [],
-    "current_event": {}
+    "currentEvent": {}
 }
 function getPlayerArray()
 {

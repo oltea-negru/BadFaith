@@ -10,23 +10,19 @@ export default function SeeEnemies({ lobby_state }) {
 
     function enemies() {
         const players = []
-        if (lobby_state) {
-            console.log(lobby_state.players)
-            for (const key in lobby_state.players) {
-                if (lobby_state.players[key].allegiance == "Enemy") players.push(lobby_state.players[key])
-            }
-        } else { //REDUX
-            if (player.allegiance == "Ally") {
-                return [{nickname:"No Peeking!"}]
-            }
+        //REDUX
+        console.log('REDUX')
+        if (player.allegiance == "Ally") {
+            players.push({ nickname: "No Peeking!" })
+        }
+        else {
             for (const key in lobby.players) {
                 if (lobby.players[key].allegiance == "Enemy") players.push(lobby.players[key])
             }
-            
         }
         return players
     }
-    console.log(enemies())
+    console.log('Enemies', enemies())
 
     return (
         <div className="bg-waiting_lobby bg-cover h-screen">

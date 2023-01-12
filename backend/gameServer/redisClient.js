@@ -103,7 +103,7 @@ class HotStorageClient {
     async createLobby(lobbyCode) {
         const lobbyDoc = schema.lobby
         lobbyDoc.state = 1
-        const lobbyExists = await this.getLobby(lobbyCode)
+        const lobbyExists = await this._getLobby(lobbyCode)
         if (lobbyExists == null) {
             this.client.SETEX(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
             return {
@@ -120,7 +120,7 @@ class HotStorageClient {
     //Attempts to add player to lobby
     async joinLobby(lobbyCode, hostDetails) {
         console.log('PlayerJoining', hostDetails)
-        const lobbyDoc = await this.getLobby(lobbyCode)
+        const lobbyDoc = await this._getLobby(lobbyCode)
         if (lobbyDoc == null) {
             return {
                 ok: false,
@@ -143,12 +143,12 @@ class HotStorageClient {
 
     //Check that the lobby exists 
     async doesLobbyExist(lobbyCode) {
-        var lobbyDoc = await this.getLobby(lobbyCode)
+        var lobbyDoc = await this._getLobby(lobbyCode)
         return (lobbyDoc != null)
     }
 
     async toggleReady(lobbyCode, socket) {
-        var lobbyDoc = await this.getLobby(lobbyCode)
+        var lobbyDoc = await this._getLobby(lobbyCode)
         // console.log('Debug Socket', socket)
         // console.log('socketToPlayers',lobbyDoc.socketToPlayers)
         const playerID = lobbyDoc.socketToPlayers[socket]
@@ -176,7 +176,7 @@ class HotStorageClient {
     }
 
     async getReadyCounter(lobbyCode) {
-        const lobby = await this.getLobby(lobbyCode)
+        const lobby = await this._getLobby(lobbyCode)
         if (lobby == null) return {
             ok: false,
             msg: "Lobby does not exist"
@@ -188,7 +188,7 @@ class HotStorageClient {
     }
 
     async getActivePlayerNumber(lobbyCode) {
-        const lobby = await this.getLobby(lobbyCode)
+        const lobby = await this._getLobby(lobbyCode)
         if (lobby == null) return {
             ok: false,
             msg: "Lobby does not exist"
@@ -202,7 +202,7 @@ class HotStorageClient {
 
     // TODO Remove inbetweeen state -> add seamless event to event progression
     async progressGameState(lobbyCode) {
-        const lobby = await this.getLobby(lobbyCode)
+        const lobby = await this._getLobby(lobbyCode)
         if (lobby == null) return {
             ok: false,
             msg: "Lobby does not exist"
@@ -263,7 +263,7 @@ class HotStorageClient {
                     }
                 } else { // moving to next event
                     console.log("Lobby " + lobbyCode + ": progressing to next event")
-                    if (lobby.currentEvent != null) lobby.eventHistory.add(lobby.currentEvent);
+                    if (lobby.currentEvent != null) lobby.eventHistory.push(lobby.currentEvent);
                     lobby.currentEvent = lobby.events.shift()
                     lobby.state = 5
                     await this.updateLobby(lobbyCode, lobby)
@@ -317,37 +317,39 @@ class HotStorageClient {
     }
 
     async getUserState(lobbyCode, socket) {
-        const lobby = await this.getLobby(lobbyCode)
+        const lobby = await this._getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[socket]
+        console.log(lobby.currentEvent.player)
+        // const eventPlayerID = lobby.socketToPlayers[lobby.currentEvent.player.socketID]
         delete lobby.events
         delete lobby.votes
         delete lobby.voteLimit
-        if (lobby.currentEvent.player == playerID) {
+        // if (eventPlayerID == playerID) {
             return lobby
-        } else {
-            delete lobby.currentEvent.details
-            delete lobby.currentEvent.extra_players
-            delete lobby.currentEvent.event_function
-            delete lobby.currentEvent.event_name
+        // } else {
+        //     delete lobby.currentEvent.details
+        //     delete lobby.currentEvent.extra_players
+        //     delete lobby.currentEvent.event_function
+        //     delete lobby.currentEvent.event_name
 
-            Object.keys(lobby.players).foreach(player => { //Players should not know the details more than what is needed outside the event
-                delete lobby.players[player].socketID
-                delete lobby.players[player].allegiance
-                delete lobby.players[player].role
-                delete lobby.players[player].target
-                delete lobby.players[player].ready
-            })
-            return lobby
-        }
+        //     Object.keys(lobby.players).forEach(player => { //Players should not know the details more than what is needed outside the event
+        //         delete lobby.players[player].socketID
+        //         delete lobby.players[player].allegiance
+        //         delete lobby.players[player].role
+        //         delete lobby.players[player].target
+        //         delete lobby.players[player].ready
+        //     })
+        //     return lobby
+        // }
     }
 
     async getSockets(lobbyCode) {
-        const lobby = await this.getLobby(lobbyCode)
+        const lobby = await this._getLobby(lobbyCode)
         return Object.keys(lobby.socketToPlayers);
     }
 
     async getPlayer(lobbyCode, socket) {
-        const lobby = await this.getLobby(lobbyCode)
+        const lobby = await this._getLobby(lobbyCode)
         console.log('Socket',socket)
         // console.log('Lobby',lobby)
         const playerID = lobby.socketToPlayers[socket]
@@ -359,14 +361,14 @@ class HotStorageClient {
     }
 
     async updatePlayer(lobbyCode, playerDetails) {
-        const lobby = this.getLobby(lobbyCode)
+        const lobby = this._getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[playerDetails.socketID]
         lobby.players[playerID] = playerDetails
         this.updateLobby(lobbyCode, lobby)
     }
 
     async getUsername(lobbyCode, socket) {
-        const lobby = await this.getLobby(lobbyCode)
+        const lobby = await this._getLobby(lobbyCode)
         var playerID = lobby.socketToPlayers[socket]
         return {
             ok: true,
@@ -375,7 +377,7 @@ class HotStorageClient {
     }
 
     async getNickname(lobbyCode, socket) {
-        var lobbyDoc = await this.getLobby(lobbyCode)
+        var lobbyDoc = await this._getLobby(lobbyCode)
         var playerID = lobbyDoc.socketToPlayers[socket]
         const nickname = lobbyDoc.players[playerID]
         return {
@@ -385,7 +387,8 @@ class HotStorageClient {
     }
 
     //fetch individual lobby json
-    async getLobby(lobbyCode) {
+    async _getLobby(lobbyCode) {
+        if(lobbyCode == null ) return null
         const lobby = await this.client.get(lobbyCode)
         return JSON.parse(lobby)
     }
@@ -469,7 +472,7 @@ class HotStorageClient {
     // if lobby does not exist, do nothing and return false
     // if lobby exists, update and return true
     async updateLobby(lobbyCode, lobbyDoc) {
-        const lobby = await this.getLobby(lobbyCode)
+        const lobby = await this._getLobby(lobbyCode)
         if (lobby == null) return { ok: false, msg: "Lobby does not exist" };
         this.client.SETEX(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
         return {
@@ -527,8 +530,8 @@ function SetAllegiances(lobby_state) {
         while (updatedPlayers[players[index]].allegiance != "") {
             index = [Math.floor((Math.random() * players.length))]
         }
-        updatedPlayers[players[index]].allegiance = "Enenmy"
-        updatedPlayers[players[index]].original = "Enenmy"
+        updatedPlayers[players[index]].allegiance = "Enemy"
+        updatedPlayers[players[index]].original = "Enemy"
     }
     for (let i = 0; i < players.length; i++) {
         if (updatedPlayers[players[i]].allegiance == "") {
