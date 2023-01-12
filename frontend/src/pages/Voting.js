@@ -50,7 +50,7 @@ export default function Voting()
         {dummyPlayers.map((player) => playerFrame(player.nickname, player.avatar))}
       </div>
 
-      <div className='h-2/5 w-[120%] bg-rope bg-cover bg-bottom -translate-x-[10%] translate-y-1'></div>
+      <div className='h-2/5 w-[120%] bg-rope bg-cover bg-bottom  -translate-x-[10%] translate-y-1'></div>
     </div>
   )
 }

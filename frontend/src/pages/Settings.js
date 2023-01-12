@@ -127,7 +127,7 @@ function Settings()
             <div className="absolute flex-col text-white text-3xl font-another w-3/5 h-[70%] max-w-[600px] max-h-[600px] justify-between mt-[7%] items-center flex ">
                 <div className="">
                     <img src={avatars[avatarInput]} alt="Avatar" className="h-36 rounded-lg border-4 border-white bg-white" />
-                    <div className="flex flex-row justify-around">
+                    <div className="flex flex-row justify-around mt-1">
                         <img
                             src={EditAvatar}
                             alt="Edit Avatar"
