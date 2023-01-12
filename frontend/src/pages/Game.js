@@ -10,18 +10,17 @@ export default function Game({ lobby_state })
 
     const { lobby } = useSelector(state => state.game);
     // if (used_state == null) 
-    used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("BodyGuard", {
-        nickname: "LoremIpsum",
-        icon: "Figure this out",
-        original: "Enemy",
-        allegiance: "Enemy"
-    }, getPlayerArray())
+    // const used_state = dummylobbyState
+    // dummylobbyState.current_event = EventGenMap("Blackmailed", {
+    //     nickname: "LoremIpsum",
+    //     icon: "Figure this out",
+    //     original: "Enemy",
+    //     allegiance: "Enemy"
+    // }, getPlayerArray())
 
-    const setFunction = (used_state) =>
-    {
-        switch (used_state.state)
-        {
+    // console.log(used_state)
+    const setFunction = (used_state) => {
+        switch (used_state.state) {
             case 1:// Joining
                 return (<WaitingRoom />)
             case 2:// Starting
@@ -43,7 +42,7 @@ export default function Game({ lobby_state })
 
     return (
         <div>
-            {setFunction(used_state)}
+            {setFunction(lobby)}
         </div>
     )
 }

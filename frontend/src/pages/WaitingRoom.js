@@ -59,7 +59,7 @@ export default function WaitingRoom({ lobby_state }) {
                 </div>
             </div>
             <div>
-                <button className="absolute bottom-[15%] right-[45%] font-another text-2xl rounded-2xl"
+                <button className="absolute bottom-[15%] right-[45%] font-another text-2xl rounded-2xl hover:text-[#ff0000]"
                     onClick={() => dispatch(readyUp(lobbyCode))}>Ready</button>
             </div>
             <div className="flex flex-row ml-[30%] mt-[20%] absolute">

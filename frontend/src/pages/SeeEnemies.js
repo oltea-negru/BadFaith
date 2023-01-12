@@ -4,7 +4,7 @@ import PlayerWaiting from "../components/player_waiting";
 import { readyUp } from "../redux/middleware/gameServerMiddleware";
 
 export default function SeeEnemies({ lobby_state }) {
-    const { lobbyCode, lobby } = useSelector(state => state.game)
+    const { lobbyCode, lobby, player } = useSelector(state => state.game)
     const dispatch = useDispatch()
     const colors = ['#813b45', '#7f6a8b', '#6f98aa', '#FF8042', '#7c6434', '#e3bd73', '#5a2b32', '#8c9c83'];
 
@@ -15,7 +15,10 @@ export default function SeeEnemies({ lobby_state }) {
             for (const key in lobby_state.players) {
                 if (lobby_state.players[key].allegiance == "Enemy") players.push(lobby_state.players[key])
             }
-        } else {
+        } else { //REDUX
+            if (player.allegiance == "Ally") {
+                return [{nickname:"No Peeking!"}]
+            }
             for (const key in lobby.players) {
                 if (lobby.players[key].allegiance == "Enemy") players.push(lobby.players[key])
             }

@@ -119,6 +119,7 @@ class HotStorageClient {
 
     //Attempts to add player to lobby
     async joinLobby(lobbyCode, hostDetails) {
+        console.log('PlayerJoining', hostDetails)
         const lobbyDoc = await this.getLobby(lobbyCode)
         if (lobbyDoc == null) {
             return {
@@ -148,6 +149,8 @@ class HotStorageClient {
 
     async toggleReady(lobbyCode, socket) {
         var lobbyDoc = await this.getLobby(lobbyCode)
+        console.log('Debug Socket', socket)
+        console.log('socketToPlayers',lobbyDoc.socketToPlayers)
         const playerID = lobbyDoc.socketToPlayers[socket]
         console.log('Debug PlayerID', playerID)
         if (lobbyDoc.players[playerID].ready) {
@@ -216,8 +219,6 @@ class HotStorageClient {
                 console.log("Lobby " + lobbyCode + ": progressing to start game phase")
                 lobby.state = 2
                 await this.updateLobby(lobbyCode, lobby)
-                return { ok: true, msg: "Progressed to starting game" }
-            case 2: // Starting to between events
                 lobby.players = SetAllegiences(lobby)
                 lobby.events = GenerateEvents(lobby)
                 lobby.enemyCount = GetEnemyCount(lobby)
