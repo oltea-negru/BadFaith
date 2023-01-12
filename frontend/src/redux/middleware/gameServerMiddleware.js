@@ -8,11 +8,11 @@ export const gsConnecting = host => ({ type: 'GS_CONNECTING', host });
 export const sendChat = message => ({ type: 'CHAT', message })
 export const sendAction = (lobbyCode, actionType, actionDetails) => ({ type: 'ACTION', lobbyCode, actionType, actionDetails })
 export const createLobby = hostDetails => ({ type: 'CREATE_LOBBY', hostDetails })
-export const joinLobby = (lobbyCode, playerDetails) => ({ type: 'CREATE_LOBBY', lobbyCode, playerDetails})
-export const votePlayer = (lobbyCode, target) => ({ type: 'CREATE_LOBBY', lobbyCode, target })
-export const readyUp = lobbyCode => ({ type: 'CREATE_LOBBY', lobbyCode })
+export const joinLobby = (lobbyCode, playerDetails) => ({ type: 'JOIN_LOBBY', lobbyCode, playerDetails})
+export const votePlayer = (lobbyCode, target) => ({ type: 'VOTE', lobbyCode, target })
+export const readyUp = lobbyCode => ({ type: 'READY', lobbyCode })
 
-const serverHost = process.env.SERVER_HOST || "34.142.27.158"
+const serverHost = process.env.SERVER_HOST || "localhost"
 const serverPort = process.env.SERVER_PORT || "9000"
 
 const gameServerMiddleware = () => {
@@ -35,6 +35,7 @@ const gameServerMiddleware = () => {
             console.log('Socket is already open!')
             
             // connect to the remote host
+            console.log(serverHost, serverPort)
             socket = new io(`${serverHost}:${serverPort}`, {
                 transports: ['websocket']
             })
@@ -87,6 +88,7 @@ const gameServerMiddleware = () => {
             console.log('Join Lobby', action.lobbyCode, action.playerDetails);
             socket.emit('joinLobby', action.lobbyCode, action.playerDetails, (response) => {
                 if (response.ok) {
+                    console.log('')
                     store.dispatch(updateLobbyCode(response.lobbyCode))
                     store.dispatch(updatePlayerID(action.playerDetails.playerID))
                 }

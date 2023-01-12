@@ -111,9 +111,9 @@ io.on('connection', async (socket) => {
 
     socket.on('readyUp', async (lobbyCode, acknowledgement) => {
         const isReady = await readyUp(lobbyCode, socket)
-        if (result.progressState) {
+        if (isReady.progressState) {
             updateAll(lobbyCode)
-            acknowledgement()
+            acknowledgement(isReady)
         }
         else{
             acknowledgement(isReady)
