@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import WaitingList from "../assets/svg/EventBoardComponent.svg";
 import OpenDoor from "../assets/svg/EnterEventDoorComponent.svg";
 import Avatar from "../assets/avatars/avatar-1.svg";
+import { useDispatch } from 'react-redux'
+import { readyUp } from "../redux/middleware/gameServerMiddleware";
+
 const PrivateCall = [
     "There is a private phone call for this player.",
     <br />,

@@ -8,6 +8,88 @@ const redisHost = process.env.REDIS_HOST || 'localhost'
 const redisPort = process.env.REDIS_PORT || '6379'
 DEFAULT_EXPIRATIION = 3600
 
+const PrivateCall = ["There is a private phone call for this player." , '<br />', "They will be with back shortly."]
+
+const Events = {
+    OldAllies: {
+        BlindName: "Old Allies",
+        EventTitle: "Old Allies",
+        BlindInfo: "Two players are revelead to have appeared as the same team at the start",
+        Details: "Two players are revelead to have appeared as the same team at the start"
+    },
+    OldEnemies: {
+        BlindName: "Old Enemies",
+        EventTitle: "Old Enemies",
+        BlindInfo: "Two players are revelead to have appeared on opposite teams at the start",
+        Details: "Two players are revelead to have appeared on opposite teams at the start",
+    },
+    DeepState: {
+        BlindName: "Private Call",
+        EventTitle: "Deep State",
+        BlindInfo: PrivateCall,
+        Details: "Deep State",
+    },
+    SplinterCell: {
+        BlindName: "Private Call",
+        EventTitle: "Splinter Cell",
+        BlindInfo: PrivateCall,
+        Details: "Splinter Cell"
+    },
+    BackroomDeal: {
+        BlindName: "Backroom Deal",
+        EventTitle: "Backroom Deal",
+        BlindInfo: ["Their loyalty is being put to the test." , '<br />', "Is it strong enough?"],
+        Details: ["You have the option to switch teams, but if you do so you cannot vote." , '<br />', "Do you accept?"]
+    },
+    Martyr: {
+        BlindName: "Private Call",
+        EventTitle: "Martyr",
+        BlindInfo: PrivateCall,
+        Details: "You have been chosen as a Martyr, get yourself voted and you will be rewarded."
+    },
+    BackgroundCheck: {
+        BlindName: "Background Check",
+        EventTitle: "Background Check",
+        BlindInfo: "We have done a little digging. Here is what we know..."
+    },
+    PickPocket: {
+        BlindName: "Pick Pocket",
+        EventTitle: "Pick Pocket",
+        BlindInfo: "Select a player to swap roles with",
+        Details: "Select a player to swap roles with"
+    },
+    GagOrder: {
+        BlindName: "Gag Order",
+        EventTitle: "Gag Order",
+        BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
+        Details: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
+    },
+    BlackMark: {
+        BlindName: "Black Mark",
+        EventTitle: "Black Mark",
+        BlindInfo: "Choose a player to add an extra vote against",
+        Details: "Choose a player to add an extra vote against"
+    },
+    Coup: {
+        BlindName: "Private Call",
+        BlindInfo: PrivateCall,
+        EventTitle: "Coup d'etat",
+        Details: "Coup d'etat"
+
+    },
+    Blackmailed: {
+        BlindName: "Blackmailed",
+        EventTitle: "Blackmailed",
+        BlindInfo: ["Another player has some dirt on you that cannot come to light." , '<br />', "You will only win if they do."],
+        Details: ["Another player has some dirt on you that cannot come to light." , '<br />', "You will only win if they do."],
+    },
+    BodyGuard: {
+        BlindName: "Bodyguard",
+        EventTitle: "Bodyguard",
+        BlindInfo: ["You have been employed to protect another." , '<br />', "They cannot be voted out."]
+    }
+}
+
 class HotStorageClient {
     constructor() {
         this.client = redis.createClient({ url: `redis://${redisHost}:${redisPort}` })
@@ -82,8 +164,11 @@ class HotStorageClient {
             }
         if (readyResult.ok)
             return {
+                ok: true,
                 isReady: lobbyDoc.players[playerID].ready
             }
+        else
+            return readyResult
     }
 
     async getReadyCounter(lobbyCode) {
@@ -378,88 +463,6 @@ class HotStorageClient {
             msg: "Lobby updated"
         };
     }
-
-    PrivateCall = ["There is a private phone call for this player.", <br />, "They will be with back shortly."];
-
-    Events = {
-        OldAllies: {
-            BlindName: "Old Allies",
-            EventTitle: "Old Allies",
-            BlindInfo: "Two players are revelead to have appeared as the same team at the start",
-            Details: "Two players are revelead to have appeared as the same team at the start"
-        },
-        OldEnemies: {
-            BlindName: "Old Enemies",
-            EventTitle: "Old Enemies",
-            BlindInfo: "Two players are revelead to have appeared on opposite teams at the start",
-            Details: "Two players are revelead to have appeared on opposite teams at the start",
-        },
-        DeepState: {
-            BlindName: "Private Call",
-            EventTitle: "Deep State",
-            BlindInfo: PrivateCall,
-            Details: "Deep State",
-        },
-        SplinterCell: {
-            BlindName: "Private Call",
-            EventTitle: "Splinter Cell",
-            BlindInfo: PrivateCall,
-            Details: "Splinter Cell"
-        },
-        BackroomDeal: {
-            BlindName: "Backroom Deal",
-            EventTitle: "Backroom Deal",
-            BlindInfo: ["Their loyalty is being put to the test.", <br />, "Is it strong enough?"],
-            Details: ["You have the option to switch teams, but if you do so you cannot vote.", <br />, "Do you accept?"]
-        },
-        Martyr: {
-            BlindName: "Private Call",
-            EventTitle: "Martyr",
-            BlindInfo: PrivateCall,
-            Details: "You have been chosen as a Martyr, get yourself voted and you will be rewarded."
-        },
-        BackgroundCheck: {
-            BlindName: "Background Check",
-            EventTitle: "Background Check",
-            BlindInfo: "We have done a little digging. Here is what we know..."
-        },
-        PickPocket: {
-            BlindName: "Pick Pocket",
-            EventTitle: "Pick Pocket",
-            BlindInfo: "Select a player to swap roles with",
-            Details: "Select a player to swap roles with"
-        },
-        GagOrder: {
-            BlindName: "Gag Order",
-            EventTitle: "Gag Order",
-            BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
-            Details: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
-        },
-        BlackMark: {
-            BlindName: "Black Mark",
-            EventTitle: "Black Mark",
-            BlindInfo: "Choose a player to add an extra vote against",
-            Details: "Choose a player to add an extra vote against"
-        },
-        Coup: {
-            BlindName: "Private Call",
-            BlindInfo: PrivateCall,
-            EventTitle: "Coup d'etat",
-            Details: "Coup d'etat"
-
-        },
-        Blackmailed: {
-            BlindName: "Blackmailed",
-            EventTitle: "Blackmailed",
-            BlindInfo: ["Another player has some dirt on you that cannot come to light.", <br />, "You will only win if they do."],
-            Details: ["Another player has some dirt on you that cannot come to light.", <br />, "You will only win if they do."],
-        },
-        BodyGuard: {
-            BlindName: "Bodyguard",
-            EventTitle: "Bodyguard",
-            BlindInfo: ["You have been employed to protect another.", <br />, "They cannot be voted out."]
-        }
-    };
 
     GenerateEvents({ lobby_state }) {
         let events = [];

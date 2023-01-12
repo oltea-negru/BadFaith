@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
 import { AddMessage } from "../slices/chatSlice";
-import { updatePlayerID, updateLobby, toggleReady, updateVote } from "../slices/gameSlice";
+import { updatePlayerID, updateLobby, toggleReady, updateVote, updateLobbyCode } from "../slices/gameSlice";
+import { setLoading, setError } from "../slices/userSlice";
 
 export const gsConnect = () => ({ type: 'GS_CONNECT' });
 export const gsConnecting = host => ({ type: 'GS_CONNECTING', host });
@@ -11,6 +12,8 @@ export const joinLobby = (lobbyCode, playerDetails) => ({ type: 'CREATE_LOBBY', 
 export const votePlayer = (lobbyCode, target) => ({ type: 'CREATE_LOBBY', lobbyCode, target })
 export const readyUp = lobbyCode => ({ type: 'CREATE_LOBBY', lobbyCode })
 
+const serverHost = process.env.SERVER_HOST || "34.142.27.158"
+const serverPort = process.env.SERVER_PORT || "9000"
 
 const gameServerMiddleware = () => {
     let socket = null;
@@ -32,8 +35,8 @@ const gameServerMiddleware = () => {
             console.log('Socket is already open!')
             
             // connect to the remote host
-            socket = new io('localhost:9000', {
-            transports: ['websocket']
+            socket = new io(`34.142.27.158:9000`, {
+                transports: ['websocket']
             })
 
             socket.on('connect', () => {
@@ -45,7 +48,7 @@ const gameServerMiddleware = () => {
             })
 
             socket.on('state', state => {
-                onGameState()
+                onGameState(store.dispatch, state)
             })
 
             socket.on('disconnect', (reason) => {
@@ -66,7 +69,16 @@ const gameServerMiddleware = () => {
             console.log('Create lobby', action.hostDetails);
             socket.emit('createLobby', action.hostDetails, (response) => {
                 if (response.ok) {
-                    store.dispatch(updatePlayerID(store.user.email))
+                    store.dispatch(updateLobbyCode(response.lobbyCode))
+                    store.dispatch(updatePlayerID(action.hostDetails.playerID))
+                    store.dispatch(setLoading(false))
+                    //TODO Setup loading and error modals
+                }
+                else{
+                    store.dispatch(setError(response.message))
+                    setTimeout(() => {
+                        store.dispatch(setError(null))
+                    }, 3000)
                 }
                 //TODO Error messages if server failed to create/join lobby
             })
@@ -76,6 +88,12 @@ const gameServerMiddleware = () => {
             socket.emit('joinLobby', action.lobbyCode, action.playerDetails, (response) => {
                 if (response.ok) {
                     store.dispatch(updatePlayerID(store.user.email))
+                }
+                else{
+                    store.dispatch(setError(response.message))
+                    setTimeout(() => {
+                        store.dispatch(setError(null))
+                    }, 3000)
                 }
             })
             break;
@@ -88,6 +106,10 @@ const gameServerMiddleware = () => {
                 }
                 else {
                     store.dispatch(updateVote(""))
+                    store.dispatch(setError(response.message))
+                    setTimeout(() => {
+                        store.dispatch(setError(null))
+                    }, 3000)
                 }
             })
             break;
@@ -96,11 +118,24 @@ const gameServerMiddleware = () => {
             socket.emit('readyUp', action.lobbyCode, (response) => {
                 if(response.ok)
                     store.dispatch(toggleReady(response.isReady))
+                else{
+                    store.dispatch(setError(response.message))
+                    setTimeout(() => {
+                        store.dispatch(setError(null))
+                    }, 3000)
+                }
             })
             break;
         case 'ACTION':
             console.log('Action', action.lobbyCode, action.actionType, action.actionDetails);
-            socket.emit('action', action.lobbyCode, action.actionType, action.actionDetails)
+            socket.emit('action', action.lobbyCode, action.actionType, action.actionDetails, (response) => {
+                if(!response.ok){
+                    store.dispatch(setError(response.message))
+                    setTimeout(() => {
+                        store.dispatch(setError(null))
+                    }, 3000)
+                }
+            })
             break;
         case 'CHAT':
             console.log('Chat Socket Emit', action.message);

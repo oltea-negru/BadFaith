@@ -1,6 +1,5 @@
 const { createClient } = require('redis')
 const { createAdapter } = require('@socket.io/redis-adapter');
-const { updateLobby } = require('../../frontend/src/redux/slices/gameSlice');
 const HotStorageClient = require('./redisClient').HotStorageClient;
 
 const gameStoreClient = new HotStorageClient()
@@ -113,6 +112,7 @@ io.on('connection', async (socket) => {
         const isReady = await readyUp(lobbyCode, socket)
         if (result.progressState) {
             updateAll(lobbyCode)
+            acknowledgement()
         }
         else{
             acknowledgement(isReady)
@@ -120,9 +120,10 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('action', async (lobbyCode, type, actionDetails, acknowledgement) => {
+        let result;
         switch (type) {
             case 'vote':
-                await addVote(lobbyCode, actionDetails.target)
+                result = await addVote(lobbyCode, actionDetails.target)
                 break;
             case 'update':
                 /*
@@ -135,11 +136,12 @@ io.on('connection', async (socket) => {
                     "ready": ,
                 }
                 */
-                await updatePlayerGoal(lobbyCode, actionDetails)
+                result = await updatePlayerGoal(lobbyCode, actionDetails)
                 break;
             default:
                 break;
         }
+        acknowledgement(result)
         await gameStoreClient.progressGameState(lobbyCode)
         await updateAll(lobbyCode) 
     })

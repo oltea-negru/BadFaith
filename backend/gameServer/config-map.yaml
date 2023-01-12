@@ -4,5 +4,5 @@ metadata:
   name: server-config-map
 data:
   # Configuration values can be set as key-value properties
-  REDIS_HOST: "10.112.250.75"
+  REDIS_HOST: "10.140.197.187"
   REDIS_PORT: "6379"

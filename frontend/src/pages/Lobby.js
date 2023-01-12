@@ -1,12 +1,10 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import JoinLobbyCard from '../assets/svg/JoinLobbyComponent.svg'
 import CreateLobbyCard from '../assets/svg/CreateLobbyComponent.svg'
 import Settings from '../assets/svg/SettingsExpanded.svg'
-import { gsConnect } from '../redux/middleware/gameServerMiddleware'
-import { useDispatch } from 'react-redux'
-
+import { gsConnect, joinLobby, createLobby } from '../redux/middleware/gameServerMiddleware'
+import { useDispatch, useSelector } from 'react-redux'
 
 function Lobby()
 {
@@ -18,13 +16,21 @@ function Lobby()
     const [privateLobby, setPrivateLobby] = useState(false)
     const [codeCreated, setCodeCreated] = useState('')
     const navigate = useNavigate()
-    const dispatch = useDispatch()
 
-    //Connect game socket on joining page
+    const { email, nickname } = useSelector(state => state.user)
+    const { lobbyCode } = useSelector(state => state.game)
+
+
+
+    // Connect game socket on joining page
+    const dispatch = useDispatch()
+    useEffect(()=> {
+        dispatch(gsConnect())
+    }, [])
+
     useEffect(() => {
-        const host = `TODO gamesocket url here`;
-        dispatch(gsConnect(host));
-     }, [dispatch])
+        setCodeCreated(lobbyCode)
+    }, [lobbyCode])
 
 
     return (
@@ -37,7 +43,11 @@ function Lobby()
                                 <div className='h-[400px] w-[800px] rounded-2xl border-2 border-black  bg-white text-center justify-between flex flex-col'>
                                     <p className='text-4xl mt-10'>ENTER CODE:</p>
                                     <input type="text" className='bg-gray-300 mx-36 text-center text-2xl font-another h-10 border-2 border-black' value={joinCode} onChange={(e) => setJoinCode(e.target.value)} />
-                                    <button className='bg-black mb-10 h-14 text-4xl hover:text-5xl text-white active:text-4xl focus:outline-none' onClick={() => { setOpenCard(false); setWhichCard('') }}>Join</button>
+                                    <button className='bg-black mb-10 h-14 text-4xl hover:text-5xl text-white active:text-4xl focus:outline-none' onClick={() => { 
+                                        setOpenCard(false) 
+                                        setWhichCard('')
+                                        dispatch(joinLobby(joinCode)) 
+                                    }}>Join</button>
                                 </div>
                                 :
                                 <div>
@@ -60,11 +70,13 @@ function Lobby()
                                                         <input type="checkbox" className='w-6 focus:outline-none' value={privateLobby} onChange={(e) => setPrivateLobby(e.target.value)} />
                                                     </div>
                                                 </div>
-                                                <button className='font-another bg-white mb-10 h-14 text-4xl hover:text-5xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { setCodeCreated('random code') }}>Create Code</button>
+                                                <button className='font-another bg-white mb-10 h-14 text-4xl hover:text-5xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { 
+                                                    dispatch(createLobby({playerID: email, nickname}))
+                                                }}>Create Code</button>
                                             </div> :
                                             <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-blue-500 border-4 border-black justify-evenly'>
                                                 <p className='text-4xl text-white mt-10'>LOBBY CODE</p>
-                                                <p className='text-4xl'>{codeCreated}</p>
+                                                <p className='text-4xl'>{lobbyCode}</p>
 
                                             </div>
                                     }

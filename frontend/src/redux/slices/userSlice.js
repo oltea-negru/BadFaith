@@ -12,7 +12,9 @@ export const userSlice = createSlice({
             achievements: [],
             wins: 0,
             totalGames: 0
-        }
+        },
+        loading: false,
+        error: null
     },
     reducers: {
         setSettings: (state, action) =>
@@ -31,14 +33,6 @@ export const userSlice = createSlice({
             console.log(state.email)
             console.log(state.password)
         },
-        // setRegister:(state, action) => {
-        //     state.email = action.payload.email
-        //     state.password = action.payload.password
-        //     state.avatar = action.payload.avatar
-        //     console.log(state.email)
-        //     console.log(state.password)
-        //     console.log(state.avatar)
-        // },
         setFriends: (state, action) =>
         {
             state.friends = action.payload.friends
@@ -55,10 +49,16 @@ export const userSlice = createSlice({
         setState: (state, action) =>
         {
             state = action.payload
+        },
+        setLoading: (state, action) => {
+            state.loading = action.payload
+        },
+        setError: (state, action) => {
+            state.error = action.payload
         }
     }
 })
 
-export const { setCredentials, incrementWin, incrementGame, setState, setSettings } = userSlice.actions
+export const { setCredentials, incrementWin, incrementGame, setState, setSettings, setLoading, setError } = userSlice.actions
 
 export default userSlice.reducer
