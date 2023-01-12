@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch, } from 'react-redux'
 import { setCredentials } from "../redux/slices/userSlice";
 import { player_Register } from "../api/examplePlayerMethods.js";
-import Key from "../assets/svg/CreateKey.svg"
+import Create from "../assets/svg/CreateKey.svg"
 import Return from "../assets/svg/ReturnArrow.svg"
 
 
@@ -20,7 +20,7 @@ export default function PlayerRegister()
   const { stats, nickname, email, password, avatar } = useSelector(state => state.user);
   const [showPassword, setShowPassword] = useState(false);
 
-  async function hanldeRegister()
+  async function handleRegister()
   {
     if (emailInput === '' || passwordInput === '') return
     const message = await (player_Register(emailInput, passwordInput))
@@ -57,10 +57,10 @@ export default function PlayerRegister()
         <input type="text" id="email" name="email" placeholder="Email" className='input' value={emailInput} onChange={event => setEmail(event.target.value)} />
         <input type="password" id="password" name="password" placeholder="Password (8-30 chars)" className='input' value={passwordInput} onChange={event => setPassword(event.target.value)} />
       </form>
-      <img src={Key} alt="Register Button" className="hover:cursor-pointer absolute right-[5%] bottom-[10%] hover:h-48" onClick={() => hanldeRegister({ email: emailInput, password: passwordInput })} />
+      <img src={Create} alt="Register Button" className="hover:cursor-pointer absolute right-[5%] h-36 bottom-[10%] hover:h-40 transition" onClick={() => handleRegister({ email: emailInput, password: passwordInput })} />
       <div className='absolute bottom-20 left-20 flex flex-col hover:cursor-pointer '>
-        <button className='focus:outline-none text-3xl  text-white' onClick={() => navigateToHome()}>Back</button>
-        <img src={Return} alt="Return Button" className="h-10 hover:h-12" onClick={() => navigateToHome()} />
+        <button className='focus:outline-none text-3xl  text-white ' onClick={() => navigateToHome()}>Back</button>
+        <img src={Return} alt="Return Button" className="h-10 hover:h-12 transition" onClick={() => navigateToHome()} />
       </div>
     </div >
   )

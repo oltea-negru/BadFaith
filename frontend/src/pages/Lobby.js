@@ -6,7 +6,7 @@ import CreateLobbyCard from '../assets/svg/CreateLobbyComponent.svg'
 import Settings from '../assets/svg/SettingsExpanded.svg'
 import { gsConnect } from '../redux/middleware/gameServerMiddleware'
 import { useDispatch } from 'react-redux'
-
+import Return from "../assets/svg/ReturnArrow.svg"
 
 function Lobby()
 {
@@ -21,10 +21,11 @@ function Lobby()
     const dispatch = useDispatch()
 
     //Connect game socket on joining page
-    useEffect(() => {
+    useEffect(() =>
+    {
         const host = `TODO gamesocket url here`;
         dispatch(gsConnect(host));
-     }, [dispatch])
+    }, [dispatch])
 
 
     return (
@@ -73,12 +74,16 @@ function Lobby()
                     </div>
                     :
                     <div>
-                        <img src={JoinLobbyCard} alt="" className='absolute h-[40%] top-[10%] left-[10%] hover:h-[45%] hover:cursor-pointer' onClick={() => { setOpenCard(true); setWhichCard('join') }} />
-                        <img src={CreateLobbyCard} alt="" className='absolute h-[70%] top-[10%] right-[10%] hover:h-[75%] hover:cursor-pointer' onClick={() => { setOpenCard(true); setWhichCard('create') }} />
-                        <img src={Settings} alt="" className='absolute h-[30%] bottom-[10%] right-[42%] -rotate-12 hover:h-[35%] hover:cursor-pointer' onClick={() => navigate("/settings")} />
+                        <img src={JoinLobbyCard} alt="" className='custom-transition absolute h-[40%] top-[10%] left-[10%] hover:h-[45%] hover:cursor-pointer' onClick={() => { setOpenCard(true); setWhichCard('join') }} />
+                        <img src={CreateLobbyCard} alt="" className='custom-transition absolute h-[70%] top-[10%] right-[10%] hover:h-[75%] hover:cursor-pointer' onClick={() => { setOpenCard(true); setWhichCard('create') }} />
+                        <img src={Settings} alt="" className='custom-transition absolute h-[30%] bottom-[10%] right-[42%] -rotate-12 hover:h-[35%] hover:cursor-pointer' onClick={() => navigate("/settings")} />
                     </div>
             }
-            <button className='font-another active:text-4xl focus:outline-none absolute bottom-20 left-20 text-3xl text-white' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
+            <div className='absolute bottom-10 left-10  flex flex-col hover:cursor-pointer '>
+                <button className='focus:outline-none text-3xl  text-white ' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
+                <img src={Return} alt="Return Button" className="h-10 hover:h-12 custom-transition" onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }} />
+            </div>
+
         </div>
     );
 
