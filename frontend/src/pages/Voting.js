@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import Rope from '../assets/svg/RopeComponent.svg'
 import Frame from '../assets/svg/FrameComponent.svg'
-import GoldFrame from '../assets/svg/GoldFrameComponent.svg'
 import NameBoard from '../assets/svg/NameboardComponent.svg'
 import Avatar0 from "../assets/avatars/placeholder.svg";
 import Avatar1 from "../assets/avatars/avatar-1.svg";
@@ -51,7 +50,7 @@ export default function Voting()
         {dummyPlayers.map((player) => playerFrame(player.nickname, player.avatar))}
       </div>
 
-      <div className='h-2/5 w-[120%] bg-rope bg-cover bg-bottom -translate-x-[10%] translate-y-1'></div>
+      <div className='h-2/5 w-[120%] bg-rope bg-cover bg-bottom  -translate-x-[10%] translate-y-1'></div>
     </div>
   )
 }

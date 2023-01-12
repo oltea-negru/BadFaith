@@ -6,6 +6,7 @@ import { useSelector, useDispatch, } from 'react-redux'
 import { setCredentials } from "../redux/slices/userSlice";
 import { player_Login } from "../api/examplePlayerMethods.js";
 import { login_status } from "../api/examplePlayerMethods.js";
+import Return from "../assets/svg/ReturnArrow.svg"
 
 export default function PlayerLogin()
 {
@@ -27,13 +28,15 @@ export default function PlayerLogin()
         {
             const status = await (login_status(emailInput, passwordInput))
             console.log(status.msg)
-            if (status.msg === 'OK'){
+            if (status.msg === 'OK')
+            {
                 console.log("User LogedIn, Dispatching credentials")
                 dispatch(setCredentials({ email: emailInput, password: passwordInput, avatar: message.avatarInt}))
                 alert("Logged In successfully!");
                 navigateToLobby();
             }
-            else {
+            else
+            {
                 alert("Login failed!" + status.msg);
             }
         } else
@@ -55,15 +58,18 @@ export default function PlayerLogin()
 
     return (
         <>
-            <div className='bg-login bg-cover h-screen grid place-items-center'>
+            <div className='bg-login bg-cover bg-top h-screen grid place-items-center'>
                 <form className='flex flex-col justify-evenly h-1/3' >
                     <input type="text" id="email" name="email" placeholder="Email" className='input' value={emailInput} onChange={event => setEmail(event.target.value)} />
                     <input type="password" id="password" name="password" placeholder="Password (8-30 chars)" className='input' value={passwordInput} onChange={event => setPassword(event.target.value)} />
                 </form>
                 <div className='absolute right-0 bottom-0 overflow-hidden'>
-                    <img src={EnterButton} alt="Register Button" className="hover:cursor-pointer h-[400px] translate-x-28 translate-y-28 hover:h-96" onClick={() => handleLogin({ email: emailInput, password: passwordInput })} />
+                    <img src={EnterButton} alt="Register Button" className="hover:cursor-pointer h-[400px] translate-x-28 translate-y-28 hover:h-[430px] hover:rotate-45  custom-transition " onClick={() => handleLogin({ email: emailInput, password: passwordInput })} />
                 </div>
-                <button className='active:text-4xl  overflow-hidden hover:text-4xl focus:outline-none absolute bottom-20 left-20 text-3xl text-white' onClick={() => navigateToHome()}>Back</button>
+                <div className='absolute bottom-20 left-20 flex flex-col hover:cursor-pointer '>
+                    <button className='focus:outline-none text-3xl  text-white ' onClick={() => navigateToHome()}>Back</button>
+                    <img src={Return} alt="Return Button" className="h-10 hover:h-12 custom-transition" onClick={() => navigateToHome()} />
+                </div>
             </div>
         </>
     )
