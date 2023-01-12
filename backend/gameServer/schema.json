@@ -18,6 +18,7 @@
         "target": "",
         "nickname": "",
         "allegiance": "",
+        "original": "",
         "ready": false,
         "vote": "",
         "avatar": 0
