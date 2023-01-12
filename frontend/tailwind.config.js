@@ -12,7 +12,7 @@ module.exports = {
         'event_room': "url('/src/assets/svg/EventPlayerActiveEmpty.svg')",
         'event_waiting': "url('/src/assets/svg/EventPlayerNonActiveEmpty.svg')",
         'lobby': "url('/src/assets/svg/MainLobbyEmpty.svg')",
-        'register': "url('/src/assets/svg/EmptyRegisterPage.svg')",
+        'register': "url('/src/assets/svg/EmptyRegisterPage (1).svg')",
         "login": "url('/src/assets/svg/EmptyLoginPage.svg')",
         'voting': "url('/src/assets/svg/VotingPageEmpty.svg')",
         'rope': "url('/src/assets/svg/RopeComponent.svg')",
