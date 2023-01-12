@@ -29,7 +29,7 @@ export default function PlayerLogin()
             console.log(status.msg)
             if (status.msg === 'OK'){
                 console.log("User LogedIn, Dispatching credentials")
-                dispatch(setCredentials({ email: emailInput, password: passwordInput }))
+                dispatch(setCredentials({ email: emailInput, password: passwordInput, avatar: message.avatarInt}))
                 alert("Logged In successfully!");
                 navigateToLobby();
             }

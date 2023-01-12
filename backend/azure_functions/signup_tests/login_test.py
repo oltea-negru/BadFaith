@@ -36,8 +36,8 @@ class TestFunction(unittest.TestCase):
 
         #valid login input
         input1 = {
-            'email' : "ga02huudewy3@morinng.com",
-            "password" : "Honalulu"
+            'email' : "test1@gmail.com",
+            "password" : "TestPassword"
         }
 
         #incorrect email
@@ -71,7 +71,7 @@ class TestFunction(unittest.TestCase):
         
         #input1
         #checking for a working login
-        self.assertEqual(resp.json()["msg"], "OK")
+        self.assertEqual(resp.json()["avatarInt"], 3)
 
         #input2 and input3
         #checking for an incorrect email or password/failed login
