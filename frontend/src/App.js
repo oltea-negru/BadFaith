@@ -10,7 +10,6 @@ import Lobby from "./pages/Lobby";
 import WaitingRoom from "./pages/WaitingRoom";
 import LoginRoom from "./pages/Home.js";
 import Game from "./pages/Game";
-import LoginRoom from "./pages/Home.js";
 import Endgame from "./pages/Endgame";
 import
 {
