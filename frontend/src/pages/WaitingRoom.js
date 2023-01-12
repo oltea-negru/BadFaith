@@ -52,7 +52,7 @@ export default function WaitingRoom()
             </div>
             <div>
                 <button className="absolute bottom-[15%] right-[45%] font-another text-2xl rounded-2xl"
-                onClick={dispatch(readyUp(lobbyCode))}></button>
+                onClick={dispatch(readyUp(lobbyCode))}>Ready</button>
             </div>
             <div className="flex flex-row ml-[30%] mt-[20%] absolute">
                 {readPlayers().map((player, index) => <PlayerWaiting text={player.nickname} color={colors[index]} index={index + 1} />)}
