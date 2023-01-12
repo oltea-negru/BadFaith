@@ -1,18 +1,22 @@
 import EventMap, { OutsideEvent } from "./eventMap";
+import Evidence from "../assets/svg/EvidenceBoard.svg"
+import { useSelector } from "react-redux";
 
-export function CurrentEvent({ current_event })
-{
-    // const lobby = useState([]);
+export function CurrentEvent() {
+    const { lobby } = useSelector(state => state.game)
+
+    let event = EventMap(lobby.currentEvent);
     return (
-        <div >
-            {EventMap(current_event)}
+        <div className="">
+            <img src={Evidence} alt="Evidence Board" className="absolute right-[20%] top-[5%] h-1/2" />
+            {event}
         </div>
     );
 }
 
-export function EventWaiting({ current_event })
-{
+export function EventWaiting() {
+    const { lobby } = useSelector(state => state.game)
     return (
-        <OutsideEvent event_data={current_event} />
+        <OutsideEvent />
     );
 }

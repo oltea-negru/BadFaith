@@ -9,7 +9,8 @@
         "currentEvent": {},
         "eventHistory": [],
         "events": [],
-        "voteLimit": 0
+        "voteLimit": 0,
+        "enemyCount": 0
     },
     "player": {
         "socketID": "",
@@ -17,8 +18,10 @@
         "target": "",
         "nickname": "",
         "allegiance": "",
+        "original": "",
         "ready": false,
-        "vote": ""
+        "vote": "",
+        "avatar": 0
     },
     "event": {
         "event_name": "",

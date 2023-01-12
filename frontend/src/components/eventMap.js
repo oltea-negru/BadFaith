@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import WaitingList from "../assets/svg/EventBoardComponent.svg";
 import OpenDoor from "../assets/svg/EnterEventDoorComponent.svg";
 import Avatar from "../assets/avatars/avatar-1.svg";
+import { useDispatch, useSelector } from 'react-redux'
+import { readyUp, sendAction } from "../redux/middleware/gameServerMiddleware";
+
+const parser = new DOMParser()
 const PrivateCall = [
     "There is a private phone call for this player.",
     <br />,
@@ -114,114 +118,113 @@ const Events = {
     },
 };
 
-function OldEnemiesEvent({ event_data }) {
+function OldEnemiesEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">
-                    <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[0].nickname}
-                    </strong>{" "}
-                    is an old enemy of{" "}
-                    <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[1].nickname}
-                    </strong>
-                    .
-                </strong>
-                <br></br>
-                <strong className="font-another">
-                    They would never knowingly work together.
-                </strong>
-            </div>
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
+            <strong className="font-another text-[#ff0000]  font-bold bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.extra_players[0].nickname + " "}
+
+                is an old enemy of
+                <strong className="font-another text-[#ff0000]  font-bold bg-white object w-fit p-1 rounded-md">
+                    {" " + lobby.currentEvent.extra_players[1].nickname}
+                </strong> </strong>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">
+                They would never knowingly work together.
+            </strong>
+
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
                 </button>
             </div>
-        </div>
+        </div >
+
     );
 }
 
-function OldAlliesEvent({ event_data }) {
-    // console.log(event_data.extra_players);
+function OldAlliesEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    // console.log(lobby.currentEvent.extra_players);
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
+            <strong className=" text-[#ff0000] font-another font-bold bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.extra_players[0].nickname + " "}
+
+                is an old ally of{" "}
                 <strong className="font-another text-[#ff0000]">
-                    {event_data.extra_players[0].nickname}
+                    {lobby.currentEvent.extra_players[1].nickname}
                 </strong>
-                <strong className="font-another">
-                    <br /> is an old ally of{" "}
-                    <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[1].nickname}
-                    </strong>
-                    .
-                </strong>
-                <br></br>
-                <strong className="font-another">
-                    Their last meeting was as friends.
-                </strong>
-            </div>
+            </strong>
+            <p className="font-another font-bold bg-white object w-fit p-1 rounded-md">Their last meeting was as friends.</p>
+
+
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 
-function DeepStateEvent({ event_data }) {
-    //update state to switch player allegiance
-    if (event_data.player.allegiance == "Enemy") {
-        event_data.player.allegiance = "Ally";
-    } else if (event_data.player.allegiance == "Ally") {
-        event_data.player.allegiance = "Enemy";
+function DeepStateEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function deepState() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
+        switch (details.allegiance) {
+            case "Ally":
+                details.allegiance = "Enemy"
+                break;
+            case "Enemy":
+                details.allegiance = "Ally"
+                break;
+        }
+        eventAction(dispatch, lobbyCode, 'update', details)
     }
+
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <p className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">Your mission is over</p>
+
+
+            <div className=" text-[#ff0000]">
+                <strong className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">SECRET</strong>
             </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">
-                    Your mission is over,
-                    <br /> you may return to you're true allegiance
-                </strong>
-                <br></br>
-            </div>
-            <div className="absolute h-24 w-64 text-center text-[#ff0000] text-2xl top-[22vh] right-[46vw] -rotate-9 m-auto">
-                <strong className="font-another">SECRET</strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
+            <div className="absolute p-2 text-2xl top-[15%] w-[33%] right-[7%] bg-white rotate-10">
                 <strong className="font-another">
                     Your Team:
                     <br />{" "}
                 </strong>
                 <strong className="font-another text-[#ff0000]">
-                    {event_data.player.allegiance}
+                    {lobby.currentEvent.player.allegiance}
                 </strong>
             </div>
 
@@ -229,92 +232,104 @@ function DeepStateEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        deepState()
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 
-function SplinterCellEvent({ event_data }) {
-    event_data.player.allegiance = "Splinter";
+function SplinterCellEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function splinter() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
+        details.allegiance = "Splinter"
+        console.log('SendingUpdateDetails', details)
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <p className="font-another text-xl">
-                    You have broken away from all allegiances and now stand alone.
-                    <br />
-                    You must avoid being voted out to win
-                </p>
-                <h2 className="font-another text-[#ff0000] text-center">
-                    <b>SURVIVE AT ALL COSTS</b>
-                </h2>
-            </div>
-            <div className="absolute h-24 w-64 text-center text-[#ff0000] text-2xl top-[22vh] right-[46vw] -rotate-9 m-auto">
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <p className="font-another font-bold  bg-white object w-fit p-1 rounded-md">
+                You have broken away from all allegiances and now stand alone.
+            </p>
+            <p className="font-another font-bold  bg-white object w-fit p-1 rounded-md">You must avoid being voted out to win
+            </p>
+            <h2 className=" text-[#ff0000] text-center font-another font-bold  bg-white object w-fit p-1 rounded-md">
+                <b>SURVIVE AT ALL COSTS</b>
+            </h2>
+            <div className=" text-[#ff0000] text-center font-another font-bold  bg-white object w-fit p-1 rounded-md">
                 <strong className="font-another">SECRET</strong>
             </div>
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
+                        splinter();
                         endEvent();
                     }}
                 >
                     Done
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 
-function BackroomDealEvent({ event_data }) {
-    function Betray() {
-        if (event_data.player.allegiance == "Ally") {
-            event_data.player.allegiance = "Enemy";
-        } else if (event_data.player.allegiance == "Enemy") {
-            event_data.player.allegiance = "Ally";
+function BackroomDealEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function Betray() { // Swap
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
+        switch (details.allegiance) {
+            case "Ally":
+                details.allegiance = "Enemy"
+                break;
+            case "Enemy":
+                details.allegiance = "Ally"
+                break;
         }
-        // DisableVote(event_data.player); prevent this player from being able to vote
-        endEvent();
+        details.role = "Betray"
+        eventAction(dispatch, lobbyCode, 'update', details)
     }
 
     function Remain() {
-        endEvent();
+        endEvent(dispatch, lobbyCode);
     }
 
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">{event_data.details}</strong>
-                <br />
-            </div>
-            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
-                <strong className="font-another">
-                    {" "}
-                    Your Team:
-                    <br />
-                    <strong className="font-another text-[#ff0000]">
-                        {event_data.player.allegiance}
-                    </strong>
-                </strong>
-            </div>
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <div className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                <strong className="font-another">{lobby.currentEvent.details}</strong>
 
+            </div>
+            <strong className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {" "}
+                Your Team:
+
+                <strong className="font-another font-bold text-2xl bg-white text-red-500 object w-fit p-1 rounded-md">
+                    {" " + lobby.currentEvent.player.allegiance}
+                </strong>
+            </strong>
             <div className="flex">
                 <button
-                    className="font-another absolute p-1 bg-transparent justify-center m-auto text-2xl top-[50vh] right-[38.5vw] w-[4.5vw] h-[6.8vh] min-w-[75px] hover:text-[#ff0000]"
+                    className="font-another text-2xl  mr-3 text-white bg-green-900 object w-fit p-2 rounded-md"
                     onClick={() => {
                         Remain();
                     }}
@@ -322,7 +337,7 @@ function BackroomDealEvent({ event_data }) {
                     Remain
                 </button>
                 <button
-                    className="font-another absolute p-1 bg-transparent justify-center m-auto text-2xl top-[46.1vh] right-[21.4vw] w-[4vw] h-[10.5vh] min-w-[75px] -rotate-10 hover:text-[#ff0000]"
+                    className="font-another text-2xl  text-white bg-red-900 object w-fit p-2 rounded-md"
                     onClick={() => {
                         Betray();
                     }}
@@ -330,91 +345,114 @@ function BackroomDealEvent({ event_data }) {
                     Betray
                 </button>
             </div>
-        </div>
+        </div >
+
     );
 }
 
-function MartyrEvent({ event_data }) {
-    event_data.player.allegiance = "Splinter";
+function MartyrEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function martyr() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        });
+        details.allegiance = "Splinter"
+        details.role = "Martyr"
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
+            <div className="font-another font-bold bg-white object w-fit p-1 rounded-md">
+
+                If you win,{" "}
+                <strong className="font-another font-bold text-[#ff0000] object w-fit p-1 rounded-md">only</strong>  you will
+                win.
+
             </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">{event_data.details}</strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
-                <strong className="font-another">
-                    If you win,{" "}
-                    <strong className="font-another text-[#ff0000]">only</strong> you will
-                    win.
-                </strong>
-            </div>
-            <div className="absolute h-24 w-64 text-center text-[#ff0000] text-2xl top-[22vh] right-[46vw] -rotate-9 m-auto">
+            <div className="font-another font-bold bg-white object  text-[#ff0000] w-fit p-1 rounded-md">
                 <strong className="font-another">SECRET</strong>
             </div>
+
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        martyr();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 
-function BackgroundCheckEvent({ event_data }) {
+function BackgroundCheckEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">
-                    According to the latest intel,
-                    <br />{" "}
-                    <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[0].nickname}
-                    </strong>{" "}
-                    is an{" "}
-                    <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[0].allegiance}
-                    </strong>
-                    .
-                </strong>
-                <br></br>
-                <strong className="font-another">Make of this what you will.</strong>
-            </div>
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+
+            <strong className="font-another font-bold  bg-white object w-fit p-1 rounded-md">
+                According to the latest intel,</strong>
+
+            <strong className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md text-[#ff0000]">
+                {lobby.currentEvent.extra_players[0].nickname + " "}
+
+                is an{" "}
+                <strong className="font-another text-[#ff0000]">
+                    {lobby.currentEvent.extra_players[0].allegiance}
+
+                    .</strong>{" "}
+            </strong>
+
+            <strong className="font-another font-bold  bg-white object w-fit p-1 rounded-md">Make of this what you will.</strong>
+
+
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 
-function PickPocketEvent({ event_data }) {
+function PickPocketEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function PickPocket(target) {
-        const op1 = event_data.player;
-        const op2 = target;
-        /*
-            State changes: allegience role and target of op1 to be swapped with op2
-            */
+        console.log('Target', target)
+        var details1 = player
+        var details2 = {}
+        Object.key(lobby.players).forEach(player => {
+            if (player.nickname == target.nickname) {
+                details2 = player
+            }
+        })
+        details1.role = lobby.players[target].role
+        details1.allegiance = lobby.players[target].allegiance
+        details1.target = lobby.players[target].target
+        details2.role = player.role
+        details2.allegiance = player.allegiance
+        details2.target = player.target
+        eventAction(dispatch, lobbyCode, 'update', details1)
+        eventAction(dispatch, lobbyCode, 'update', details2)
     }
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
@@ -422,45 +460,59 @@ function PickPocketEvent({ event_data }) {
         console.log("Toggled");
     }
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
+        <div className="overflow-hidden font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+
+
+            <div className="font-another font-bold  bg-white object w-fit p-1 rounded-md">
+                <strong className="font-another">{lobby.currentEvent.details}</strong>
             </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">{event_data.details}</strong>
-            </div>
-            <div className="absolute p-2 text-2xl overflow-hidden top-[50vh] w-[21vh] right-[43.3vw]">
-                <button
-                    className="font-another -rotate-6 hover:text-[#ff0000]"
-                    id="chatButton"
-                    onClick={() => {
-                        // UpdateChat(chatMessage)
-                        // setMessage('');
-                        showSelection();
-                    }}
-                >
-                    Choose Target
-                </button>
-            </div>
-            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
+            <button
+                className="bg-red-900 p-1 w-36 text-white rounded-lg"
+                id="chatButton"
+                onClick={() => {
+                    // UpdateChat(chatMessage)
+                    // setMessage('');
+                    showSelection();
+                }}
+            >
+                Choose Target
+            </button>
+
+            <div
+                id="eventSlide"
+                className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
+            >
+                <img src={WaitingList} alt="sdas" className="h-full" />
+
                 <div
-                    id="eventSlide"
-                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
+                    id="SelectBox"
+                    className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
                 >
-                    <img src={WaitingList} alt="sdas" className="h-full" />
+                    {lobby.currentEvent.extra_players.map((player) => (
+                        <button
+                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                            onClick={() => {
+                                PickPocket(player);
+                                endEvent();
+                            }}
+                        >
+                            {player.nickname}
+                        </button>
+                    ))}
 
                     <div
                         id="SelectBox"
                         className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
                     >
-                        {event_data.extra_players.map((player) => (
+                        {lobby.currentEvent.extra_players.map((player) => (
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
                                     PickPocket(player);
-                                    endEvent();
+                                    endEvent(dispatch, lobbyCode);
                                 }}
                             >
                                 {player.nickname}
@@ -469,119 +521,162 @@ function PickPocketEvent({ event_data }) {
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div className="flex">
+                <button
+                    className="bg-red-900 p-1 w-20 text-white rounded-lg"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >
+                    Done
+                </button>
+            </div>
+        </div >
     );
 }
 
 
-function GagOrderEvent({ event_data }) {
+function GagOrderEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
     }
-    const [gagSelect, setGag] = useState();
+    function gagPlayer(target) {
+        console.log('Target', target)
+        let details
+        Object.keys(target).forEach(key => {
+            details[key] = target[key]
+        })
+        details.role = "NoVote"
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">{event_data.details}</strong>
-            </div>
-            <div className="absolute p-2 text-2xl overflow-hidden top-[50vh] w-[21vh] right-[43.3vw]">
-                <button
-                    className="font-another -rotate-6 hover:text-[#ff0000]"
-                    id="chatButton"
-                    onClick={() => {
-                        // UpdateChat(chatMessage)
-                        // setMessage('');
-                        showSelection();
-                    }}
-                >
-                    Choose Target
-                </button>
-            </div>
-            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
-                <div
-                    id="eventSlide"
-                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
-                >
-                    <img src={WaitingList} alt="sdas" className="h-full" />
+        <div className="overflow-hidden  font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
 
-                    <div
-                        id="SelectBox"
-                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
-                    >
-                        {event_data.extra_players.map((player) => (
-                            <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                                onClick={() => {
-                                    setGag(player);
-                                    //EmitGag();
-                                    endEvent();
-                                }}
-                            >
-                                {player.nickname}
-                            </button>
-                        ))}
-                    </div>
+            <button
+                className="bg-green-900 p-1 w-36 text-white rounded-lg"
+                id="chatButton"
+                onClick={() => {
+                    // UpdateChat(chatMessage)
+                    // setMessage('');
+                    showSelection();
+                }}
+            >Choose Target
+            </button>
+            <div
+                id="eventSlide"
+                className="flex-col absolute text-center flex h-auto rounded w-full duration-1000 ease-out transition-all translate-y-full "
+            >
+                <img src={WaitingList} alt="sdas" className="h-full" />
+
+                <div
+                    id="SelectBox"
+                    className="flex-wrap absolute justify-center w-1/2 top-[11%] left-[25%] space-y-2"
+                >
+                    {lobby.currentEvent.extra_players.map((player) => (
+                        <button
+                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                            onClick={() => {
+                                gagPlayer(player);
+                                //EmitGag();
+                                endEvent();
+                            }}
+                        >
+                            {player.nickname}
+                        </button>
+                    ))}
                 </div>
+
+            </div>
+
+            <div className="flex">
+                <button
+                    className="bg-red-900 p-1 w-20 text-white rounded-lg"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >
+                    Done
+                </button>
             </div>
         </div>
     );
 }
 
-function BlackMarkEvent({ event_data }) {
-    const [mark, setMark] = useState();
+function BlackMarkEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function markPlayer(target) {
+        console.log('Target', target)
+        var details = target
+        eventAction(dispatch, lobbyCode, 'vote', details)
+    }
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
     }
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">{event_data.details}</strong>
-            </div>
-            <div className="absolute p-2 text-2xl overflow-hidden top-[50vh] w-[21vh] right-[43.3vw]">
-                <button
-                    className="font-another rotate-6 hover:text-[#ff0000]"
-                    id="chatButton"
-                    onClick={() => {
-                        // UpdateChat(chatMessage)
-                        // setMessage('');
-                        showSelection();
-                    }}
-                >
-                    Choose Target
-                </button>
-            </div>
-            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
-                <div
-                    id="eventSlide"
-                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
-                >
-                    <img src={WaitingList} alt="sdas" className="h-full" />
+        <div className="overflow-hidden  font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
 
+            <button
+                className="bg-green-900 p-1 w-36 text-white rounded-lg"
+                id="chatButton"
+                onClick={() => {
+                    // UpdateChat(chatMessage)
+                    // setMessage('');
+                    showSelection();
+                }}
+            >
+                Choose Target
+            </button>
+            <div
+                id="eventSlide"
+                className="flex-col absolute text-center flex h-auto rounded w-full duration-1000 ease-out transition-all translate-y-full "
+            >
+                <img src={WaitingList} alt="sdas" className="h-full" />
+
+                <div
+                    id="SelectBox"
+                    className="flex-wrap absolute justify-center w-1/2 top-[11%] left-[25%] space-y-2"
+                >
+                    {lobby.currentEvent.extra_players.map((player) => (
+                        <button
+                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                            onClick={() => {
+                                markPlayer(player);
+                                //EmitGag();
+                                endEvent();
+                            }}
+                        >
+                            {player.nickname}
+                        </button>
+                    ))}
+                </div>
+                <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
                     <div
-                        id="SelectBox"
-                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
+                        id="eventSlide"
+                        className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
                     >
-                        {event_data.extra_players.map((player) => (
+                        {lobby.currentEvent.extra_players.map((player) => (
                             <button
                                 className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                                 onClick={() => {
-                                    setMark(player);
+                                    markPlayer(player);
                                     //EmitMark();
-                                    endEvent();
+                                    endEvent(dispatch, lobbyCode);
                                 }}
                             >
                                 {player.nickname}
@@ -589,32 +684,62 @@ function BlackMarkEvent({ event_data }) {
                         ))}
                     </div>
                 </div>
+
             </div>
-        </div>
+
+            <div className="flex">
+                <button
+                    className="bg-red-900 p-1 w-20 text-white rounded-lg"
+                    onClick={() => {
+                        endEvent();
+                    }}
+                >
+                    Done
+                </button>
+            </div>
+        </div >
+
+
     );
 }
 
-function CoupEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "vote";
+function CoupEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function coup() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
+        function getUserName() {
+            const players = lobby.players
+            Object.keys(players).forEach(player => {
+                if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
+                    return player
+                }
+            })
+        }
+        details.target = getUserName()
+        details.role = "Coup"
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
 
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+        <div className="overflow-hidden  font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+
+            <div className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
                 <strong className="font-another">
                     <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[0].nickname}
+                        {lobby.currentEvent.extra_players[0].nickname}
                     </strong>{" "}
                     has outlived the need for their service.
                 </strong>
-                <br />
+            </div>
+            <div className="font-another font-bold  bg-white object w-fit p-1 rounded-md">
                 <strong className="font-another">Make sure they are eliminated</strong>
-                <br />
             </div>
             <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
                 <strong className="font-another">To win they must be eliminated</strong>
@@ -623,92 +748,116 @@ function CoupEvent({ event_data }) {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        coup()
+                        endEvent(dispatch, lobbyCode);
                     }}
-                >
-                    Done
+                >Done
                 </button>
             </div>
         </div>
     );
 }
 
-function BlackmailedEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "win";
+function BlackmailedEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function blackmail() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
+        function getUserName() {
+            const players = lobby.players
+            Object.keys(players).forEach(player => {
+                if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
+                    return player
+                }
+            })
+        }
+        details.target = getUserName()
+        details.role = "Blackmail"
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-lg top-[16vh] w-[21vh] right-[43.5vh] ">
-                <strong className="font-another">{event_data.details}</strong>
-                <br />
-                <strong>
-                    Until you can prevent what they know from spreading, they must come
-                    out ahead.
-                </strong>
-            </div>
-            <div className="absolute rotate-10 p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] ">
-                <strong className="font-another">You lose if they lose.</strong>
-            </div>
-            <div className="absolute p-2 text-xl top-[50vh] w-[18vh] right-[45.1vw] -rotate-6">
-                <strong className="font-another">
-                    <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[0].nickname}
-                    </strong>{" "}
-                    knows too much.
-                </strong>
-                <br />
-            </div>
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+            <strong className="font-another font-bold bg-white object w-fit p-1 rounded-md">{lobby.currentEvent.details}</strong>
+
+
+            <p className="font-another font-bold  bg-white object w-fit p-1 rounded-md">Until you can prevent what they know from spreading, they must come
+                out ahead.</p>
+
+            <strong className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">You lose if they lose.</strong>
+
+
+            <strong className="text-[#ff0000] font-another font-bold bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.extra_players[0].nickname} knows too much.</strong>{" "}
+
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        blackmail();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
                 </button>
             </div>
-        </div>
+        </div >
     );
 }
 
-function BodyGuardEvent({ event_data }) {
-    event_data.player.target = event_data.extra_players[0];
-    event_data.player.type = "lives";
+function BodyGuardEvent() {
+    const dispatch = useDispatch()
+    const { player, lobby, lobbyCode } = useSelector(state => state.game)
+    function bodyguard() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
+        function getUserName() {
+            const players = lobby.players
+            Object.keys(players).forEach(player => {
+                if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
+                    return player
+                }
+            })
+        }
+        details.target = getUserName()
+        details.role = "Guard"
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
     return (
-        <div className="p-4 m-auto">
-            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
-                <strong className="font-another relative text-2xl top-[35%]">
-                    {event_data.event_name}
-                </strong>
-            </div>
-            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
-                <strong className="font-another">
-                    <strong className="font-another text-[#ff0000]">
-                        {event_data.extra_players[0].nickname}
-                    </strong>{" "}
-                    has employed your protection.
-                </strong>
-                <br />
-                <strong className="font-another">They must survive.</strong>
-                <br />
-            </div>
-            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
-                <strong className="font-another">
-                    If they are not voted <br />
-                    out you win.
-                </strong>
-            </div>
+        <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
+            <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
+                {lobby.currentEvent.event_name}
+            </h1>
+
+
+            <strong className="font-another font-bold text-xl bg-white object w-fit p-1 rounded-md">
+                <strong className="font-another text-[#ff0000]">
+                    {lobby.currentEvent.extra_players[0].nickname}
+                </strong>{" "}
+                has employed your protection.
+            </strong>
+
+            <strong className="font-another font-bold  bg-white object w-fit p-1 rounded-md">They must survive.</strong>
+
+
+
+            <strong className="font-another font-bold text-xl bg-white object w-fit p-1 rounded-md">
+                If they are not voted out you win.
+            </strong>
+
             <div className="flex">
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
-                        endEvent();
+                        bodyguard();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -718,44 +867,46 @@ function BodyGuardEvent({ event_data }) {
     );
 }
 
-export default function EventMap(current_event) {
-    const key = current_event.event_function;
-    switch (key) {
+export default function EventMap() {
+    const { lobby } = useSelector(state => state.game)
+    switch (lobby.currentEvent.event_function) {
         case "OldEnemies":
-            return <OldEnemiesEvent event_data={current_event} />;
+            return <OldEnemiesEvent />;
         case "OldAllies":
-            return <OldAlliesEvent event_data={current_event} />;
+            return <OldAlliesEvent />;
         case "DeepState":
-            return <DeepStateEvent event_data={current_event} />;
+            return <DeepStateEvent />;
         case "SplinterCell":
-            return <SplinterCellEvent event_data={current_event} />;
+            return <SplinterCellEvent />;
         case "BackroomDeal":
-            return <BackroomDealEvent event_data={current_event} />;
+            return <BackroomDealEvent />;
         case "Martyr":
-            return <MartyrEvent event_data={current_event} />;
+            return <MartyrEvent />;
         case "BackgroundCheck":
-            return <BackgroundCheckEvent event_data={current_event} />;
+            return <BackgroundCheckEvent />;
         case "PickPocket":
-            return <PickPocketEvent event_data={current_event} />;
+            return <PickPocketEvent />;
         case "GagOrder":
-            return <GagOrderEvent event_data={current_event} />;
+            return <GagOrderEvent />;
         case "BlackMark":
-            return <BlackMarkEvent event_data={current_event} />;
+            return <BlackMarkEvent />;
         case "Coup":
-            return <CoupEvent event_data={current_event} />;
+            return <CoupEvent />;
         case "Blackmailed":
-            return <BlackmailedEvent event_data={current_event} />;
+            return <BlackmailedEvent />;
         case "BodyGuard":
-            return <BodyGuardEvent event_data={current_event} />;
+            return <BodyGuardEvent />;
         default:
             break;
     }
 }
 
-function endEvent() {
-    const eventInfo = document.querySelector("#Event-Info");
-    eventInfo.classList.toggle("hidden");
-    //insert emits to progress game state
+function eventAction(dispatch, lobbyCode, type, playerChanges) {
+    dispatch(sendAction(lobbyCode, type, playerChanges))
+}
+
+function endEvent(dispatch, lobbyCode,) {
+    dispatch(sendAction(lobbyCode, 'progress'))
 }
 
 function excludePlayer(player) {
@@ -827,7 +978,7 @@ export function EventGenMap(eventName, player, players) {
         extra_players: extra_players,
         blind_name: event.BlindName,
         event_name: event.EventTitle,
-        blind_info: event.BlindInfo,
+        blind_info: parser.parseFromString(event.BlindInfo, "text/html"),
         details: event.Details,
         event_function: eventName,
     };
@@ -843,7 +994,8 @@ function GenerateEvents({ lobby_state }) {
     });
 }
 
-export function OutsideEvent({ event_data }) {
+export function OutsideEvent() {
+    const { lobby } = useSelector(state => state.game)
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
@@ -853,10 +1005,19 @@ export function OutsideEvent({ event_data }) {
 
         <div className="bg-event_waiting h-screen bg-cover">
             <div className="absolute bottom-0 left-[10%] h-4/5 ">
-                <p className="font-another text-white text-3xl absolute bg-yellow-700 text-center w-[80%] ml-[10%] mt-[10%]">{event_data.blind_name}</p>
+                <p className="font-another text-white text-3xl absolute bg-yellow-700 text-center w-[80%] ml-[10%] mt-[10%]">{lobby.currentEvent.blind_name}</p>
                 <img src={Avatar} alt="player in the room" className="absolute rounded-full bg-transparent h-[20%] mt-[30%] ml-[30%]" />
                 {/* avatar of user inside bro idk how to access it! */}
-                <img src={OpenDoor} alt="Open Door" className="h-full hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" />
+                <img src={OpenDoor} alt="Open Door" className="h-full hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" onClick={() => showSelection()} />
+            </div>
+            <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
+                <div id="eventSlide"
+                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full ">
+                    <img src={WaitingList} alt="sdas" className="h-full" />
+                    <div className="w-[430px] m-auto max-w-[430px]">
+                        <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">{lobby.currentEvent.blind_info}</strong>
+                    </div>
+                </div>
             </div>
         </div>
     );
