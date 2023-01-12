@@ -1,10 +1,11 @@
 import React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import JoinLobbyCard from '../assets/svg/JoinLobbyComponent.svg'
 import CreateLobbyCard from '../assets/svg/CreateLobbyComponent.svg'
 import Settings from '../assets/svg/SettingsExpanded.svg'
-
+import { gsConnect } from '../redux/middleware/gameServerMiddleware'
+import { useDispatch } from 'react-redux'
 
 
 function Lobby()
@@ -17,6 +18,13 @@ function Lobby()
     const [privateLobby, setPrivateLobby] = useState(false)
     const [codeCreated, setCodeCreated] = useState('')
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    //Connect game socket on joining page
+    useEffect(() => {
+        const host = `TODO gamesocket url here`;
+        dispatch(gsConnect(host));
+     }, [dispatch])
 
 
     return (
@@ -37,22 +45,22 @@ function Lobby()
                                         codeCreated === ''
                                             ?
                                             <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-blue-500 border-4 border-black justify-between'>
-                                                <p className='text-4xl text-white mt-10'>CREATE LOBBY</p>
+                                                <p className='font-another text-4xl text-white mt-10'>CREATE LOBBY</p>
                                                 <div className='flex flex-col h-3/5 w-2/3 justify-around'>
                                                     <div className='flex flex-row justify-between'>
-                                                        <p className='text-2xl text-white'>Number of Players:</p>
+                                                        <p className='font-another text-2xl text-white'>Number of Players:</p>
                                                         <input type="number" className=' text-center text-2xl w-[50px] font-another h-10 border-2 border-black' value={numberOfPlayers} onChange={(e) => setNumberOfPlayers(e.target.value)} />
                                                     </div>
                                                     <div className='flex flex-row justify-between'>
-                                                        <p className='text-2xl text-white'>Time Limit:</p>
+                                                        <p className='font-another text-2xl text-white'>Time Limit:</p>
                                                         <input type="number" className=' text-center text-2xl w-[50px] font-another h-10 border-2 border-black' value={timeLimit} onChange={(e) => setTimeLimit(e.target.value)} />
                                                     </div>
                                                     <div className='flex flex-row justify-between'>
-                                                        <p className='text-2xl text-white'>Private Lobby:</p>
+                                                        <p className='font-another text-2xl text-white'>Private Lobby:</p>
                                                         <input type="checkbox" className='w-6 focus:outline-none' value={privateLobby} onChange={(e) => setPrivateLobby(e.target.value)} />
                                                     </div>
                                                 </div>
-                                                <button className='bg-white mb-10 h-14 text-4xl hover:text-5xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { setCodeCreated('random code') }}>Create Code</button>
+                                                <button className='font-another bg-white mb-10 h-14 text-4xl hover:text-5xl text-black active:text-4xl w-full focus:outline-none' onClick={() => { setCodeCreated('random code') }}>Create Code</button>
                                             </div> :
                                             <div className='flex flex-col text-center place-items-center h-[600px] w-[500px] bg-blue-500 border-4 border-black justify-evenly'>
                                                 <p className='text-4xl text-white mt-10'>LOBBY CODE</p>
@@ -70,7 +78,7 @@ function Lobby()
                         <img src={Settings} alt="" className='absolute h-[30%] bottom-[10%] right-[42%] -rotate-12 hover:h-[35%] hover:cursor-pointer' onClick={() => navigate("/settings")} />
                     </div>
             }
-            <button className='active:text-4xl focus:outline-none absolute bottom-20 left-20 text-3xl text-white' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
+            <button className='font-another active:text-4xl focus:outline-none absolute bottom-20 left-20 text-3xl text-white' onClick={() => { setOpenCard(false); setWhichCard(''); setCodeCreated('') }}>Back</button>
         </div>
     );
 

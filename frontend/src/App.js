@@ -1,3 +1,6 @@
+import { useSelector} from 'react-redux'
+import {useEffect} from 'react';
+import { login_remove } from "./api/examplePlayerMethods.js";
 import Settings from "./pages/Settings";
 import PLogin from "./pages/Login.js"
 import PRegister from "./pages/Register.js"
@@ -5,21 +8,15 @@ import Voting from "./pages/Voting.js";
 import Chat from "./pages/ChatTest";
 import Lobby from "./pages/Lobby";
 import WaitingRoom from "./pages/WaitingRoom";
-import { useSelector} from 'react-redux'
-import {useEffect} from 'react';
-import { login_remove } from "./api/examplePlayerMethods.js";
+import LoginRoom from "./pages/Home.js";
+import Game from "./pages/Game";
 import Endgame from "./pages/Endgame";
 import
 {
 	BrowserRouter as Router,
 	Route,
 	Routes,
-
 } from "react-router-dom";
-
-import LoginRoom from "./pages/Home.js";
-// import PlayerLogin from "./pages"
-import EventRoom from "./pages/EventRoom";
 
 
 function App()
@@ -52,7 +49,7 @@ function App()
 				<Route path="/chat" element={<Chat />} />
 				<Route path="/lobby" element={<Lobby />} />
 				<Route path="/settings" element={<Settings />} />
-				<Route path="/event" element={<EventRoom />} />
+				<Route path="/game" element={<Game />} />
 			</Routes>
 		</Router>
 	);

@@ -1,33 +1,55 @@
+import Voting from "./Voting.js";
+import WaitingRoom from "./WaitingRoom";
+import EventRoom from "./EventRoom";
 import { EventGenMap } from "../components/eventMap";
-import { CurrentEvent, EventWaiting } from "../components/CurrentEvent";
+import { useSelector } from 'react-redux'
+import Endgame from "./Endgame.js";
+export default function Game({ lobby_state }) {
 
-export default function EventRoom({ lobby_state }) {
-
-
+    const { lobby } = useSelector(state => state.game);
     var used_state = lobby_state
-    if (used_state == null) used_state = dummylobbyState
-    dummylobbyState.current_event = EventGenMap("GagOrder", {
+    // if (used_state == null) 
+    used_state = dummylobbyState
+    dummylobbyState.current_event = EventGenMap("Blackmailed", {
         nickname: "LoremIpsum",
         icon: "Figure this out",
         original: "Enemy",
         allegiance: "Enemy"
     }, getPlayerArray())
 
-    if (used_state.state == 4) {
-        if (used_state.inEvent) {
-            return (
-                <div className="bg-event_room h-screen bg-cover bg-bottom">
-                    <CurrentEvent current_event={used_state.current_event} />
-                </div>
-            )
-        } else {
-            return (
-                <EventWaiting current_event={used_state.current_event} />
-            )
+    const setFunction = (used_state) => {
+        switch (used_state.state) {
+            case 1:// Joining
+                return (<WaitingRoom />)
+            case 2:// Starting
+                return (<WaitingRoom />)
+            case 3:// Between Events
+                return (<WaitingRoom />)
+            case 4:// Events
+                return (<EventRoom lobby_state={used_state} />)
+            case 5:// Discussion
+                return (<WaitingRoom />)
+            case 6:// Voting
+                return (<Voting />)
+            case 7:// Results
+                return (<Endgame />)
         }
     }
+
+    return (
+        <div>
+            {setFunction(used_state)}
+        </div>
+    )
 }
+
+
+
+
+
+const inEvent = false
 const dummylobbyState = {
+    "inEvent": inEvent,
     "id": "",
     "players": {
         "DummyID": {
@@ -70,7 +92,7 @@ const dummylobbyState = {
     "current_event": {}
 }
 function getPlayerArray() {
-    let playerArray = new Array();
+    let playerArray = [];
     Object.keys(dummylobbyState.players).forEach(player => {
         playerArray.push(dummylobbyState.players[player]);
     })

@@ -2,32 +2,49 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const gameSlice = createSlice({
     name: 'game',
-    initialState:{
-        role: '',
-        eventInfo: {
-            name: '',
-            evidence: '',
-            isMyEvent: false
+    initialState: {
+        lobby: {
+            players: {},
+            readyUp: 0,
+            socketToPlayers: {},
+            votes: {},
+            playerToSockets: {},
+            state: 1,
+            currentEvent: {},
+            eventHistory: [],
+            events: [],
+            voteLimit: 0
         },
-        eventHistory: [],
-        players: []
+        player: {
+            socketId: "",
+            role: "",
+            target: "",
+            nickname: "",
+            allegiance: "",
+            ready: false,
+            vote: ""
+        },
+        playerID: "Default"
     },
     reducers: {
-        updateRole: (state, action) => {
-            state.role = action.payload
+        updatePlayerID: (state, action) => {
+            state.playerID = action.payload
         },
-        updateEvent: (state, action) => {
-            state.eventInfo = action.payload
+        updateLobby: (state, action) => {
+            state.lobby = action.payload
         },
-        updateEventHistory: state => {
-            state.eventHistory.push(state.eventInfo)
+        updatePlayer: (state, action) => {
+            state.player = action.payload
         },
-        updatePlayers: (state, action) => {
-            state.players = action.payload
+        toggleReady: (state, isReady) => {
+            state.player.ready = isReady
+        },
+        updateVote: (state, vote) => {
+            state.player.vote = vote
         }
     }
 })
 
-export const { updateRole, updateEvent, updateEventHistory, updatePlayers } = gameSlice.actions
+export const { updatePlayerID, updateLobby, updatePlayer, toggleReady, updateVote } = gameSlice.actions
 
 export default gameSlice.reducer

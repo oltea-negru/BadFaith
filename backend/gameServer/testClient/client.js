@@ -1,4 +1,4 @@
-const socketUrl = `35.189.71.120:`;
+const socketUrl = `localhost:`;
 
 let connectButton;
 let disconnectButton;
@@ -32,20 +32,57 @@ const connect = () => {
     console.log('ID Ping Received:', id)
   })
 
+  socket.on('state', state => {
+    console.log('Updated state', state);
+  })
+  
   socket.open();
 };
 
 const chat = () => {
-  socket.emit('chat', socket.id)
+  const message = document.getElementById('chat').value
+  socket.emit('chat', message)
 }
 
 const disconnect = () => {
   socket.disconnect();
 }
 
+const createLobby = () => {
+  console.log('Create lobby');
+  const hostDetails = {
+    playerID: document.getElementById('playerID').value,
+    nickname: document.getElementById('nickname').value
+  }
+  socket.emit('createLobby', hostDetails, (response) => {
+    console.log('Create lobby response', response)
+    document.getElementById('lobbyCode').value = response.lobbyCode
+  })
+}
+
+const joinLobby = () => {
+  console.log('Join lobby');
+  const lobbyCode = document.getElementById('lobbyCode').value
+  const playerDetails = {
+    playerID: document.getElementById('playerID').value,
+    nickname: document.getElementById('nickname').value,
+  }
+  socket.emit('joinLobby', lobbyCode, playerDetails, (response) => {
+    console.log('Join lobby response', response)
+  })
+}
+
+const ready = () => {
+  console.log('Ready Up');
+  const lobbyCode = document.getElementById('lobbyCode').value
+  socket.emit('readyUp', lobbyCode, (response) => {
+    console.log('ReadyUp response', response)
+  })
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   connectButton = document.getElementById('connect');
-  chatButton = document.getElementById('chat');
   disconnectButton = document.getElementById('disconnect');
   statusInput = document.getElementById('status');
 });
