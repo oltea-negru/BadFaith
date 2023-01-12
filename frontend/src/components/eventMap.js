@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import WaitingList from "../assets/svg/WaitingBoardComponent.svg";
-
+import WaitingList from "../assets/svg/EventBoardComponent.svg";
+import OpenDoor from "../assets/svg/EnterEventDoorComponent.svg";
 const PrivateCall = ["There is a private phone call for this player.", <br />, "They will be with back shortly."];
 
 const Events = {
@@ -88,20 +88,22 @@ const Events = {
     }
 };
 
-function OldEnemiesEvent({ event_data }) {
+function OldEnemiesEvent({ event_data })
+{
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong><strong className="playerName">{event_data.extra_players[0].nickname}</strong> is an old enemy of <strong className="playerName">{event_data.extra_players[1].nickname}</strong>.</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another"><strong className="font-another text-[#ff0000]">{event_data.extra_players[0].nickname}</strong> is an old enemy of <strong className="font-another text-[#ff0000]">{event_data.extra_players[1].nickname}</strong>.</strong>
                 <br></br>
-                <strong>They would never knowingly work together.</strong>
+                <strong className="font-another">They would never knowingly work together.</strong>
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done</button>
@@ -110,22 +112,24 @@ function OldEnemiesEvent({ event_data }) {
     );
 }
 
-function OldAlliesEvent({ event_data }) {
+function OldAlliesEvent({ event_data })
+{
 
     // console.log(event_data.extra_players);
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle font-another">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong className="playerName">{event_data.extra_players[0].nickname}</strong><strong><br /> is an old ally of <strong className="playerName">{event_data.extra_players[1].nickname}</strong>.</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another text-[#ff0000]">{event_data.extra_players[0].nickname}</strong><strong className="font-another"><br /> is an old ally of <strong className="font-another text-[#ff0000]">{event_data.extra_players[1].nickname}</strong>.</strong>
                 <br></br>
-                <strong>Their last meeting was as friends.</strong>
+                <strong className="font-another">Their last meeting was as friends.</strong>
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -135,35 +139,39 @@ function OldAlliesEvent({ event_data }) {
     );
 }
 
-function DeepStateEvent({ event_data }) {
+function DeepStateEvent({ event_data })
+{
     //update state to switch player allegiance
-    if (event_data.player.allegiance == "Enemy") {
+    if (event_data.player.allegiance == "Enemy")
+    {
         event_data.player.allegiance = "Ally";
     }
-    else if (event_data.player.allegiance == "Ally") {
+    else if (event_data.player.allegiance == "Ally")
+    {
         event_data.player.allegiance = "Enemy";
     }
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong>Your mission is over,<br /> you may return to you're true allegiance</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another">Your mission is over,<br /> you may return to you're true allegiance</strong>
                 <br></br>
             </div>
-            <div className="secretEvent">
-                <strong>SECRET</strong>
+            <div className="absolute h-24 w-64 text-center text-[#ff0000] text-2xl top-[22vh] right-[46vw] -rotate-9 m-auto">
+                <strong className="font-another">SECRET</strong>
             </div>
-            <div className="eventChange">
-                <strong>Your Team:<br /> </strong>
-                <strong className="playerName">{event_data.player.allegiance}</strong>
+            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
+                <strong className="font-another">Your Team:<br /> </strong>
+                <strong className="font-another text-[#ff0000]">{event_data.player.allegiance}</strong>
             </div>
 
 
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -173,25 +181,27 @@ function DeepStateEvent({ event_data }) {
     );
 }
 
-function SplinterCellEvent({ event_data }) {
+function SplinterCellEvent({ event_data })
+{
     event_data.player.allegiance = "Splinter";
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <p>You have broken away from all allegiances and now stand alone.<br />
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <p className="font-another text-xl">You have broken away from all allegiances and now stand alone.<br />
                     You must avoid being voted out to win
                 </p>
-                <h2><b>SURVIVE AT ALL COSTS</b></h2>
+                <h2 className="font-another text-[#ff0000] text-center"><b>SURVIVE AT ALL COSTS</b></h2>
             </div>
-            <div className="secretEvent">
-                <strong>SECRET</strong>
+            <div className="absolute h-24 w-64 text-center text-[#ff0000] text-2xl top-[22vh] right-[46vw] -rotate-9 m-auto">
+                <strong className="font-another">SECRET</strong>
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -201,12 +211,16 @@ function SplinterCellEvent({ event_data }) {
     );
 }
 
-function BackroomDealEvent({ event_data }) {
-    function Betray() {
-        if (event_data.player.allegiance == "Ally") {
+function BackroomDealEvent({ event_data })
+{
+    function Betray()
+    {
+        if (event_data.player.allegiance == "Ally")
+        {
             event_data.player.allegiance = "Enemy";
         }
-        else if (event_data.player.allegiance == "Enemy") {
+        else if (event_data.player.allegiance == "Enemy")
+        {
             event_data.player.allegiance = "Ally";
         }
         // DisableVote(event_data.player); prevent this player from being able to vote
@@ -214,33 +228,36 @@ function BackroomDealEvent({ event_data }) {
 
     }
 
-    function Remain() {
+    function Remain()
+    {
         endEvent();
     }
 
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong>{event_data.details}</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another">{event_data.details}</strong>
                 <br />
 
             </div>
-            <div className="eventChange">
-                <strong> Your Team:<br /><strong className="playerName">{event_data.player.allegiance}</strong></strong>
+            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
+                <strong className="font-another"> Your Team:<br /><strong className="font-another text-[#ff0000]">{event_data.player.allegiance}</strong></strong>
             </div>
 
-            <div className="Event-Actions">
-                <button className="Loyal"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute p-1 bg-transparent justify-center m-auto text-2xl top-[50vh] right-[38.5vw] w-[4.5vw] h-[6.8vh] min-w-[75px] hover:text-[#ff0000]"
+                    onClick={() =>
+                    {
                         Remain();
                     }}
                 >Remain
                 </button>
-                <button className="Betray"
-                    onClick={() => {
+                <button className="font-another absolute p-1 bg-transparent justify-center m-auto text-2xl top-[46.1vh] right-[21.4vw] w-[4vw] h-[10.5vh] min-w-[75px] -rotate-10 hover:text-[#ff0000]"
+                    onClick={() =>
+                    {
                         Betray();
                     }}
                 >Betray
@@ -250,25 +267,27 @@ function BackroomDealEvent({ event_data }) {
     );
 }
 
-function MartyrEvent({ event_data }) {
+function MartyrEvent({ event_data })
+{
     event_data.player.allegiance = "Splinter";
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong>{event_data.details}</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another">{event_data.details}</strong>
             </div>
-            <div className="eventChange">
-                <strong>If you win, <strong className="playerName">only</strong> you will win.</strong>
+            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
+                <strong className="font-another">If you win, <strong className="font-another text-[#ff0000]">only</strong> you will win.</strong>
             </div>
-            <div className="secretEvent">
-                <strong>SECRET</strong>
+            <div className="absolute h-24 w-64 text-center text-[#ff0000] text-2xl top-[22vh] right-[46vw] -rotate-9 m-auto">
+                <strong className="font-another">SECRET</strong>
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -278,20 +297,22 @@ function MartyrEvent({ event_data }) {
     );
 }
 
-function BackgroundCheckEvent({ event_data }) {
+function BackgroundCheckEvent({ event_data })
+{
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong>According to the latest intel,<br /> <strong className="playerName">{event_data.extra_players[0].nickname}</strong> is an  <strong className="playerName">{event_data.extra_players[0].allegiance}</strong>.</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another">According to the latest intel,<br /> <strong className="font-another text-[#ff0000]">{event_data.extra_players[0].nickname}</strong> is an  <strong className="font-another text-[#ff0000]">{event_data.extra_players[0].allegiance}</strong>.</strong>
                 <br></br>
-                <strong>Make of this what you will.</strong>
+                <strong className="font-another">Make of this what you will.</strong>
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -301,46 +322,53 @@ function BackgroundCheckEvent({ event_data }) {
     );
 }
 
-function PickPocketEvent({ event_data }) {
-    function PickPocket(target) {
+function PickPocketEvent({ event_data })
+{
+    function PickPocket(target)
+    {
         const op1 = event_data.player;
         const op2 = target;
         /*
         State changes: allegience role and target of op1 to be swapped with op2
         */
     }
-    function showSelection() {
-        const chat = document.querySelector(".slide");
-        chat.classList.toggle("toggled");
+    function showSelection()
+    {
+        const chat = document.querySelector("#eventSlide");
+        chat.classList.toggle("translate-y-full");
         console.log("Toggled");
     }
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong>{event_data.details}</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another">{event_data.details}</strong>
             </div>
-            <div className="TargetSelection">
+            <div className="absolute p-2 text-2xl overflow-hidden top-[50vh] w-[21vh] right-[43.3vw]">
                 <button
-                    className="TargetToggle"
+                    className="font-another -rotate-6 hover:text-[#ff0000]"
                     id="chatButton"
-                    onClick={() => {
+                    onClick={() =>
+                    {
                         // UpdateChat(chatMessage)
                         // setMessage('');
                         showSelection();
                     }}>Choose Target</button>
             </div>
-            <div className="slideWrapper">
-                <div className="slide">
+            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
+                <div id="eventSlide"
+                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full ">
                     <img src={WaitingList} alt="sdas" className="h-full" />
 
-                    <div className="SelectBox">
+                    <div id="SelectBox"
+                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {event_data.extra_players.map((player) =>
                             <button
-                                className="PlayerSelect"
-                                onClick={() => {
+                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                                onClick={() =>
+                                {
                                     PickPocket(player);
                                     endEvent();
                                 }
@@ -355,48 +383,55 @@ function PickPocketEvent({ event_data }) {
     );
 }
 
-function PrivateDiscussionEvent({ event_data }) {
+function PrivateDiscussionEvent({ event_data })
+{
     const [discussionPlayers, updateDiscussion] = useState([]);
 
-    function DiscussionDisplay(player) {
+    function DiscussionDisplay(player)
+    {
 
-        const selectBox = document.querySelector(".SelectBox");
-        const discussionBox = document.querySelector(".Discussion");
+        const selectBox = document.querySelector("#SelectBox");
+        const discussionBox = document.querySelector("#Discussion");
         selectBox.classList.toggle("toggle");//Hide selection
-        discussionBox.classList.toggle("toggle");//Show details for each player
+        discussionBox.classList.toggle("flex-wrap absolute flex justify-between p-2 top-[16vh] w-[21vh] right-[43.5vh] rounded-2xl h-[20vh]");//Show details for each player
     }
-    function showSelection() {
-        const chat = document.querySelector(".slide");
-        chat.classList.toggle("toggled");
+    function showSelection()
+    {
+        const chat = document.querySelector("#eventSlide");
+        chat.classList.toggle("translate-y-full");
         console.log("Toggled");
     }
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong>{event_data.details}</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another">{event_data.details}</strong>
             </div>
-            <div className="TargetSelection">
+            <div className="absolute p-2 text-2xl overflow-hidden top-[50vh] w-[21vh] right-[43.3vw]">
                 <button
-                    className="TargetToggle"
+                    className="font-another -rotate-6 hover:text-[#ff0000]"
                     id="chatButton"
-                    onClick={() => {
+                    onClick={() =>
+                    {
                         // UpdateChat(chatMessage)
                         // setMessage('');
                         showSelection();
                     }}>Choose Target</button>
             </div>
-            <div className="slideWrapper">
-                <div className="slide">
+            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
+                <div id="eventSlide"
+                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full ">
                     <img src={WaitingList} alt="sdas" className="h-full" />
 
-                    <div className="SelectBox">
+                    <div id="SelectBox"
+                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {event_data.extra_players.map((player) =>
                             <button
-                                className="PlayerSelect"
-                                onClick={() => {
+                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                                onClick={() =>
+                                {
                                     let temp = [...discussionPlayers];
                                     temp.push(event_data.player);
                                     temp.push(player);
@@ -410,19 +445,22 @@ function PrivateDiscussionEvent({ event_data }) {
                     </div>
                 </div>
             </div>
-            <div className="Discussion">
-                {discussionPlayers.map((player) => {
-                    return <div className="Player">
-                        <strong className="playerName">{player.nickname}</strong>
+            <div id="Discussion"
+                className="hidden p-1 rounded-2xl">
+                {discussionPlayers.map((player) =>
+                {
+                    return <div className="rounded-2xl p-1 bg-white justify-center m-auto">
+                        <strong className="font-another text-[#ff0000]">{player.nickname}</strong>
                         <br />
-                        <strong>Allegience: <strong className="playerName">{player.allegiance}</strong></strong>
+                        <strong className="font-another">Allegience: <strong className="font-another text-[#ff0000]">{player.allegiance}</strong></strong>
                     </div>
                 }
                 )}
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh] hover:text-[#ff0000]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -434,40 +472,46 @@ function PrivateDiscussionEvent({ event_data }) {
 
 
 
-function GagOrderEvent({ event_data }) {
-    function showSelection() {
-        const chat = document.querySelector(".slide");
-        chat.classList.toggle("toggled");
+function GagOrderEvent({ event_data })
+{
+    function showSelection()
+    {
+        const chat = document.querySelector("#eventSlide");
+        chat.classList.toggle("translate-y-full");
         console.log("Toggled");
     }
     const [gagSelect, setGag] = useState();
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong>{event_data.details}</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another">{event_data.details}</strong>
             </div>
-            <div className="TargetSelection">
+            <div className="absolute p-2 text-2xl overflow-hidden top-[50vh] w-[21vh] right-[43.3vw]">
                 <button
-                    className="TargetToggle"
+                    className="font-another -rotate-6 hover:text-[#ff0000]"
                     id="chatButton"
-                    onClick={() => {
+                    onClick={() =>
+                    {
                         // UpdateChat(chatMessage)
                         // setMessage('');
                         showSelection();
                     }}>Choose Target</button>
             </div>
-            <div className="slideWrapper">
-                <div className="slide">
+            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
+                <div id="eventSlide"
+                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full ">
                     <img src={WaitingList} alt="sdas" className="h-full" />
 
-                    <div className="SelectBox">
+                    <div id="SelectBox"
+                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {event_data.extra_players.map((player) =>
                             <button
-                                className="PlayerSelect"
-                                onClick={() => {
+                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                                onClick={() =>
+                                {
                                     setGag(player);
                                     //EmitGag();
                                     endEvent();
@@ -480,40 +524,46 @@ function GagOrderEvent({ event_data }) {
     );
 }
 
-function BlackMarkEvent({ event_data }) {
+function BlackMarkEvent({ event_data })
+{
     const [mark, setMark] = useState();
-    function showSelection() {
-        const chat = document.querySelector(".slide");
-        chat.classList.toggle("toggled");
+    function showSelection()
+    {
+        const chat = document.querySelector("#eventSlide");
+        chat.classList.toggle("translate-y-full");
         console.log("Toggled");
     }
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong>{event_data.details}</strong>
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another">{event_data.details}</strong>
             </div>
-            <div className="TargetSelection">
+            <div className="absolute p-2 text-2xl overflow-hidden top-[50vh] w-[21vh] right-[43.3vw]">
                 <button
-                    className="TargetToggle"
+                    className="font-another rotate-6 hover:text-[#ff0000]"
                     id="chatButton"
-                    onClick={() => {
+                    onClick={() =>
+                    {
                         // UpdateChat(chatMessage)
                         // setMessage('');
                         showSelection();
                     }}>Choose Target</button>
             </div>
-            <div className="slideWrapper">
-                <div className="slide">
+            <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
+                <div id="eventSlide"
+                    className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full ">
                     <img src={WaitingList} alt="sdas" className="h-full" />
 
-                    <div className="SelectBox">
+                    <div id="SelectBox"
+                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2">
                         {event_data.extra_players.map((player) =>
                             <button
-                                className="PlayerSelect"
-                                onClick={() => {
+                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                                onClick={() =>
+                                {
                                     setMark(player);
                                     //EmitMark();
                                     endEvent();
@@ -526,25 +576,27 @@ function BlackMarkEvent({ event_data }) {
     );
 }
 
-function CoupEvent({ event_data }) {
+function CoupEvent({ event_data })
+{
     event_data.player.target = event_data.extra_players[0];
     event_data.player.type = "vote";
 
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong><strong className="playerName">{event_data.extra_players[0].nickname}</strong> has outlived the need for their service.</strong><br />
-                <strong>Make sure they are eliminated</strong><br />
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another"><strong className="font-another text-[#ff0000]">{event_data.extra_players[0].nickname}</strong> has outlived the need for their service.</strong><br />
+                <strong className="font-another">Make sure they are eliminated</strong><br />
             </div>
-            <div className="eventChange">
-                <strong>To win they must be eliminated</strong>
+            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
+                <strong className="font-another">To win they must be eliminated</strong>
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -554,27 +606,29 @@ function CoupEvent({ event_data }) {
     );
 }
 
-function BlackmailedEvent({ event_data }) {
+function BlackmailedEvent({ event_data })
+{
     event_data.player.target = event_data.extra_players[0];
     event_data.player.type = "win";
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails long">
-                <strong>{event_data.details}</strong><br />
+            <div className="absolute p-2 text-lg top-[16vh] w-[21vh] right-[43.5vh] ">
+                <strong className="font-another">{event_data.details}</strong><br />
                 <strong >Until you can prevent what they know from spreading, they must come out ahead.</strong>
             </div>
-            <div className="eventChange">
-                <strong>You lose if they lose.</strong>
+            <div className="absolute rotate-10 p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] ">
+                <strong className="font-another">You lose if they lose.</strong>
             </div>
-            <div className="eventExtra">
-                <strong><strong className="playerName">{event_data.extra_players[0].nickname}</strong> knows too much.</strong><br />
+            <div className="absolute p-2 text-xl top-[50vh] w-[18vh] right-[45.1vw] -rotate-6">
+                <strong className="font-another"><strong className="font-another text-[#ff0000]">{event_data.extra_players[0].nickname}</strong> knows too much.</strong><br />
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -584,25 +638,27 @@ function BlackmailedEvent({ event_data }) {
     );
 }
 
-function BodyGuardEvent({ event_data }) {
+function BodyGuardEvent({ event_data })
+{
     event_data.player.target = event_data.extra_players[0];
     event_data.player.type = "lives";
     return (
-        <div className="EventWrapper">
-            <div className="eventTitleBox">
-                <strong className="eventTitle">{event_data.event_name}</strong>
+        <div className="p-4 m-auto">
+            <div className="absolute h-24 w-64 text-center top-[31vh] right-[39vw]">
+                <strong className="font-another relative text-2xl top-[35%]">{event_data.event_name}</strong>
             </div>
-            <div className="eventDetails">
-                <strong><strong className="playerName">{event_data.extra_players[0].nickname}</strong> has employed your protection.</strong><br />
-                <strong>They must survive.</strong><br />
+            <div className="absolute p-2 text-2xl top-[16vh] w-[21vh] right-[43.5vh]">
+                <strong className="font-another"><strong className="font-another text-[#ff0000]">{event_data.extra_players[0].nickname}</strong> has employed your protection.</strong><br />
+                <strong className="font-another">They must survive.</strong><br />
 
             </div>
-            <div className="eventChange">
-                <strong>If they are not voted <br />out you win.</strong>
+            <div className="absolute p-2 text-2xl top-[47vh] w-[7.5vw] right-[26.6vw] rotate-10">
+                <strong className="font-another">If they are not voted <br />out you win.</strong>
             </div>
-            <div className="Event-Actions">
-                <button className="Finish"
-                    onClick={() => {
+            <div className="flex">
+                <button className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
+                    onClick={() =>
+                    {
                         endEvent();
                     }}
                 >Done
@@ -612,9 +668,11 @@ function BodyGuardEvent({ event_data }) {
     );
 }
 
-export default function EventMap(current_event) {
+export default function EventMap(current_event)
+{
     const key = current_event.event_function;
-    switch (key) {
+    switch (key)
+    {
         case "OldEnemies":
             return <OldEnemiesEvent event_data={current_event} />;
         case "OldAllies":
@@ -650,37 +708,46 @@ export default function EventMap(current_event) {
 
 }
 
-function endEvent() {
-    const eventInfo = document.querySelector(".Event-Info");
-    eventInfo.classList.toggle("toggle");
+function endEvent()
+{
+    const eventInfo = document.querySelector("#Event-Info");
+    eventInfo.classList.toggle("hidden");
 
     //insert emits to progress game state
 }
 
-function excludePlayer(player) {
-    return function (p) {
+function excludePlayer(player)
+{
+    return function (p)
+    {
         return p.nickname != player.nickname;
     }
 }
 
-function OriginalAllies(player) {
-    return function (p) {
+function OriginalAllies(player)
+{
+    return function (p)
+    {
         return p.original === player.original;
     }
 }
 
-function OriginalEnemies(player) {
-    return function (p) {
+function OriginalEnemies(player)
+{
+    return function (p)
+    {
         return p.original != player.original;
     }
 }
 
-export function EventGenMap(eventName, player, players) {
+export function EventGenMap(eventName, player, players)
+{
     const event = Events[eventName];//fetch event strings
 
     const valid = players.filter(excludePlayer(player));
     let extra_players;
-    switch (eventName) {
+    switch (eventName)
+    {
         case "OldAllies": //Started game on the same team
             extra_players = getSameStartTeam(valid);
             break;
@@ -719,6 +786,8 @@ export function EventGenMap(eventName, player, players) {
         case "BodyGuard": //Given player cannot be voted out in order to win
             extra_players = SinglePlayer(valid);
             break;
+        default:
+            break;
     }
 
     let eventObject = { //arrange data into expected format for events
@@ -735,9 +804,11 @@ export function EventGenMap(eventName, player, players) {
     return eventObject;
 }
 
-function GenerateEvents({ lobby_state }) {
+function GenerateEvents({ lobby_state })
+{
     let events = new Array();
-    lobby_state.players.forEach(player => {
+    lobby_state.players.forEach(player =>
+    {
         const eventName = RandomUniqueEvent(events);
         const event = EventGenMap(eventName, player, lobby_state.players);
         events.push(event);
@@ -746,7 +817,59 @@ function GenerateEvents({ lobby_state }) {
 
 }
 
-function getSameStartTeam(players) {
+export function OutsideEvent({ event_data })
+{
+    function showSelection()
+    {
+        const chat = document.querySelector("#eventSlide");
+        chat.classList.toggle("translate-y-full");
+        console.log("Toggled");
+    }
+    return (<div className="bg-event_waiting h-screen bg-cover">
+        <div className="">
+            <img src={OpenDoor} alt="Open Door" className="absolute bottom-0 left-[10%] h-4/5 hover:shadow-xl hover:cursor-pointer hover:shadow-slate-50" />
+            <div className="absolute bottom-0 left-[10%] w-[19%] h-4/5 ">
+                <div>
+                    <p className="font-another text-white text-3xl h-full text-center">{event_data.blind_name}</p>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
+
+        {/* <button className="absolute top-[516px] left-[370px] w-[385px] h-[100px] grid content-center text-center text-4xl text-white font-another"
+            id="chatButton"
+            onClick={() =>
+            {
+                // UpdateChat(chatMessage)
+                // setMessage('');
+                showSelection();
+            }}>{event_data.blind_name}
+        </button>
+        <div className="absolute top-[700px] left-[370px] w-[385px] h-[100px] grid content-center text-center text-4xl text-white font-another">
+            ReplaceWithAvatar
+        </div>
+        <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
+            <div id="eventSlide"
+                className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full ">
+                <img src={WaitingList} alt="sdas" className="h-full" />
+                <div className="w-[430px] m-auto max-w-[430px]">
+                    <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">{event_data.blind_info}</strong>
+                </div>
+
+            </div>
+        </div> */}
+    </div >
+    )
+}
+
+function getSameStartTeam(players)
+{
     console.log(players);
     const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
     console.log(p1);
@@ -758,23 +881,28 @@ function getSameStartTeam(players) {
     return [p1, p2];
 }
 
-function getOppStartTeams(players) {
+function getOppStartTeams(players)
+{
     const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
-    const validSecond = players.filter(p => {
+    const validSecond = players.filter(p =>
+    {
         return p.original != p1.original;
     });
     const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
     return [p1, p2];
 }
 
-function SinglePlayer(players) {
+function SinglePlayer(players)
+{
     return [players[Math.floor((Math.random() * players.length))]]; //select valid players
 }
 
-function RandomUniqueEvent(events) {
+function RandomUniqueEvent(events)
+{
     let keys = Object.keys(Events);
     let event = Events[keys[Math.floor((Math.random() * keys.length))]];
-    while (events.includes(event)) {
+    while (events.includes(event))
+    {
         event = Events[keys[Math.floor((Math.random() * keys.length))]];
     }
     return event;

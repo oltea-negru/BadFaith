@@ -1,57 +1,63 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatMessage from "../components/chat";
-import '../components/Chat.css';
+
 let messages = new Array();
 let chatMessage;
 const defaultPlayer = "Default";
-export default function Chat() {
-
-    const [chatMessage, setMessage] = useState('');
+export default function Chat()
+{
+    const [chatMessage, setMessage] = useState("");
+    const [showChat, setShowChat] = useState(false);
     return (
-        <div className="wrapper">
-            <div className="slide">
-                <div className="chat" id="chatbox">
-                    <ul>
-                        {messages.map((m) =>
-                            <ChatMessage message={m} />)}
-                    </ul>
-                </div>
-                <div className="input">
-                    <input className="chatBar"
-                        id="chatBar"
-                        type="text"
-                        value={chatMessage} placeholder="Chat"
-                        onChange={(e) => setMessage(e.target.value)}
-                        onKeyPress={(e) => {
-                            if (e.key === "Enter") {
-                                e.preventDefault();
-                                UpdateChat(chatMessage);
-                                setMessage('');
-                            }
-                        }} />
-
-
-                </div>
+        <div className="absolute flex flex-col justify-start a z-50 h-screen right-0 w-1/3 bg-transparent">
+            <div className="flex flex-row justify-end m-2">
+                <button
+                    className="font-another text-3xl focus:outline-none hover:h-12 hover:w-36 w-32 h-10 bg-[#e3bd73] rounded-md text-white"
+                    onClick={() =>
+                    {
+                        setShowChat(!showChat);
+                    }}
+                >
+                    Chat
+                </button>
             </div>
-            <button
-                className="chatToggle font-another"
-                id="chatButton"
-                onClick={() => {
-                    // UpdateChat(chatMessage)
-                    // setMessage('');
-                    showChat();
-                }}>Chat</button>
+            {showChat === false ? (
+                <div className="bg-white rounded-md overflow-hidden right-0 h-1/2 z-1 flex flex-col justify-end">
+                    <div className="overflow-y-scroll scroll-smooth hover:scroll-auto flex flex-col-reverse" >
+                        <ul>
+                            {messages.map((m) => (
+                                <ChatMessage message={m} />
+                            ))}
+                        </ul>
+                    </div>
+                    <div className="bg-[#5a2b32]">
+                        <input
+                            className="rounded-md m-2 p-1 font-another w-[97%]  "
+                            id="chatBar"
+                            type="text"
+                            value={chatMessage}
+                            placeholder="Chat"
+                            onChange={(e) => setMessage(e.target.value)}
+                            onKeyPress={(e) =>
+                            {
+                                if (e.key === "Enter")
+                                {
+                                    e.preventDefault();
+                                    UpdateChat(chatMessage);
+                                    setMessage("");
+                                }
+                            }}
+                        />
+                    </div>
+                </div>
+            ) : null}
+
         </div>
     );
 }
 
-function showChat() {
-    const chat = document.querySelector(".slide");
-    chat.classList.toggle("toggled");
-    console.log("Toggled");
-}
-
-function UpdateChat(message) {
+function UpdateChat(message)
+{
     messages.push({ player: defaultPlayer, message: message });
 }

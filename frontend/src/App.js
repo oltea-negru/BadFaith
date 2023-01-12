@@ -25,7 +25,7 @@ function App()
 			<Routes>
 				{/* <Route path="/reduxExample" element={<ReduxExample />} /> */}
 				<Route path="/" element={<LoginRoom />} />
-				<Route path="/" element={<WaitingRoom />} />
+				<Route path="/waiting" element={<WaitingRoom />} />
 				<Route path="/login" element={<PLogin />} />
 				<Route path="/register" element={<PRegister />} />
 				<Route path="/voting" element={<Voting />} />

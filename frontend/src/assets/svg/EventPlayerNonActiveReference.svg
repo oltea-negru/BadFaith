@@ -138,6 +138,7 @@
 <path d="M548.509 728.376L594.409 726.404L594.495 737.087L547.925 735.747L548.509 728.376Z" fill="#D9AC55"/>
 <circle cx="188.5" cy="177.5" r="108.5" fill="white"/>
 <rect x="291" y="405" width="297" height="74" fill="#89721E" stroke="black" stroke-width="2"/>
+<text fill="white" xml:space="preserve" style="white-space: pre" font-family="Another Typewriter" font-size="38.81" letter-spacing="0.02em"><tspan x="331.24" y="457.849">Event Name</tspan></text>
 <rect x="1820.5" y="573.5" width="897" height="457" transform="rotate(-180 1820.5 573.5)" fill="#7B6437" stroke="#6B5730" stroke-width="3"/>
 <rect x="1795.5" y="548.5" width="847" height="407" transform="rotate(-180 1795.5 548.5)" fill="#F4EFE4" stroke="#BFAA82" stroke-width="3"/>
 <circle cx="1642" cy="409" r="67" transform="rotate(-180 1642 409)" fill="#CBA3A3"/>
