@@ -82,18 +82,19 @@ async function emitUserState(lobbyCode, socket) {
 
 async function updateAll(lobbyCode) {
     const sockets = await gameStoreClient.getSockets(lobbyCode)
-    console.log('Sockets',sockets)
+    console.log('Sockets', sockets)
     for (let i = 0; i < sockets.length; i++) {
         await emitGameState(lobbyCode, sockets[i])
     }
     for (let i = 0; i < sockets.length; i++) {
-        
+
         await emitUserState(lobbyCode, sockets[i])
     }
 
 }
 
 async function updatePlayerGoal(lobbyCode, playerDetails) {
+    console.log('UpdatePlayerGoal',playerDetails)
     const result = await gameStoreClient.updatePlayer(lobbyCode, playerDetails)
 }
 
@@ -153,6 +154,7 @@ io.on('connection', async (socket) => {
                     "ready": ,
                 }
                 */
+                console.log('UpdateDetails',actionDetails)
                 result = await updatePlayerGoal(lobbyCode, actionDetails)
                 break;
             case 'progress':

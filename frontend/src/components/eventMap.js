@@ -191,7 +191,10 @@ function OldAlliesEvent() {
 function DeepStateEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    var details = player
+    let details = {}
+    Object.keys(player).forEach(key => {
+        details[key] = player[key]
+    })
     switch (details.allegiance) {
         case "Ally":
             details.allegiance = "Enemy"
@@ -240,8 +243,12 @@ function DeepStateEvent() {
 function SplinterCellEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    var details = player
+    let details = {}
+    Object.keys(player).forEach(key => {
+        details[key] = player[key]
+    })
     details.allegiance = "Splinter"
+    console.log('SendingUpdateDetails', details)
     eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
@@ -277,7 +284,10 @@ function BackroomDealEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function Betray() { // Swap
-        var details = player
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
         switch (details.allegiance) {
             case "Ally":
                 details.allegiance = "Enemy"
@@ -337,7 +347,10 @@ function BackroomDealEvent() {
 function MartyrEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    var details = player
+    let details = {}
+    Object.keys(player).forEach(key => {
+        details[key] = player[key]
+    });
     details.allegiance = "Splinter"
     details.role = "Martyr"
     eventAction(dispatch, lobbyCode, 'update', details)
@@ -415,9 +428,14 @@ function PickPocketEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function PickPocket(target) {
-        console.log('Target',target)
+        console.log('Target', target)
         var details1 = player
-        var details2 = lobby.players[target]
+        var details2 = {}
+        Object.key(lobby.players).forEach(player => {
+            if (player.nickname == target.nickname) {
+                details2 = player
+            }
+        })
         details1.role = lobby.players[target].role
         details1.allegiance = lobby.players[target].allegiance
         details1.target = lobby.players[target].target
@@ -519,7 +537,11 @@ function GagOrderEvent() {
         console.log("Toggled");
     }
     function gagPlayer(target) {
-        var details = target
+        console.log('Target', target)
+        let details 
+        Object.keys(target).forEach(key => {
+            details[key] = target[key]
+        })
         details.role = "NoVote"
         eventAction(dispatch, lobbyCode, 'update', details)
     }
@@ -584,6 +606,7 @@ function BlackMarkEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
     function markPlayer(target) {
+        console.log('Target', target)
         var details = target
         eventAction(dispatch, lobbyCode, 'vote', details)
     }
@@ -674,7 +697,10 @@ function BlackMarkEvent() {
 function CoupEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    var details = player
+    let details = {}
+    Object.keys(player).forEach(key => {
+        details[key] = player[key]
+    })
     function getUserName() {
         const players = lobby.players
         Object.keys(players).forEach(player => {
@@ -724,7 +750,10 @@ function CoupEvent() {
 function BlackmailedEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    var details = player
+    let details = {}
+    Object.keys(player).forEach(key => {
+        details[key] = player[key]
+    })
     function getUserName() {
         const players = lobby.players
         Object.keys(players).forEach(player => {
@@ -770,7 +799,10 @@ function BlackmailedEvent() {
 function BodyGuardEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    var details = player
+    let details = {}
+    Object.keys(player).forEach(key => {
+        details[key] = player[key]
+    })
     function getUserName() {
         const players = lobby.players
         Object.keys(players).forEach(player => {
@@ -929,7 +961,7 @@ export function EventGenMap(eventName, player, players) {
         extra_players: extra_players,
         blind_name: event.BlindName,
         event_name: event.EventTitle,
-        blind_info: parser.parseFromString(event.BlindInfo,"text/html"),
+        blind_info: parser.parseFromString(event.BlindInfo, "text/html"),
         details: event.Details,
         event_function: eventName,
     };

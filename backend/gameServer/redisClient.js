@@ -319,7 +319,7 @@ class HotStorageClient {
     async getUserState(lobbyCode, socket) {
         const lobby = await this._getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[socket]
-        console.log(lobby.currentEvent.player)
+        // console.log(lobby.currentEvent.player)
         // const eventPlayerID = lobby.socketToPlayers[lobby.currentEvent.player.socketID]
         delete lobby.events
         delete lobby.votes
@@ -440,7 +440,7 @@ class HotStorageClient {
     async addVote(lobbyCode, target) {
         console.log('VoteLobbyCode',lobbyCode)
         console.log('VoteTarget',target)
-        const username = this.getUsername(lobbyCode,target.socket)
+        const username = this.getUsername(lobbyCode,target.socketID)
         const lobby = await this.client.get(lobbyCode)
         if (!lobby.players[username]) {
             return {
