@@ -4,18 +4,25 @@ import PlayerWaiting from "../components/player_waiting";
 import { readyUp } from "../redux/middleware/gameServerMiddleware";
 import Chat from "./ChatTest";
 
-export default function WaitingRoom()
-{
+export default function WaitingRoom({ lobby_state }) {
     const { lobbyCode, lobby } = useSelector(state => state.game)
     const dispatch = useDispatch()
     const colors = ['#813b45', '#7f6a8b', '#6f98aa', '#FF8042', '#7c6434', '#e3bd73', '#5a2b32', '#8c9c83'];
 
     function readPlayers() {
         const players = []
-        for(const key in lobby.players ) {
-            console.log(key)
-            players.push(lobby.players[key])
+        if (lobby_state) {
+            console.log(lobby_state.players)
+            for (const key in lobby_state.players) {
+                players.push(lobby_state.players[key])
+            }
+        } else {
+            
+            for (const key in lobby.players) {
+                players.push(lobby.players[key])
+            }
         }
+        console.log(players)
         return players
     }
     // async function getPlayers()
@@ -53,7 +60,7 @@ export default function WaitingRoom()
             </div>
             <div>
                 <button className="absolute bottom-[15%] right-[45%] font-another text-2xl rounded-2xl"
-                onClick={dispatch(readyUp(lobbyCode))}>Ready</button>
+                    onClick={() => dispatch(readyUp(lobbyCode))}>Ready</button>
             </div>
             <div className="flex flex-row ml-[30%] mt-[20%] absolute">
                 {readPlayers().map((player, index) => <PlayerWaiting text={player.nickname} color={colors[index]} index={index + 1} />)}

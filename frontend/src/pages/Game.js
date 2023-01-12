@@ -17,6 +17,7 @@ export default function Game() {
         allegiance: "Enemy"
     }, getPlayerArray())
 
+    console.log(used_state)
     const setFunction = (used_state) => {
         switch (used_state.state) {
             case 1:// Joining
@@ -24,9 +25,9 @@ export default function Game() {
             case 2:// Starting
                 return (<WaitingRoom />)
             case 3:// See enemies
-                return (<SeeEnemies lobby_state={used_state}/>)
+                return (<SeeEnemies lobby_state={used_state} />)
             case 4:// Between Events
-                return (<WaitingRoom />)
+                return (<WaitingRoom lobby_state={used_state} />)
             case 5:// Events
                 return (<EventRoom lobby_state={used_state} />)
             case 6:// Discussion
@@ -40,7 +41,7 @@ export default function Game() {
 
     return (
         <div>
-            {setFunction(lobby)}
+            {setFunction(used_state)}
         </div>
     )
 }
@@ -89,7 +90,7 @@ const dummylobbyState = {
     "host": "",
     "code": "",
     "events": [],
-    "state": 1,
+    "state": 4,
     "event_history": [],
     "current_event": {}
 }
