@@ -79,7 +79,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     if "email" in player:
 
-        player['id'] = player["email"]
+        player['id'] = player["email"].lower()
 
         if "password" in player:
             user = []
