@@ -60,7 +60,7 @@ async function joinLobby(lobbyCode, playerDetails) {
 }
 
 async function readyUp(lobbyCode, socket) {
-    console.log('Debug: Socket', socket.id)
+    // console.log('Debug: Socket', socket.id)
     const result = await gameStoreClient.toggleReady(lobbyCode, socket.id)
     return result
 }
@@ -73,10 +73,24 @@ async function emitGameState(lobbyCode, socket) {
     io.to(socket).emit('state', await gameStoreClient.getUserState(lobbyCode, socket.id))
 }
 
+
+async function emitUserState(lobbyCode, socket) {
+    console.log('Sending Socket', socket)
+    const userState = await gameStoreClient.getPlayer(lobbyCode, socket)
+    if (userState.ok) io.to(socket).emit('userState', userState.player)
+}
+
 async function updateAll(lobbyCode) {
-    for (const socket of await gameStoreClient.getSockets(lobbyCode)) {
-        emitGameState(lobbyCode, socket)
+    const sockets = await gameStoreClient.getSockets(lobbyCode)
+    console.log('Sockets',sockets)
+    for (let i = 0; i < sockets.length; i++) {
+        await emitGameState(lobbyCode, sockets[i])
     }
+    for (let i = 0; i < sockets.length; i++) {
+        
+        await emitUserState(lobbyCode, sockets[i])
+    }
+
 }
 
 async function updatePlayerGoal(lobbyCode, playerDetails) {
@@ -117,7 +131,7 @@ io.on('connection', async (socket) => {
             updateAll(lobbyCode)
             acknowledgement(isReady)
         }
-        else{
+        else {
             acknowledgement(isReady)
         }
     })
@@ -147,7 +161,7 @@ io.on('connection', async (socket) => {
                 break;
         }
         acknowledgement(result)
-        await updateAll(lobbyCode) 
+        await updateAll(lobbyCode)
     })
 
     socket.on('vote', async (lobbyCode, target, acknowledgement) => {

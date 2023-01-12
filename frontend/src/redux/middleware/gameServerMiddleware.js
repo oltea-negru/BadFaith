@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import { AddMessage } from "../slices/chatSlice";
-import { updatePlayerID, updateLobby, toggleReady, updateVote, updateLobbyCode } from "../slices/gameSlice";
+import { updatePlayerID, updatePlayer, updateLobby, toggleReady, updateVote, updateLobbyCode } from "../slices/gameSlice";
 import { setLoading, setError } from "../slices/userSlice";
 
 export const gsConnect = () => ({ type: 'GS_CONNECT' });
@@ -28,6 +28,13 @@ const gameServerMiddleware = () => {
         dispatch(updateLobby(gameState))
     }
 
+    const onUserState = (dispatch, userState) => {
+        console.log('User State update received: ', userState)
+        dispatch(updatePlayer(userState))
+    }
+
+    
+
     return store => next => action => {
         switch (action.type) {
             case 'GS_CONNECT':
@@ -51,6 +58,10 @@ const gameServerMiddleware = () => {
 
                 socket.on('state', state => {
                     onGameState(store.dispatch, state)
+                })
+
+                socket.on('userState', state => {
+                    onUserState(store.dispatch, state)
                 })
 
                 socket.on('disconnect', (reason) => {

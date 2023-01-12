@@ -563,7 +563,7 @@ function GagOrderEvent({ event_data }) {
                             className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                             onClick={() =>
                             {
-                                setGag(player);
+                                gagPlayer(player);
                                 //EmitGag();
                                 endEvent();
                             }}
@@ -662,7 +662,7 @@ function BlackMarkEvent({ event_data }) {
                             className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
                             onClick={() =>
                             {
-                                setMark(player);
+                                markPlayer(player);
                                 //EmitGag();
                                 endEvent();
                             }}

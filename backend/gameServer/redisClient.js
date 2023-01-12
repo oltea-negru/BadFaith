@@ -149,10 +149,10 @@ class HotStorageClient {
 
     async toggleReady(lobbyCode, socket) {
         var lobbyDoc = await this.getLobby(lobbyCode)
-        console.log('Debug Socket', socket)
-        console.log('socketToPlayers',lobbyDoc.socketToPlayers)
+        // console.log('Debug Socket', socket)
+        // console.log('socketToPlayers',lobbyDoc.socketToPlayers)
         const playerID = lobbyDoc.socketToPlayers[socket]
-        console.log('Debug PlayerID', playerID)
+        // console.log('Debug PlayerID', playerID)
         if (lobbyDoc.players[playerID].ready) {
             lobbyDoc.readyUp--
         }
@@ -218,8 +218,7 @@ class HotStorageClient {
                 }
                 console.log("Lobby " + lobbyCode + ": progressing to start game phase")
                 lobby.state = 2
-                await this.updateLobby(lobbyCode, lobby)
-                lobby.players = SetAllegiences(lobby)
+                lobby.players = SetAllegiances(lobby)
                 lobby.events = GenerateEvents(lobby)
                 lobby.enemyCount = GetEnemyCount(lobby)
                 if (lobby.events.length != Object.keys(lobby.players).length) {
@@ -230,7 +229,7 @@ class HotStorageClient {
                     }
                 }
                 for (const [player, data] in lobby.players) {
-                    console.log(player + ": " + data.allegiance)
+                    // console.log(player + ": " + data.allegiance)
                     if (data.allegiance == "") {
                         //Player has not been allocated a team
                         return {
@@ -348,11 +347,14 @@ class HotStorageClient {
     }
 
     async getPlayer(lobbyCode, socket) {
-        const lobbyDoc = await this.getLobby(lobbyCode)
-        const playerID = lobbyDoc.socketToPlayers[socket]
+        const lobby = await this.getLobby(lobbyCode)
+        console.log('Socket',socket)
+        // console.log('Lobby',lobby)
+        const playerID = lobby.socketToPlayers[socket]
+        console.log('Player',playerID)
         return {
             ok: true,
-            player: lobbyDoc.players[playerID]
+            player: lobby.players[playerID]
         }
     }
 
@@ -364,8 +366,8 @@ class HotStorageClient {
     }
 
     async getUsername(lobbyCode, socket) {
-        var lobbyDoc = await this.getLobby(lobbyCode)
-        var playerID = lobbyDoc.socketToPlayers[socket]
+        const lobby = await this.getLobby(lobbyCode)
+        var playerID = lobby.socketToPlayers[socket]
         return {
             ok: true,
             username: playerID
@@ -477,8 +479,8 @@ class HotStorageClient {
     }
 }
 
-function GetEnemyCount({ lobby_state }) {
-    const players = lobby_state.players.keys()
+function GetEnemyCount(lobby_state) {
+    const players = Object.keys(lobby_state.players)
     switch (players.length) {
         case 4:
             return 1
@@ -495,8 +497,9 @@ function GetEnemyCount({ lobby_state }) {
     }
 }
 
-function SetAllegiences({ lobby_state }) {
-    const players = lobby_state.players.keys()
+function SetAllegiances(lobby_state) {
+    // console.log('Lobby',lobby_state)
+    const players = Object.keys(lobby_state.players)
     const updatedPlayers = lobby_state.players
     let enemyNo = 0
     switch (players.length) {
@@ -537,13 +540,14 @@ function SetAllegiences({ lobby_state }) {
     return updatedPlayers
 }
 
-function GenerateEvents({ lobby_state }) {
+function GenerateEvents(lobby_state) {
     let events = [];
-    lobby_state.players.forEach(player => {
+    getPlayerArray(lobby_state.players).map(player => {
         const eventName = RandomUniqueEvent(events);
         const event = EventGenMap(eventName, player, lobby_state.players);
         events.push(event);
     });
+    
     return events
 }
 
@@ -554,6 +558,7 @@ function excludePlayer(player) {
 }
 
 function EventGenMap(eventName, player, players) {
+    // console.log('Event',eventName)
     const event = Events[eventName];//fetch event strings
     const playerArray = getPlayerArray(players)
     const valid = playerArray.filter(excludePlayer(player));
@@ -608,13 +613,13 @@ function EventGenMap(eventName, player, players) {
 }
 
 function getSameStartTeam(players) {
-    console.log(players);
+    // console.log(players);
     const p1 = players[Math.floor((Math.random() * players.length))]; //select valid players
-    console.log(p1);
+    // console.log(p1);
     const valid = players.filter(excludePlayer(p1));
-    console.log(valid);
+    // console.log(valid);
     const validSecond = valid.filter(OriginalAllies(p1));
-    console.log(validSecond);
+    // console.log(validSecond);
     const p2 = validSecond[Math.floor((Math.random() * validSecond.length))];
     return [p1, p2];
 }
@@ -632,18 +637,14 @@ function SinglePlayer(players) {
     return [players[Math.floor((Math.random() * players.length))]]; //select valid players
 }
 
-function objectToArray(object) {
-    array = Object.entries(object).map((e) => ({ [e[0]]: e[1] }))
-    return array
-}
 
 function RandomUniqueEvent(events) {
     let keys = Object.keys(Events);
-    let event = Events[keys[Math.floor((Math.random() * keys.length))]];
-    while (events.includes(event)) {
-        event = Events[keys[Math.floor((Math.random() * keys.length))]];
+    let key = keys[Math.floor((Math.random() * keys.length))];
+    while (events.includes(Events[key])) {
+        key =keys[Math.floor((Math.random() * keys.length))];
     }
-    return event;
+    return key;
 }
 function getPlayerArray(players) {
     let playerArray = [];

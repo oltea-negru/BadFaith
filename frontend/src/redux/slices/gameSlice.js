@@ -21,6 +21,7 @@ export const gameSlice = createSlice({
             target: "",
             nickname: "",
             allegiance: "",
+            original: "",
             ready: false,
             vote: ""
         },
