@@ -191,19 +191,21 @@ function OldAlliesEvent() {
 function DeepStateEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    let details = {}
-    Object.keys(player).forEach(key => {
-        details[key] = player[key]
-    })
-    switch (details.allegiance) {
-        case "Ally":
-            details.allegiance = "Enemy"
-            break;
-        case "Enemy":
-            details.allegiance = "Ally"
-            break;
+    function deepState() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
+        switch (details.allegiance) {
+            case "Ally":
+                details.allegiance = "Enemy"
+                break;
+            case "Enemy":
+                details.allegiance = "Ally"
+                break;
+        }
+        eventAction(dispatch, lobbyCode, 'update', details)
     }
-    eventAction(dispatch, lobbyCode, 'update', details)
 
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
@@ -230,6 +232,7 @@ function DeepStateEvent() {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
+                        deepState()
                         endEvent(dispatch, lobbyCode);
                     }}
                 >
@@ -243,13 +246,15 @@ function DeepStateEvent() {
 function SplinterCellEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    let details = {}
-    Object.keys(player).forEach(key => {
-        details[key] = player[key]
-    })
-    details.allegiance = "Splinter"
-    console.log('SendingUpdateDetails', details)
-    eventAction(dispatch, lobbyCode, 'update', details)
+    function splinter() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        })
+        details.allegiance = "Splinter"
+        console.log('SendingUpdateDetails', details)
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
@@ -270,6 +275,7 @@ function SplinterCellEvent() {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
+                        splinter();
                         endEvent();
                     }}
                 >
@@ -347,13 +353,15 @@ function BackroomDealEvent() {
 function MartyrEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    let details = {}
-    Object.keys(player).forEach(key => {
-        details[key] = player[key]
-    });
-    details.allegiance = "Splinter"
-    details.role = "Martyr"
-    eventAction(dispatch, lobbyCode, 'update', details)
+    function martyr() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
+        });
+        details.allegiance = "Splinter"
+        details.role = "Martyr"
+        eventAction(dispatch, lobbyCode, 'update', details)
+    }
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
@@ -375,6 +383,7 @@ function MartyrEvent() {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
+                        martyr();
                         endEvent(dispatch, lobbyCode);
                     }}
                 >
@@ -538,7 +547,7 @@ function GagOrderEvent() {
     }
     function gagPlayer(target) {
         console.log('Target', target)
-        let details 
+        let details
         Object.keys(target).forEach(key => {
             details[key] = target[key]
         })
@@ -697,21 +706,23 @@ function BlackMarkEvent() {
 function CoupEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    let details = {}
-    Object.keys(player).forEach(key => {
-        details[key] = player[key]
-    })
-    function getUserName() {
-        const players = lobby.players
-        Object.keys(players).forEach(player => {
-            if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
-                return player
-            }
+    function coup() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
         })
+        function getUserName() {
+            const players = lobby.players
+            Object.keys(players).forEach(player => {
+                if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
+                    return player
+                }
+            })
+        }
+        details.target = getUserName()
+        details.role = "Coup"
+        eventAction(dispatch, lobbyCode, 'update', details)
     }
-    details.target = getUserName()
-    details.role = "Coup"
-    eventAction(dispatch, lobbyCode, 'update', details)
 
     return (
         <div className="overflow-hidden  font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
@@ -737,10 +748,10 @@ function CoupEvent() {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
+                        coup()
                         endEvent(dispatch, lobbyCode);
                     }}
-                >
-                    Done
+                >Done
                 </button>
             </div>
         </div>
@@ -750,21 +761,23 @@ function CoupEvent() {
 function BlackmailedEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    let details = {}
-    Object.keys(player).forEach(key => {
-        details[key] = player[key]
-    })
-    function getUserName() {
-        const players = lobby.players
-        Object.keys(players).forEach(player => {
-            if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
-                return player
-            }
+    function blackmail() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
         })
+        function getUserName() {
+            const players = lobby.players
+            Object.keys(players).forEach(player => {
+                if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
+                    return player
+                }
+            })
+        }
+        details.target = getUserName()
+        details.role = "Blackmail"
+        eventAction(dispatch, lobbyCode, 'update', details)
     }
-    details.target = getUserName()
-    details.role = "Blackmail"
-    eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
@@ -786,6 +799,7 @@ function BlackmailedEvent() {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
+                        blackmail();
                         endEvent(dispatch, lobbyCode);
                     }}
                 >
@@ -799,21 +813,23 @@ function BlackmailedEvent() {
 function BodyGuardEvent() {
     const dispatch = useDispatch()
     const { player, lobby, lobbyCode } = useSelector(state => state.game)
-    let details = {}
-    Object.keys(player).forEach(key => {
-        details[key] = player[key]
-    })
-    function getUserName() {
-        const players = lobby.players
-        Object.keys(players).forEach(player => {
-            if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
-                return player
-            }
+    function bodyguard() {
+        let details = {}
+        Object.keys(player).forEach(key => {
+            details[key] = player[key]
         })
+        function getUserName() {
+            const players = lobby.players
+            Object.keys(players).forEach(player => {
+                if (lobby.currentEvent.extra_players[0].nickname == players[player].nickname) {
+                    return player
+                }
+            })
+        }
+        details.target = getUserName()
+        details.role = "Guard"
+        eventAction(dispatch, lobbyCode, 'update', details)
     }
-    details.target = getUserName()
-    details.role = "Guard"
-    eventAction(dispatch, lobbyCode, 'update', details)
     return (
         <div className="font-another absolute right-[22.5%] top-[8%] h-[44%] w-[31%] flex flex-col justify-between">
             <h1 className="font-another font-bold text-2xl bg-white object w-fit p-1 rounded-md">
@@ -840,6 +856,7 @@ function BodyGuardEvent() {
                 <button
                     className="font-another absolute w-20 h-12 text-2xl p-1 bg-white justify-center m-auto hover:text-[#ff0000] rounded-2xl top-[60vh] left-[60vh]"
                     onClick={() => {
+                        bodyguard();
                         endEvent(dispatch, lobbyCode);
                     }}
                 >

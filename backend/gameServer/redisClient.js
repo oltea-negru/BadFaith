@@ -361,10 +361,13 @@ class HotStorageClient {
     }
 
     async updatePlayer(lobbyCode, playerDetails) {
-        const lobby = this._getLobby(lobbyCode)
-        const playerID = lobby.socketToPlayers[playerDetails.socketID]
+        const lobby = await this._getLobby(lobbyCode)
+        console.log("SocketMap",lobby.socketToPlayers)
+        console.log('UpdatePlayer',playerDetails)
+        const socket = playerDetails.socketID
+        const playerID = lobby.socketToPlayers[socket]
         lobby.players[playerID] = playerDetails
-        this.updateLobby(lobbyCode, lobby)
+        await this.updateLobby(lobbyCode, lobby)
     }
 
     async getUsername(lobbyCode, socket) {

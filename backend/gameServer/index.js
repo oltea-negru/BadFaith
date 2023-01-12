@@ -139,6 +139,7 @@ io.on('connection', async (socket) => {
 
     socket.on('action', async (lobbyCode, type, actionDetails, acknowledgement) => {
         let result;
+        console.log('Action',lobbyCode)
         switch (type) {
             case 'vote':
                 result = await addVote(lobbyCode, actionDetails)
