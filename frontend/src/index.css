@@ -2,37 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
+/* * {
     border: 1px solid red;
-}
+} */
 
 /* .slowAnim {
     @apply hover: transition duration-700 ease-in-out;
 } */
 
 .settingsInput {
-    @apply rounded-lg bg-gray-300 h-10 w-1/2 ml-3 px-5 text-sm;
+    @apply rounded-lg bg-gray-300 h-12 w-1/2 ml-3 px-5 text-lg border-4 border-black;
 
 }
 
 .settingsInput:focus {
-    @apply bg-white outline-orange-900;
+    @apply bg-white outline-orange-900 border-none;
 }
 
 .settingsButton {
     @apply rounded-lg bg-[#813b45] text-white h-10 text-lg w-full m-1;
 }
 
-.avatarButton {
-    @apply rounded-lg bg-[#813b45] h-10 text-lg w-full m-3 p-1;
-}
-
-.avatarButton:hover {
-    @apply cursor-pointer shadow-sm shadow-white;
-}
-
-.avatarButton:active {
-    @apply bg-[#f08d9c] shadow-lg;
+.settingsButton:hover {
+    @apply cursor-pointer text-2xl;
 }
 
 .input {
