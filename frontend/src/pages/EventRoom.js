@@ -17,7 +17,7 @@ export default function EventRoom({ lobby_state })
     if (inEvent)
     {
         return (
-            <div className="bg-event_room h-screen bg-cover">
+            <div className="bg-event_room h-screen bg-cover bg-bottom">
                 <CurrentEvent current_event={used_state.current_event} />
             </div>
         )
@@ -29,7 +29,7 @@ export default function EventRoom({ lobby_state })
     }
 }
 
-const inEvent = false
+const inEvent = true
 const dummylobbyState = {
     "id": "",
     "players": {
