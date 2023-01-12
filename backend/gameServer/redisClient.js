@@ -149,6 +149,7 @@ class HotStorageClient {
     async toggleReady(lobbyCode, socket) {
         var lobbyDoc = await this.getLobby(lobbyCode)
         const playerID = lobbyDoc.socketToPlayers[socket]
+        console.log('Debug PlayerID', playerID)
         if (lobbyDoc.players[playerID].ready) {
             lobbyDoc.readyUp--
         }

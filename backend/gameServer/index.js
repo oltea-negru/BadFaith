@@ -1,5 +1,6 @@
 const { createClient } = require('redis')
 const { createAdapter } = require('@socket.io/redis-adapter');
+const { getUnpackedSettings } = require('http2');
 const HotStorageClient = require('./redisClient').HotStorageClient;
 
 const gameStoreClient = new HotStorageClient()
@@ -59,6 +60,7 @@ async function joinLobby(lobbyCode, playerDetails) {
 }
 
 async function readyUp(lobbyCode, socket) {
+    console.log('Debug: Socket', socket.id)
     const result = await gameStoreClient.toggleReady(lobbyCode, socket.id)
     return result
 }
@@ -96,7 +98,7 @@ io.on('connection', async (socket) => {
         const result = await createLobby(lobbyCode, hostDetails)
         socket.join(lobbyCode)
         const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
-        emitGameState(lobbyCode, socket.id)
+        updateAll(lobbyCode)
         acknowledgement(callbackObj)
     })
 
@@ -104,7 +106,7 @@ io.on('connection', async (socket) => {
         playerDetails.socketID = socket.id
         const result = await joinLobby(lobbyCode, playerDetails)
         socket.join(lobbyCode)
-        emitGameState(lobbyCode, socket.id)
+        updateAll(lobbyCode)
         const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
         acknowledgement(callbackObj)
     })
