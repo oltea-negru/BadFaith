@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import Rope from '../assets/svg/RopeComponent.svg'
 import Frame from '../assets/svg/FrameComponent.svg'
-import GoldFrame from '../assets/svg/GoldFrameComponent.svg'
 import NameBoard from '../assets/svg/NameboardComponent.svg'
 import Avatar0 from "../assets/avatars/placeholder.svg";
 import Avatar1 from "../assets/avatars/avatar-1.svg";
