@@ -123,6 +123,7 @@ class HotStorageClient {
                 msg: "Lobby does not exist"
             }
         }
+        if (lobbyDoc.state != 1) return { ok: false, msg: "Game has already started" }
         await this.setActivePlayer(hostDetails.playerID, hostDetails.socketID, lobbyCode)
         if (!lobbyDoc.players[hostDetails.playerID]) { //if player is not in the game already
             lobbyDoc.players[hostDetails.playerID] = schema.player
@@ -224,6 +225,13 @@ class HotStorageClient {
         switch (lobby.state) {
             case 1: // Joining to Starting
                 // check that number of 'readys' is equal to number of
+                console.log("No. players", Object.keys(lobby.players).length)
+                if (Object.keys(lobby.players).length < 4) {
+                    return {
+                        ok: false,
+                        msg: "Not enough players"
+                    }
+                }
                 if (lobby.readyUp != Object.keys(lobby.players).length) {
                     return {
                         ok: false,
@@ -280,7 +288,7 @@ class HotStorageClient {
                     }
                 } else { // moving to next event
                     console.log("Lobby " + lobbyCode + ": progressing to next event")
-                    if (lobby.currentEvent != null) lobby.eventHistory.push(lobby.currentEvent);
+                    if (Object.keys(lobby.currentEvent).length != 0) lobby.eventHistory.push(lobby.currentEvent);
                     lobby.currentEvent = lobby.events.shift()
                     await this.resetReady(lobby)
                     lobby.state = 5

@@ -5,21 +5,25 @@ import Avatar from "../assets/avatars/avatar-1.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { sendAction } from "../redux/middleware/gameServerMiddleware";
 
-const parser = new DOMParser();
-
-
-
-
 function OldEnemiesEvent() {
     const dispatch = useDispatch();
     const { lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if(string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     return (
         <div className="board">
             <h1 className="eventTitle">
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {parser.parseFromString(lobby.currentEvent.details, "text/html")}
+                {details}
             </strong>
             <p className="bigInfo">
                 <strong className="text-red-500">
@@ -50,11 +54,19 @@ function OldEnemiesEvent() {
 function OldAlliesEvent() {
     const dispatch = useDispatch();
     const { lobby, lobbyCode } = useSelector((state) => state.game);
-    // console.log(lobby.currentEvent.extra_players);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if(string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     return (
         <div className="board">
             <h1 className="eventTitle">{lobby.currentEvent.event_name}</h1>
-            <strong className="smallInfo">{parser.parseFromString(lobby.currentEvent.details, "text/html")}</strong>
+            <strong className="smallInfo">{details}</strong>
             <p className="bigInfo">
                 <strong className=" text-red-500 ">
                     {lobby.currentEvent.extra_players[0].nickname + " "}
@@ -166,6 +178,15 @@ function SplinterCellEvent() {
 function BackroomDealEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if(string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     function Betray() {
         // Swap
         let details = {};
@@ -184,6 +205,7 @@ function BackroomDealEvent() {
         }
         details.role = "Betray";
         eventAction(dispatch, lobbyCode, "update", details);
+        endEvent(dispatch, lobbyCode);
     }
 
     function Remain() {
@@ -196,7 +218,7 @@ function BackroomDealEvent() {
                 {lobby.currentEvent.event_name}
             </h1>
 
-            <p className="bigInfo">{parser.parseFromString(lobby.currentEvent.details, "text/html")}</p>
+            <p className="bigInfo">{details}</p>
 
             <p className="bigInfo">
                 Your Team: <strong className="text-red-500">
@@ -227,6 +249,15 @@ function BackroomDealEvent() {
 function MartyrEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if(string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     function martyr() {
         let details = {};
         Object.keys(player).forEach((key) => {
@@ -242,7 +273,7 @@ function MartyrEvent() {
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {parser.parseFromString(lobby.currentEvent.details, "text/html")}
+                {details}
             </strong>
             <div className="bigInfo">
                 If you win,{" "}
@@ -311,6 +342,15 @@ function BackgroundCheckEvent() {
 function GagOrderEvent() {
     const dispatch = useDispatch();
     const { lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if(string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
@@ -331,7 +371,7 @@ function GagOrderEvent() {
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {parser.parseFromString(lobby.currentEvent.details, "text/html")}
+                {details}
             </strong>
 
             <button
@@ -384,6 +424,15 @@ function GagOrderEvent() {
 function BlackMarkEvent() {
     const dispatch = useDispatch();
     const { lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if(string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     function markPlayer(target) {
         console.log("Target", target);
         var details = target;
@@ -400,7 +449,7 @@ function BlackMarkEvent() {
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {parser.parseFromString(lobby.currentEvent.details, "text/html")}
+                {details}
             </strong>
 
             <button
@@ -511,6 +560,15 @@ function CoupEvent() {
 function BlackmailedEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if(string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     function blackmail() {
         let details = {};
         Object.keys(player).forEach((key) => {
@@ -537,7 +595,7 @@ function BlackmailedEvent() {
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {parser.parseFromString(lobby.currentEvent.details, "text/html")}
+                {details}
             </strong>
 
 
@@ -661,6 +719,16 @@ function endEvent(dispatch, lobbyCode) {
 
 export function OutsideEvent() {
     const { lobby } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.blind_info
+    let blindInfo = []
+    input.forEach(string => {
+        if(string === '<br />') {
+            blindInfo.push(<br />)
+        } else {
+            blindInfo.push(string)
+        }
+    })
+    console.log('BlindInfo',blindInfo)
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
@@ -693,7 +761,7 @@ export function OutsideEvent() {
                     <img src={WaitingList} alt="sdas" className="h-full" />
                     <div className="w-[430px] m-auto max-w-[430px]">
                         <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">
-                            {parser.parseFromString(lobby.currentEvent.blind_info, "text/html")}
+                            {blindInfo}
                         </strong>
                     </div>
                 </div>

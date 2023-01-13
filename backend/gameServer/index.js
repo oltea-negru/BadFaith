@@ -66,7 +66,7 @@ async function readyUp(lobbyCode, socket) {
 
 async function addVote(lobbyCode, target) {
     const response = await gameStoreClient.addVote(lobbyCode, target)
-    if(response.msg == "Progressed")
+    if (response.msg == "Progressed")
         updateAll(lobbyCode)
     return response
 }
@@ -97,12 +97,12 @@ async function updateAll(lobbyCode) {
 }
 
 async function updatePlayerGoal(lobbyCode, playerDetails) {
-    console.log('UpdatePlayerGoal',playerDetails)
+    console.log('UpdatePlayerGoal', playerDetails)
     const result = await gameStoreClient.updatePlayer(lobbyCode, playerDetails)
 }
 
 async function updateLobbyPlayerSocket(lobbyCode, playerID, socket) {
-    const result = await gameStoreClient.updateLobbyPlayerSocket(lobbyCode,playerID,socket)
+    const result = await gameStoreClient.updateLobbyPlayerSocket(lobbyCode, playerID, socket)
     return result
 }
 
@@ -157,8 +157,8 @@ io.on('connection', async (socket) => {
                 // updateAll(lobbyCode)
             }
         }
-        
-        acknowledgement({ok: true, inLobby})
+
+        acknowledgement({ ok: true, inLobby })
     })
     /* if exists {
             if socketID exists -> fuck no go away
@@ -178,10 +178,14 @@ io.on('connection', async (socket) => {
     socket.on('joinLobby', async (lobbyCode, playerDetails, acknowledgement) => {
         playerDetails.socketID = socket.id
         const result = await joinLobby(lobbyCode, playerDetails)
-        socket.join(lobbyCode)
-        updateAll(lobbyCode)
-        const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
-        acknowledgement(callbackObj)
+        if (result.ok) {
+            socket.join(lobbyCode)
+            updateAll(lobbyCode)
+            const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
+            acknowledgement(callbackObj)
+        }
+        else acknowledgement(result)
+
     })
 
     socket.on('readyUp', async (lobbyCode, acknowledgement) => {
@@ -197,7 +201,7 @@ io.on('connection', async (socket) => {
 
     socket.on('action', async (lobbyCode, type, actionDetails, acknowledgement) => {
         let result;
-        console.log('Action',lobbyCode)
+        console.log('Action', lobbyCode)
         switch (type) {
             case 'vote':
                 result = await addVote(lobbyCode, actionDetails)
@@ -213,7 +217,7 @@ io.on('connection', async (socket) => {
                     "ready": ,
                 }
                 */
-                console.log('UpdateDetails',actionDetails)
+                console.log('UpdateDetails', actionDetails)
                 result = await updatePlayerGoal(lobbyCode, actionDetails)
                 break;
             case 'progress':
