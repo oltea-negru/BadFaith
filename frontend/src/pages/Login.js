@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EnterButton from "../assets/svg/Enter.svg";
 import { useSelector, useDispatch, } from 'react-redux'
@@ -7,6 +7,7 @@ import { setCredentials } from "../redux/slices/userSlice";
 import { player_Login } from "../api/examplePlayerMethods.js";
 import { login_status } from "../api/examplePlayerMethods.js";
 import Return from "../assets/svg/ReturnArrow.svg"
+import { loginPlayer } from '../redux/middleware/gameServerMiddleware';
 
 export default function PlayerLogin()
 {
@@ -46,6 +47,11 @@ export default function PlayerLogin()
         console.log("current User: " + email + " " + password)
     }
 
+    useEffect(() => {
+        if(email!='' && password!='')
+            navigate("/lobby")
+    }, [email, password])
+
     function navigateToLobby()
     {
         navigate("/lobby");
@@ -64,7 +70,7 @@ export default function PlayerLogin()
                     <input type="password" id="password" name="password" placeholder="Password (8-30 chars)" className='input' value={passwordInput} onChange={event => setPassword(event.target.value)} />
                 </form>
                 <div className='absolute right-0 bottom-0 overflow-hidden'>
-                    <img src={EnterButton} alt="Register Button" className="hover:cursor-pointer h-[400px] translate-x-28 translate-y-28 hover:h-[430px] hover:rotate-45  custom-transition " onClick={() => handleLogin({ email: emailInput, password: passwordInput })} />
+                    <img src={EnterButton} alt="Register Button" className="hover:cursor-pointer h-[400px] translate-x-28 translate-y-28 hover:h-[430px] hover:rotate-45  custom-transition " onClick={() => dispatch(loginPlayer( emailInput, passwordInput ))} />
                 </div>
                 <div className='absolute bottom-20 left-20 flex flex-col hover:cursor-pointer '>
                     <button className='focus:outline-none text-3xl  text-white ' onClick={() => navigateToHome()}>Back</button>

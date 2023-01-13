@@ -6,7 +6,7 @@ bluebird.promisifyAll(redis);
 
 const redisHost = process.env.REDIS_HOST || 'localhost'
 const redisPort = process.env.REDIS_PORT || '6379'
-DEFAULT_EXPIRATIION = 3600
+DEFAULT_EXPIRATION = 3600
 
 const PrivateCall = ["There is a private phone call for this player.", '<br />', "They will be with back shortly."]
 
@@ -101,7 +101,7 @@ class HotStorageClient {
         lobbyDoc.state = 1
         const lobbyExists = await this._getLobby(lobbyCode)
         if (lobbyExists == null) {
-            await this.client.SETEX(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
+            await this.client.SETEX(lobbyCode, DEFAULT_EXPIRATION, JSON.stringify(lobbyDoc))
             return {
                 ok: true,
                 msg: "Lobby created: " + lobbyCode
@@ -340,18 +340,35 @@ class HotStorageClient {
         }
     }
 
-    async getSyncHash(playerID) {
-        if (playerID == null) return {ok: false, hash: null}
+    async getSyncPlayerHash(playerID) {
+        if (playerID == null) return { ok: false, hash: null }
         const sync = await this.client.get(playerID)
-        return {ok: true, hash: JSON.parse(sync)}
+        return { ok: true, hash: JSON.parse(sync) }
+    }
+
+    async getSyncSocketHash(socketID) {
+        if (socketID == null) return { ok: false, playerID: null }
+        const playerID = await this.client.get(socketID)
+        return { ok: true, playerID }
     }
 
     async _setSyncHash(playerID, hash) {
-        await this.client.SETEX(playerID, DEFAULT_EXPIRATIION, hash)
+        await this.client.SETEX(playerID, DEFAULT_EXPIRATION, JSON.stringify(hash))
+        await this.client.SETEX(hash.socketID, DEFAULT_EXPIRATION, playerID)
     }
 
+    async disconnectPlayerSocket(socketID) {
+        const playerID = (await this.getSyncSocketHash(socketID)).playerID
+        if (!playerID) return
+        let playerHash = (await this.getSyncPlayerHash(playerID)).hash
+        playerHash.socketID = ''
+        await this._setSyncHash(playerID, playerHash)
+        await this.client.del(socketID)
+    }
+
+
     async syncPlayer(playerID, sentHash) {
-        const hash = await this.getSyncHash(playerID).hash
+        const hash = (await this.getSyncPlayerHash(playerID)).hash || {}
         hash.socketID = sentHash.socketID
         hash.lobbyCode = sentHash.BackgroundChecklobbyCode
         await this._setSyncHash(playerID, hash)
@@ -537,7 +554,7 @@ class HotStorageClient {
     async updateLobby(lobbyCode, lobbyDoc) {
         const lobby = await this._getLobby(lobbyCode)
         if (lobby == null) return { ok: false, msg: "Lobby does not exist" };
-        this.client.SETEX(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
+        await this.client.SETEX(lobbyCode, DEFAULT_EXPIRATION, JSON.stringify(lobbyDoc))
         return {
             ok: true,
             msg: "Lobby updated"
