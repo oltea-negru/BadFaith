@@ -14,26 +14,26 @@ const Events = {
     OldAllies: {
         BlindName: "Old Allies",
         EventTitle: "Old Allies",
-        BlindInfo: "Two players are revelead to have appeared as the same team at the start",
-        Details: "Two players are revelead to have appeared as the same team at the start"
+        BlindInfo: ["Two players are revelead to have appeared as the same team at the start"],
+        Details: ["Two players are revelead to have appeared as the same team at the start"]
     },
     OldEnemies: {
         BlindName: "Old Enemies",
         EventTitle: "Old Enemies",
-        BlindInfo: "Two players are revelead to have appeared on opposite teams at the start",
-        Details: "Two players are revelead to have appeared on opposite teams at the start",
+        BlindInfo: ["Two players are revelead to have appeared on opposite teams at the start"],
+        Details: ["Two players are revelead to have appeared on opposite teams at the start"],
     },
     DeepState: {
         BlindName: "Private Call",
         EventTitle: "Deep State",
         BlindInfo: PrivateCall,
-        Details: "Deep State",
+        Details: ["Deep State"],
     },
     SplinterCell: {
         BlindName: "Private Call",
         EventTitle: "Splinter Cell",
         BlindInfo: PrivateCall,
-        Details: "Splinter Cell"
+        Details: ["Splinter Cell"]
     },
     BackroomDeal: {
         BlindName: "Backroom Deal",
@@ -45,30 +45,31 @@ const Events = {
         BlindName: "Private Call",
         EventTitle: "Martyr",
         BlindInfo: PrivateCall,
-        Details: "You have been chosen as a Martyr, get yourself voted and you will be rewarded."
+        Details: ["You have been chosen as a Martyr, get yourself voted and you will be rewarded."]
     },
     BackgroundCheck: {
         BlindName: "Background Check",
         EventTitle: "Background Check",
-        BlindInfo: "We have done a little digging. Here is what we know..."
+        BlindInfo: ["We have done a little digging. Here is what we know..."],
+        Details: ["We have done a little digging. Here is what we know..."]
     },
     GagOrder: {
         BlindName: "Gag Order",
         EventTitle: "Gag Order",
-        BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
-        Details: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
+        BlindInfo: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."],
+        Details: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."]
     },
     BlackMark: {
         BlindName: "Black Mark",
         EventTitle: "Black Mark",
-        BlindInfo: "Choose a player to add an extra vote against",
-        Details: "Choose a player to add an extra vote against"
+        BlindInfo: ["Choose a player to add an extra vote against"],
+        Details: ["Choose a player to add an extra vote against"]
     },
     Coup: {
         BlindName: "Private Call",
         BlindInfo: PrivateCall,
-        EventTitle: "Coup d'etat",
-        Details: "Coup d'etat"
+        EventTitle: ["Coup d'etat"],
+        Details: ["Coup d'etat"]
 
     },
     Blackmailed: {
@@ -80,7 +81,8 @@ const Events = {
     BodyGuard: {
         BlindName: "Bodyguard",
         EventTitle: "Bodyguard",
-        BlindInfo: ["You have been employed to protect another.", '<br />', "They cannot be voted out."]
+        BlindInfo: ["You have been employed to protect another.", '<br />', "They cannot be voted out."],
+        Details: ["You have been employed to protect another.", '<br />', "They cannot be voted out."]
     }
 }
 
@@ -339,9 +341,9 @@ class HotStorageClient {
     }
 
     async getSyncHash(playerID) {
-        if (playerID == null) return null
+        if (playerID == null) return {ok: false, hash: null}
         const sync = await this.client.get(playerID)
-        return JSON.parse(sync)
+        return {ok: true, hash: JSON.parse(sync)}
     }
 
     async _setSyncHash(playerID, hash) {
@@ -349,7 +351,7 @@ class HotStorageClient {
     }
 
     async syncPlayer(playerID, sentHash) {
-        const hash = await this.getSyncHash(playerID)
+        const hash = await this.getSyncHash(playerID).hash
         hash.socketID = sentHash.socketID
         hash.lobbyCode = sentHash.BackgroundChecklobbyCode
         await this._setSyncHash(playerID, hash)
@@ -359,7 +361,7 @@ class HotStorageClient {
     async getUserState(lobbyCode, socket) {
         const lobby = await this._getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[socket]
-        // console.log(lobby.currentEvent.player)
+        console.log(lobby.eventHistory)
         // const eventPlayerID = lobby.socketToPlayers[lobby.currentEvent.player.socketID]
         delete lobby.events
         delete lobby.votes
