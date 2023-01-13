@@ -182,7 +182,7 @@ function Settings()
                         {showPassword ? (
                             <input
                                 className="settingsInput text-black"
-                                type="password"
+                                type="text"
                                 id="password"
                                 name="password"
                                 value={passwordInput}
@@ -195,7 +195,7 @@ function Settings()
                         ) : (
                             <input
                                 className="settingsInput text-black"
-                                type="text"
+                                type="password"
                                 id="password"
                                 name="password"
                                 value={passwordInput}
