@@ -2,9 +2,10 @@ import { io } from "socket.io-client";
 import { player_Login } from "../../api/examplePlayerMethods";
 import { AddMessage } from "../slices/chatSlice";
 import { updatePlayerID, updatePlayer, updateLobby, toggleReady, updateVote, updateLobbyCode } from "../slices/gameSlice";
-import { setLoading, setError, setCredentials } from "../slices/userSlice";
+import { setLoading, setError, setCredentials, resetUser  } from "../slices/userSlice";
 
 export const gsConnect = () => ({ type: 'GS_CONNECT' });
+export const gsDisconnect = () => ({ type: 'GS_DISCONNECT' });
 export const gsConnecting = host => ({ type: 'GS_CONNECTING', host });
 export const sendChat = message => ({ type: 'CHAT', message })
 export const sendAction = (lobbyCode, actionType, actionDetails) => ({ type: 'ACTION', lobbyCode, actionType, actionDetails })
@@ -54,6 +55,10 @@ const gameServerMiddleware = () => {
                     console.log('Connected');
                 });
 
+                socket.on('kick', () => {
+                    store.dispatch(gsDisconnect())
+                })
+
                 socket.on('chat', message => {
                     onChat(store.dispatch, message)
                 })
@@ -79,6 +84,7 @@ const gameServerMiddleware = () => {
                 }
                 socket = null;
                 console.log('Game Socket closed');
+                store.dispatch(resetUser())
                 break;
             case 'CREATE_LOBBY':
                 console.log('Create lobby', action.hostDetails);

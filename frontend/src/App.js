@@ -23,10 +23,17 @@ import { gsConnect } from './redux/middleware/gameServerMiddleware.js';
 function App()
 {
 	const dispatch = useDispatch()
-	const { email, password } = useSelector(state => state.user)
+	const { email, password, error } = useSelector(state => state.user)
+
 	useEffect (() => {
 		dispatch(gsConnect())
 	}, []);
+
+	useEffect(() => {
+		if(error){
+			alert(error)
+		}
+	}, [error])
 
 
 	return (

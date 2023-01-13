@@ -140,7 +140,7 @@ io.on('connection', async (socket) => {
         }
         
         if(playerHash.socketID != null && playerHash.socketID != "") {
-            acknowledgement({ok: false, msg: playerID + " is already logged in"})
+            io.to(playerHash.socketID).emit('kick')
         }
         else {
             playerHash.socketID = socket.id
