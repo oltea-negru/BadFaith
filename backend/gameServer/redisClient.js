@@ -123,6 +123,7 @@ class HotStorageClient {
                 msg: "Lobby does not exist"
             }
         }
+        if (Object.keys(lobbyDoc.players).length == 9) return { ok: false, msg: "Game is full" }
         if (lobbyDoc.state != 1) return { ok: false, msg: "Game has already started" }
         await this.setActivePlayer(hostDetails.playerID, hostDetails.socketID, lobbyCode)
         if (!lobbyDoc.players[hostDetails.playerID]) { //if player is not in the game already
