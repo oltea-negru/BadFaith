@@ -52,18 +52,12 @@ const Events = {
         EventTitle: "Background Check",
         BlindInfo: "We have done a little digging. Here is what we know..."
     },
-    PickPocket: {
-        BlindName: "Pick Pocket",
-        EventTitle: "Pick Pocket",
-        BlindInfo: "Select a player to swap roles with",
-        Details: "Select a player to swap roles with"
+    GagOrder: {
+        BlindName: "Gag Order",
+        EventTitle: "Gag Order",
+        BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
+        Details: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
     },
-    // GagOrder: {
-    //     BlindName: "Gag Order",
-    //     EventTitle: "Gag Order",
-    //     BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
-    //     Details: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
-    // },
     BlackMark: {
         BlindName: "Black Mark",
         EventTitle: "Black Mark",
@@ -650,9 +644,6 @@ function EventGenMap(eventName, player, players) {
             break;
         case "BackgroundCheck": // Current appeared allegience
             extra_players = SinglePlayer(valid);
-            break;
-        case "PickPocket": // Swap allegiences with player of choice, if possible
-            extra_players = valid;
             break;
         case "GagOrder": //Prevent a player of choice from voting
             extra_players = valid;

@@ -44,31 +44,7 @@ export const gameSlice = createSlice({
             "events": [],
             "state": 5,
             "eventHistory": [],
-            "currentEvent": {
-                "player": {
-                    "nickname": "LoremIpsum",
-                    "icon": "Figure this out",
-                    "original": "Enemy",
-                    "allegiance": "Enemy"
-                },
-                "extra_players": [
-                    {
-                        "nickname": "Geronimo",
-                        "original": "Ally",
-                        "allegiance": "Ally"
-                    }
-                ],
-                "blind_name": "Blackmailed",
-                "event_name": "Blackmailed",
-                "blind_info": {
-                    "location": null
-                },
-                "details": [
-                    "Another player has some dirt on you that cannot come to light.",
-                    "You will only win if they do."
-                ],
-                "event_function": "Blackmailed"
-            }
+            "currentEvent": {}
         },
         player: {
             socketId: "",
