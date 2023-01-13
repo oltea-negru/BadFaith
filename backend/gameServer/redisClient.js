@@ -465,7 +465,7 @@ class HotStorageClient {
     async getNickname(lobbyCode, socket) {
         var lobbyDoc = await this._getLobby(lobbyCode)
         var playerID = lobbyDoc.socketToPlayers[socket]
-        const nickname = lobbyDoc.players[playerID]
+        const nickname = lobbyDoc.players[playerID].nickname
         return {
             ok: true,
             nickname: nickname
@@ -503,11 +503,13 @@ class HotStorageClient {
     }
 
     async setActivePlayer(playerID, socket, lobbyCode) {
-        const players = await this.getActivePlayers()
-        players[playerID] = {
+        const players = await this.getActivePlayers() || {}
+        const hash = {
             lobbyCode: lobbyCode,
-            socket: socket
+            socketID: socket
         }
+        players[playerID] = hash
+        await this._setSyncHash(playerID, hash)
         await this.client.set("players", JSON.stringify(players))
     }
 

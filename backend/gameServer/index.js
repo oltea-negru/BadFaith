@@ -85,12 +85,10 @@ async function emitUserState(lobbyCode, socket) {
 async function updateAll(lobbyCode) {
     //TODO  Refactor to not retrieve lobby each time?
     const sockets = await gameStoreClient.getSockets(lobbyCode)
-    console.log('Sockets', sockets)
     for (let i = 0; i < sockets.length; i++) {
         await emitGameState(lobbyCode, sockets[i])
     }
     for (let i = 0; i < sockets.length; i++) {
-
         await emitUserState(lobbyCode, sockets[i])
     }
 
@@ -147,7 +145,7 @@ io.on('connection', async (socket) => {
         else {
             playerHash.socketID = socket.id
             if(playerHash.lobbyCode != null && playerHash.lobbyCode != "") {
-                result = await updateLobbyPlayerSocket(playerID,playerHash.lobbyCode,socket.id)
+                result = await updateLobbyPlayerSocket(playerHash.lobbyCode,playerID,socket.id)
                 if(result.ok) {
                     inLobby = (await setPlayerSync(playerID,playerHash)).inGame
                 }
@@ -235,9 +233,13 @@ io.on('connection', async (socket) => {
 
     socket.on('chat', async message => {
         console.log('Chat event')
-        const lobbyCode = Array.from(socket.rooms.keys())[1]
+        const lobbyCode = (await gameStoreClient.getSyncPlayerHash((await gameStoreClient.getSyncSocketHash(socket.id)).playerID)).hash.lobbyCode
         const player = (await gameStoreClient.getNickname(lobbyCode, socket.id)).nickname
-        socket.to(lobbyCode).emit('chat', { player, message });
+
+        if(lobbyCode)
+            socket.to(lobbyCode).emit('chat', { player, message })
+        else
+            socket.broadcast.emit('chat', {player: "GLOBAL"+player, message})
     })
 
     socket.on('disconnect', async () => {
