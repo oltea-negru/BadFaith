@@ -98,12 +98,10 @@ const Events = {
         EventTitle: "Blackmailed",
         BlindInfo: [
             "Another player has some dirt on you that cannot come to light.",
-            <br />,
             "You will only win if they do.",
         ],
         Details: [
             "Another player has some dirt on you that cannot come to light.",
-            <br />,
             "You will only win if they do.",
         ],
     },
@@ -112,7 +110,6 @@ const Events = {
         EventTitle: "Bodyguard",
         BlindInfo: [
             "You have been employed to protect another.",
-            <br />,
             "They cannot be voted out.",
         ],
     },
@@ -978,7 +975,7 @@ export function EventGenMap(eventName, player, players) {
         extra_players: extra_players,
         blind_name: event.BlindName,
         event_name: event.EventTitle,
-        blind_info: parser.parseFromString(event.BlindInfo, "text/html"),
+        blind_info: event.BlindInfo,
         details: event.Details,
         event_function: eventName,
     };
