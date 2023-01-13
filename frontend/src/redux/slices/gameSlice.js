@@ -22,7 +22,7 @@ export const gameSlice = createSlice({
             nickname: "",
             allegiance: "",
             original: "",
-            ready: false,
+            isReady: false,
             vote: ""
         },
         playerID: "Default",
@@ -39,7 +39,7 @@ export const gameSlice = createSlice({
             state.player = action.payload
         },
         toggleReady: (state, isReady) => {
-            state.player.ready = isReady
+            state.player.isReady = isReady
         },
         updateVote: (state, vote) => {
             state.player.vote = vote

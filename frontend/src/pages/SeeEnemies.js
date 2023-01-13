@@ -40,7 +40,7 @@ export default function SeeEnemies() {
             </div>
             <div>
                 <button className="absolute top-[10%] right-[45%] font-another text-2xl p-1 rounded-2xl hover:text-[#ff0000] bg-white"
-                    onClick={() => dispatch(readyUp(lobbyCode))}>Ready</button>
+                    onClick={() => dispatch(readyUp(lobbyCode))}>{player.isReady ? <>Ready</> : <>Unready</>}</button>
             </div>
         </div>
 
