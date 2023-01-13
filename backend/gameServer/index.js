@@ -1,6 +1,6 @@
 const { createClient } = require('redis')
 const { createAdapter } = require('@socket.io/redis-adapter');
-const { updateLobby } = require('../../frontend/src/redux/slices/gameSlice');
+const { getUnpackedSettings } = require('http2');
 const HotStorageClient = require('./redisClient').HotStorageClient;
 
 const gameStoreClient = new HotStorageClient()
@@ -60,6 +60,7 @@ async function joinLobby(lobbyCode, playerDetails) {
 }
 
 async function readyUp(lobbyCode, socket) {
+    // console.log('Debug: Socket', socket.id)
     const result = await gameStoreClient.toggleReady(lobbyCode, socket.id)
     return result
 }
@@ -72,13 +73,28 @@ async function emitGameState(lobbyCode, socket) {
     io.to(socket).emit('state', await gameStoreClient.getUserState(lobbyCode, socket.id))
 }
 
+
+async function emitUserState(lobbyCode, socket) {
+    console.log('Sending Socket', socket)
+    const userState = await gameStoreClient.getPlayer(lobbyCode, socket)
+    if (userState.ok) io.to(socket).emit('userState', userState.player)
+}
+
 async function updateAll(lobbyCode) {
-    for (const socket of await gameStoreClient.getSockets(lobbyCode)) {
-        emitGameState(lobbyCode, socket)
+    const sockets = await gameStoreClient.getSockets(lobbyCode)
+    console.log('Sockets', sockets)
+    for (let i = 0; i < sockets.length; i++) {
+        await emitGameState(lobbyCode, sockets[i])
     }
+    for (let i = 0; i < sockets.length; i++) {
+
+        await emitUserState(lobbyCode, sockets[i])
+    }
+
 }
 
 async function updatePlayerGoal(lobbyCode, playerDetails) {
+    console.log('UpdatePlayerGoal',playerDetails)
     const result = await gameStoreClient.updatePlayer(lobbyCode, playerDetails)
 }
 
@@ -97,7 +113,7 @@ io.on('connection', async (socket) => {
         const result = await createLobby(lobbyCode, hostDetails)
         socket.join(lobbyCode)
         const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
-        emitGameState(lobbyCode, socket.id)
+        updateAll(lobbyCode)
         acknowledgement(callbackObj)
     })
 
@@ -105,24 +121,28 @@ io.on('connection', async (socket) => {
         playerDetails.socketID = socket.id
         const result = await joinLobby(lobbyCode, playerDetails)
         socket.join(lobbyCode)
-        emitGameState(lobbyCode, socket.id)
-        acknowledgement(result)
+        updateAll(lobbyCode)
+        const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
+        acknowledgement(callbackObj)
     })
 
     socket.on('readyUp', async (lobbyCode, acknowledgement) => {
         const isReady = await readyUp(lobbyCode, socket)
-        if (result.progressState) {
+        if (isReady.progressState) {
             updateAll(lobbyCode)
+            acknowledgement(isReady)
         }
-        else{
+        else {
             acknowledgement(isReady)
         }
     })
 
     socket.on('action', async (lobbyCode, type, actionDetails, acknowledgement) => {
+        let result;
+        console.log('Action',lobbyCode)
         switch (type) {
             case 'vote':
-                await addVote(lobbyCode, actionDetails.target)
+                result = await addVote(lobbyCode, actionDetails)
                 break;
             case 'update':
                 /*
@@ -135,13 +155,16 @@ io.on('connection', async (socket) => {
                     "ready": ,
                 }
                 */
-                await updatePlayerGoal(lobbyCode, actionDetails)
+                console.log('UpdateDetails',actionDetails)
+                result = await updatePlayerGoal(lobbyCode, actionDetails)
                 break;
+            case 'progress':
+                result = await gameStoreClient.progressGameState(lobbyCode)
             default:
                 break;
         }
-        await gameStoreClient.progressGameState(lobbyCode)
-        await updateAll(lobbyCode) 
+        acknowledgement(result)
+        await updateAll(lobbyCode)
     })
 
     socket.on('vote', async (lobbyCode, target, acknowledgement) => {

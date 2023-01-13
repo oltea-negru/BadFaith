@@ -17,6 +17,7 @@ module.exports = {
         'voting': "url('/src/assets/svg/VotingPageEmpty.svg')",
         'rope': "url('/src/assets/svg/RopeComponent.svg')",
         "endgame": "url('/src/assets/svg/RevealWinnerPageEmpty2.svg')",
+        "evidence": "url('/src/assets/svg/EvidenceBoard.svg')",
       },
       fontFamily: {
         'another': ['Another', 'sans-serif'],

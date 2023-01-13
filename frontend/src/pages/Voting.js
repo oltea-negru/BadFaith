@@ -10,13 +10,23 @@ import Avatar4 from "../assets/avatars/avatar-4.svg";
 import Avatar5 from "../assets/avatars/avatar-5.svg";
 import Avatar6 from "../assets/avatars/avatar-6.svg";
 import Avatar7 from "../assets/avatars/avatar-7.svg";
+import { useSelector } from 'react-redux'
 
 
 export default function Voting()
 {
+  const {lobby} = useSelector(state => state.game)
   const [votedPlayer, setVotedPlayer] = React.useState(null);
   const [haveIVoted, setHaveIVoted] = React.useState(false);
   const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
+
+  function readPlayers() {
+    const players = []
+    for(const key in lobby.players ) {
+        players.push(lobby.players[key])
+    }
+    return players
+  }
 
   function playerFrame(name, avatar)
   {
@@ -47,13 +57,15 @@ export default function Voting()
   return (
     <div className='bg-voting bg-cover h-screen flex flex-col justify-between overflow-hidden '>
       <div className='h-3/5 text-center flex flex-row justify-evenly align-middle'>
-        {dummyPlayers.map((player) => playerFrame(player.nickname, player.avatar))}
+        {readPlayers().map((player) => playerFrame(player.nickname, player.avatar))}
       </div>
 
       <div className='h-2/5 w-[120%] bg-rope bg-cover bg-bottom  -translate-x-[10%] translate-y-1'></div>
     </div>
   )
 }
+
+
 
 const dummyPlayers = [
   {
