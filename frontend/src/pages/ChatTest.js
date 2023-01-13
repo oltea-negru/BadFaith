@@ -30,12 +30,13 @@ export default function Chat()
                     onClick={() =>
                     {
                         setShowChat(!showChat);
+                        console.log(showChat);
                     }}
                 >
                     Chat
                 </button>
             </div>
-            {showChat === false ? (
+            {showChat ? (
                 <div className="bg-white rounded-md overflow-hidden right-0 h-1/2 z-1 flex flex-col justify-end">
                     <div className="overflow-y-scroll scroll-smooth hover:scroll-auto flex flex-col-reverse" >
                         <ul>

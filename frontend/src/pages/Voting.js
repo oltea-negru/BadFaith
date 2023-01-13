@@ -15,15 +15,17 @@ import { useSelector } from 'react-redux'
 
 export default function Voting()
 {
-  const {lobby} = useSelector(state => state.game)
+  const { lobby } = useSelector(state => state.game)
   const [votedPlayer, setVotedPlayer] = React.useState(null);
   const [haveIVoted, setHaveIVoted] = React.useState(false);
   const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
-  function readPlayers() {
+  function readPlayers()
+  {
     const players = []
-    for(const key in lobby.players ) {
-        players.push(lobby.players[key])
+    for (const key in lobby.players)
+    {
+      players.push(lobby.players[key])
     }
     return players
   }
@@ -60,7 +62,7 @@ export default function Voting()
         {readPlayers().map((player) => playerFrame(player.nickname, player.avatar))}
       </div>
 
-      <div className='h-2/5 w-[120%] bg-rope bg-cover bg-bottom  -translate-x-[10%] translate-y-1'></div>
+      <div className='bg-rope bg-cover bg-bottom w-screen h-3/5'></div>
     </div>
   )
 }

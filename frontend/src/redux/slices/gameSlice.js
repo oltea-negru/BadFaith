@@ -50,24 +50,24 @@ export const gameSlice = createSlice({
                     "icon": "Figure this out",
                     "original": "Enemy",
                     "allegiance": "Enemy"
-                  },
-                  "extra_players": [
+                },
+                "extra_players": [
                     {
-                      "nickname": "Geronimo",
-                      "original": "Ally",
-                      "allegiance": "Ally"
+                        "nickname": "Geronimo",
+                        "original": "Ally",
+                        "allegiance": "Ally"
                     }
-                  ],
-                  "blind_name": "Blackmailed",
-                  "event_name": "Blackmailed",
-                  "blind_info": {
+                ],
+                "blind_name": "Blackmailed",
+                "event_name": "Blackmailed",
+                "blind_info": {
                     "location": null
-                  },
-                  "details": [
+                },
+                "details": [
                     "Another player has some dirt on you that cannot come to light.",
                     "You will only win if they do."
-                  ],
-                  "event_function": "Blackmailed"
+                ],
+                "event_function": "Blackmailed"
             }
         },
         player: {
@@ -84,22 +84,28 @@ export const gameSlice = createSlice({
         lobbyCode: ""
     },
     reducers: {
-        updatePlayerID: (state, action) => {
+        updatePlayerID: (state, action) =>
+        {
             state.playerID = action.payload
         },
-        updateLobby: (state, action) => {
+        updateLobby: (state, action) =>
+        {
             state.lobby = action.payload
         },
-        updatePlayer: (state, action) => {
+        updatePlayer: (state, action) =>
+        {
             state.player = action.payload
         },
-        toggleReady: (state, isReady) => {
+        toggleReady: (state, isReady) =>
+        {
             state.player.ready = isReady
         },
-        updateVote: (state, vote) => {
+        updateVote: (state, vote) =>
+        {
             state.player.vote = vote
         },
-        updateLobbyCode: (state, action) => {
+        updateLobbyCode: (state, action) =>
+        {
             state.lobbyCode = action.payload
         }
     }

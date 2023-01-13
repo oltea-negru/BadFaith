@@ -7,7 +7,7 @@ import { useState } from 'react';
 
 export default function WaitingRoom()
 {
-    const { lobbyCode, lobby } = useSelector(state => state.game)
+    const { lobbyCode, lobby, player } = useSelector(state => state.game)
     const [readyStatus, setReadyStatus] = useState(false)
     const dispatch = useDispatch()
     const colors = ['#813b45', '#7f6a8b', '#6f98aa', '#FF8042', '#7c6434', '#e3bd73', '#5a2b32', '#8c9c83'];
@@ -58,14 +58,13 @@ export default function WaitingRoom()
         <div className="bg-waiting_lobby bg-cover h-screen">
             <div className="absolute left-2 top-2 w-fit bg-[#384d36] py-2 px-6 rounded-md">
                 <strong className="font-another text-white font-thin text-3xl">
-                    CODE: {/* {lobbyCode} */}
-                    codeADFASFD
+                    CODE: {lobbyCode}
                 </strong>
             </div>
             <Chat />
             <div className="absolute top-[10%] right-2 w-fit bg-[#5183b3] py-2 px-6 rounded-md">
                 <strong className="font-another text-white font-thin text-xl">
-                    Player: *insert username here*
+                    {player.allegiance} : {player.nickname}
                 </strong>
             </div>
 
@@ -85,6 +84,8 @@ export default function WaitingRoom()
             <div className="flex flex-row ml-[30%] mt-[20%] absolute">
                 {readPlayers().map((player, index) => <PlayerWaiting text={player.nickname} color={colors[index]} index={index + 1} />)}
             </div>
+
+            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => { }}>Leave Game</button>
 
         </div>
 

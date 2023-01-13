@@ -15,7 +15,7 @@ module.exports = {
         'register': "url('/src/assets/svg/EmptyRegisterPage (1).svg')",
         "login": "url('/src/assets/svg/EmptyLogin.svg')",
         'voting': "url('/src/assets/svg/VotingPageEmpty.svg')",
-        'rope': "url('/src/assets/svg/RopeComponent.svg')",
+        'rope': "url('/src/assets/svg/RopeComponentCropped.svg')",
         "endgame": "url('/src/assets/svg/RevealWinnerPageEmpty2.svg')",
         "evidence": "url('/src/assets/svg/EvidenceBoard.svg')",
       },
