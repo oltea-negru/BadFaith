@@ -24,8 +24,8 @@ class TestFunction(unittest.TestCase):
         # Json for testing email
         # Checking for a inavlid email
         input1 = {
-            'email' : "gavin@gmail.com",
-            "password" : "password2"
+            'email' : "LAMA@gmail.com",
+            "password" : "gmailcom"
         }
 
         # Checking for a short password
@@ -61,14 +61,14 @@ class TestFunction(unittest.TestCase):
                'https://badfaith2.azurewebsites.net/api/signup',
             #    'http://localhost:7071/api/SignUp'   ,                   
                                                                         
-                json = input4
+                json = input1
          )
 
 
 
         #input1
         # Checking for a inavlid email
-        # self.assertEqual(resp.json()["msg"], "Invalid email provided")
+        self.assertEqual(resp.json()["msg"], "OK")
 
         #input2
         # Checking for a short password
@@ -80,7 +80,7 @@ class TestFunction(unittest.TestCase):
 
         #input4
         #Checking for a valid password
-        self.assertEqual(resp.json()["msg"], "OK")
+        # self.assertEqual(resp.json()["msg"], "OK")
 
         #input4 again
         #Checking for duplicate players
