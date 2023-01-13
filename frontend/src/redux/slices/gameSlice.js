@@ -4,16 +4,71 @@ export const gameSlice = createSlice({
     name: 'game',
     initialState: {
         lobby: {
-            players: {},
-            readyUp: 0,
-            socketToPlayers: {},
-            votes: {},
-            playerToSockets: {},
-            state: 1,
-            currentEvent: {},
-            eventHistory: [],
-            events: [],
-            voteLimit: 0
+            "inEvent": true,
+            "id": "",
+            "players": {
+                "DummyID": {
+                    nickname: "LoremIpsum",
+                    icon: "Figure this out",
+                    original: "Enemy",
+                    allegiance: "Enemy"
+                },
+                "Lorem": {
+                    nickname: "Sean Connery",
+                    icon: "Figure this out",
+                    original: "Enemy",
+                    allegiance: "Ally"
+                },
+                "Ipsum": {
+                    "nickname": "Travolta",
+                    "icon": "Figure this out",
+                    original: "Ally",
+                    allegiance: "Enemy",
+                    "target": "",
+                },
+                "Delta": {
+                    nickname: "Geronimo",
+                    original: "Ally",
+                    allegiance: "Ally"
+                },
+                "Beta": {
+                    nickname: "Jester",
+                    original: "Enemy",
+                    allegiance: "Enemy"
+                }
+            },
+            "remainingPlayers": ["Lorem", "Snorlax"],
+            "invited": [],
+            "host": "",
+            "code": "",
+            "events": [],
+            "state": 5,
+            "eventHistory": [],
+            "currentEvent": {
+                "player": {
+                    "nickname": "LoremIpsum",
+                    "icon": "Figure this out",
+                    "original": "Enemy",
+                    "allegiance": "Enemy"
+                  },
+                  "extra_players": [
+                    {
+                      "nickname": "Geronimo",
+                      "original": "Ally",
+                      "allegiance": "Ally"
+                    }
+                  ],
+                  "blind_name": "Blackmailed",
+                  "event_name": "Blackmailed",
+                  "blind_info": {
+                    "location": null
+                  },
+                  "details": [
+                    "Another player has some dirt on you that cannot come to light.",
+                    "You will only win if they do."
+                  ],
+                  "event_function": "Blackmailed"
+            }
         },
         player: {
             socketId: "",
