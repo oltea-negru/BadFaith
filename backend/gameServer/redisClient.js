@@ -390,8 +390,8 @@ class HotStorageClient {
         console.log(lobby.eventHistory)
         // const eventPlayerID = lobby.socketToPlayers[lobby.currentEvent.player.socketID]
         delete lobby.events
-        delete lobby.votes
-        delete lobby.voteLimit
+        // delete lobby.votes
+        // delete lobby.voteLimit
         // if (eventPlayerID == playerID) {
         return lobby
         // } else {

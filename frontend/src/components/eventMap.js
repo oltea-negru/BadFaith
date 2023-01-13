@@ -11,7 +11,7 @@ function OldEnemiesEvent() {
     const input = lobby.currentEvent.details
     let details = []
     input.forEach(string => {
-        if(string === '<br />') {
+        if (string === '<br />') {
             details.push(<br />)
         } else {
             details.push(string)
@@ -57,7 +57,7 @@ function OldAlliesEvent() {
     const input = lobby.currentEvent.details
     let details = []
     input.forEach(string => {
-        if(string === '<br />') {
+        if (string === '<br />') {
             details.push(<br />)
         } else {
             details.push(string)
@@ -96,6 +96,7 @@ function DeepStateEvent() {
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function deepState() {
         let details = {};
+        console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
@@ -109,6 +110,7 @@ function DeepStateEvent() {
             default:
                 break;
         }
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
 
@@ -144,11 +146,13 @@ function SplinterCellEvent() {
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function splinter() {
         let details = {};
+        console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
         details.allegiance = "Splinter";
         console.log("SendingUpdateDetails", details);
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -181,7 +185,7 @@ function BackroomDealEvent() {
     const input = lobby.currentEvent.details
     let details = []
     input.forEach(string => {
-        if(string === '<br />') {
+        if (string === '<br />') {
             details.push(<br />)
         } else {
             details.push(string)
@@ -190,6 +194,7 @@ function BackroomDealEvent() {
     function Betray() {
         // Swap
         let details = {};
+        console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
@@ -204,6 +209,7 @@ function BackroomDealEvent() {
                 break;
         }
         details.role = "Betray";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
         endEvent(dispatch, lobbyCode);
     }
@@ -252,7 +258,7 @@ function MartyrEvent() {
     const input = lobby.currentEvent.details
     let details = []
     input.forEach(string => {
-        if(string === '<br />') {
+        if (string === '<br />') {
             details.push(<br />)
         } else {
             details.push(string)
@@ -260,11 +266,13 @@ function MartyrEvent() {
     })
     function martyr() {
         let details = {};
+        console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
         details.allegiance = "Splinter";
         details.role = "Martyr";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -345,7 +353,7 @@ function GagOrderEvent() {
     const input = lobby.currentEvent.details
     let details = []
     input.forEach(string => {
-        if(string === '<br />') {
+        if (string === '<br />') {
             details.push(<br />)
         } else {
             details.push(string)
@@ -363,6 +371,7 @@ function GagOrderEvent() {
             details[key] = target[key];
         });
         details.role = "NoVote";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -427,7 +436,7 @@ function BlackMarkEvent() {
     const input = lobby.currentEvent.details
     let details = []
     input.forEach(string => {
-        if(string === '<br />') {
+        if (string === '<br />') {
             details.push(<br />)
         } else {
             details.push(string)
@@ -436,6 +445,7 @@ function BlackMarkEvent() {
     function markPlayer(target) {
         console.log("Target", target);
         var details = target;
+        console.log(details)
         eventAction(dispatch, lobbyCode, "vote", details);
     }
     function showSelection() {
@@ -504,6 +514,7 @@ function CoupEvent() {
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function coup() {
         let details = {};
+        console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
@@ -520,6 +531,7 @@ function CoupEvent() {
         }
         details.target = getUserName();
         details.role = "Coup";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
 
@@ -563,7 +575,7 @@ function BlackmailedEvent() {
     const input = lobby.currentEvent.details
     let details = []
     input.forEach(string => {
-        if(string === '<br />') {
+        if (string === '<br />') {
             details.push(<br />)
         } else {
             details.push(string)
@@ -571,6 +583,7 @@ function BlackmailedEvent() {
     })
     function blackmail() {
         let details = {};
+        console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
@@ -587,6 +600,7 @@ function BlackmailedEvent() {
         }
         details.target = getUserName();
         details.role = "Blackmail";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -625,6 +639,7 @@ function BodyGuardEvent() {
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function bodyguard() {
         let details = {};
+        console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
@@ -641,6 +656,7 @@ function BodyGuardEvent() {
         }
         details.target = getUserName();
         details.role = "Guard";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -722,13 +738,13 @@ export function OutsideEvent() {
     const input = lobby.currentEvent.blind_info
     let blindInfo = []
     input.forEach(string => {
-        if(string === '<br />') {
+        if (string === '<br />') {
             blindInfo.push(<br />)
         } else {
             blindInfo.push(string)
         }
     })
-    console.log('BlindInfo',blindInfo)
+    console.log('BlindInfo', blindInfo)
     function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
