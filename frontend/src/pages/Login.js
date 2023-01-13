@@ -58,7 +58,7 @@ export default function PlayerLogin()
 
     return (
         <>
-            <div className='bg-login bg-cover bg-top h-screen grid place-items-center'>
+            <div className='bg-login bg-cover font-another bg-top h-screen grid place-items-center'>
                 <form className='flex flex-col justify-evenly h-1/3' >
                     <input type="text" id="email" name="email" placeholder="Email" className='input' value={emailInput} onChange={event => setEmail(event.target.value)} />
                     <input type="password" id="password" name="password" placeholder="Password (8-30 chars)" className='input' value={passwordInput} onChange={event => setPassword(event.target.value)} />

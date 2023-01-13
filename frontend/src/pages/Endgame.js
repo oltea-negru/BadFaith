@@ -55,6 +55,7 @@ function Endgame()
             <div className='text-center h-1/2 w-[90%] mx-auto p-10 flex flex-wrap justify-center'>
                 {Object.entries(lobby.players).map(playerEntry => playerInfo(playerEntry[0], playerEntry[1]))}
             </div>
+            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => { }}>Leave Game</button>
         </div>
     )
 }

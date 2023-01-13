@@ -338,6 +338,23 @@ class HotStorageClient {
         }
     }
 
+    async getSyncHash(playerID) {
+        if(playerID == null ) return null
+        const sync = await this.client.get(playerID)
+        return JSON.parse(sync)
+    }
+
+    async _setSyncHash(playerID,hash) {
+        await this.client.SETEX(playerID, DEFAULT_EXPIRATIION, hash)
+    }
+
+    async syncPlayer(playerID,lobbyCode,socketID) {
+        const hash = await this.getSyncHash(playerID)
+        hash.socketID = socketID
+        hash.lobbyCode = lobbyCode
+        await this._setSyncHash(playerID,hash)
+    }
+
     async getUserState(lobbyCode, socket) {
         const lobby = await this._getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[socket]

@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* {
+* {
     border: 1px solid red;
-} */
+}
 
 /* .slowAnim {
     @apply hover: transition duration-700 ease-in-out;
@@ -37,6 +37,35 @@
 
 .custom-transition {
     @apply duration-300 ease-in-out;
+}
+
+.board {
+    @apply px-8 py-3 font-another absolute top-[10%] max-w-[600px] min-w-[560px] min-h-[330px] max-h-[600px] flex flex-col justify-between;
+
+}
+
+.eventTitle {
+    @apply text-5xl text-white bg-[#856831] w-fit py-1 px-3 rounded-md;
+}
+
+.smallInfo {
+    @apply bg-white w-fit py-1 px-2 rounded-md font-semibold mr-5;
+}
+
+.bigInfo {
+    @apply bg-white text-2xl w-fit py-1 px-2 rounded-md font-semibold mr-5;
+}
+
+.done {
+    @apply bg-[#601822] text-xl w-fit py-1 px-3 rounded-md custom-transition text-white;
+}
+
+.done:hover {
+    @apply cursor-pointer bg-[#813b45] px-5;
+}
+
+.secret {
+    @apply absolute animate-pulse py-2 px-5 text-white text-2xl top-[40%] w-fit right-[7%] bg-red-600 rotate-12;
 }
 
 @font-face {

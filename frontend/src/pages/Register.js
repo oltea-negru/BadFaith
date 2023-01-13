@@ -52,7 +52,7 @@ export default function PlayerRegister()
   }
 
   return (
-    <div className='bg-register bg-cover bg-center bg-top grid place-items-center h-screen'>
+    <div className='bg-register bg-cover font-another bg-top grid place-items-center h-screen'>
       <form className='flex flex-col justify-evenly h-1/3'>
         <input type="text" id="email" name="email" placeholder="Email" className='input' value={emailInput} onChange={event => setEmail(event.target.value)} />
         <input type="password" id="password" name="password" placeholder="Password (8-30 chars)" className='input' value={passwordInput} onChange={event => setPassword(event.target.value)} />
