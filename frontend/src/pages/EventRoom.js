@@ -3,9 +3,7 @@ import { CurrentEvent, EventWaiting } from "../components/CurrentEvent";
 
 export default function EventRoom() {
     const { player, lobby } = useSelector(state => state.game)
-
-    if (lobby.state === 5) {
-        if (player.socketID === lobby.currentEvent.player.socketID) {
+        if (lobby.currentEvent != null && player.socketID === lobby.currentEvent.player.socketID) {
             return (
                 <div className="bg-event_room h-screen bg-cover bg-bottom">
                     <CurrentEvent />
@@ -18,6 +16,5 @@ export default function EventRoom() {
                 </div>
             )
         }
-    }
 }
 
