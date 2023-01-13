@@ -2,11 +2,9 @@ import Voting from "./Voting.js";
 import WaitingRoom from "./WaitingRoom";
 import EventRoom from "./EventRoom";
 import SeeEnemies from "./SeeEnemies.js";
-import { EventGenMap } from "../components/eventMap";
 import { useSelector } from 'react-redux'
 import Endgame from "./Endgame.js";
-export default function Game({ lobby_state })
-{
+export default function Game({ lobby_state }) {
 
     const { lobby } = useSelector(state => state.game);
     // if (used_state == null) 
@@ -18,10 +16,8 @@ export default function Game({ lobby_state })
     //     allegiance: "Enemy"
     // }, getPlayerArray())
 
-    const setFunction = (used_state) =>
-    {
-        switch (used_state.state)
-        {
+    const setFunction = (used_state) => {
+        switch (used_state.state) {
             case 1:// Joining
                 return (<WaitingRoom />)
             case 2:// Starting
@@ -38,6 +34,8 @@ export default function Game({ lobby_state })
                 return (<Voting />)
             case 8:// Results
                 return (<Endgame />)
+            default:
+                break;
         }
     }
 
@@ -48,60 +46,3 @@ export default function Game({ lobby_state })
     )
 }
 
-
-
-
-
-const inEvent = true
-const dummylobbyState = {
-    "inEvent": inEvent,
-    "id": "",
-    "players": {
-        "DummyID": {
-            nickname: "LoremIpsum",
-            icon: "Figure this out",
-            original: "Enemy",
-            allegiance: "Enemy"
-        },
-        "Lorem": {
-            nickname: "Sean Connery",
-            icon: "Figure this out",
-            original: "Enemy",
-            allegiance: "Ally"
-        },
-        "Ipsum": {
-            "nickname": "Travolta",
-            "icon": "Figure this out",
-            original: "Ally",
-            allegiance: "Enemy",
-            "target": "",
-        },
-        "Delta": {
-            nickname: "Geronimo",
-            original: "Ally",
-            allegiance: "Ally"
-        },
-        "Beta": {
-            nickname: "Jester",
-            original: "Enemy",
-            allegiance: "Enemy"
-        }
-    },
-    "remaining_players": ["Lorem", "Snorlax"],
-    "invited": [],
-    "host": "",
-    "code": "",
-    "events": [],
-    "state": 3,
-    "event_history": [],
-    "current_event": {}
-}
-function getPlayerArray()
-{
-    let playerArray = [];
-    Object.keys(dummylobbyState.players).forEach(player =>
-    {
-        playerArray.push(dummylobbyState.players[player]);
-    })
-    return playerArray;
-}

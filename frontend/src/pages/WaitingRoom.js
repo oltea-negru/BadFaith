@@ -3,7 +3,6 @@ import WaitingList from "../assets/svg/WaitingBoardComponent.svg";
 import PlayerWaiting from "../components/player_waiting";
 import { readyUp } from "../redux/middleware/gameServerMiddleware";
 import Chat from "./ChatTest";
-import { useState } from 'react';
 
 export default function WaitingRoom() {
     const { player, lobbyCode, lobby } = useSelector(state => state.game)
@@ -58,12 +57,6 @@ export default function WaitingRoom() {
                 </strong>
             </div>
             <Chat />
-            <div className="absolute top-[10%] right-2 w-fit bg-[#5183b3] py-2 px-6 rounded-md">
-                <strong className="font-another text-white font-thin text-xl">
-                    {player.allegiance} : {player.nickname}
-                </strong>
-            </div>
-
             <div className="bottom-0 left-14 h-5/6 absolute">
                 <img src={WaitingList} alt="waiting list" className="h-full" />
                 <div className="absolute top-[12%] h-[45%] w-full text-center flex-col flex justify-between ">
@@ -88,27 +81,27 @@ export default function WaitingRoom() {
     );
 }
 
-const dummyPlayers = [
-    {
-        "nickname": "aaryan",
-    },
-    {
-        "nickname": "oltea",
-    },
-    {
-        "nickname": "nee",
-    },
-    {
-        "nickname": "gavin",
-    },
-    {
-        "nickname": "adithya",
-    },
-    {
-        "nickname": "thanuj",
-    },
-    {
-        "nickname": "cameron",
-    },
+// const dummyPlayers = [
+//     {
+//         "nickname": "aaryan",
+//     },
+//     {
+//         "nickname": "oltea",
+//     },
+//     {
+//         "nickname": "nee",
+//     },
+//     {
+//         "nickname": "gavin",
+//     },
+//     {
+//         "nickname": "adithya",
+//     },
+//     {
+//         "nickname": "thanuj",
+//     },
+//     {
+//         "nickname": "cameron",
+//     },
 
-]
+// ]
