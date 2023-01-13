@@ -753,7 +753,7 @@ export function OutsideEvent() {
                     onClick={() => showSelection()}
                 />
             </div>
-            <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
+            <div className="absolute bottom-0 h-[822px] w-[650px] right-[40%] overflow-y-hidden ">
                 <div
                     id="eventSlide"
                     className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full "
