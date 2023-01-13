@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import ChatMessage from "../components/chat";
 import { sendChat, gsConnect } from "../redux/middleware/gameServerMiddleware"
@@ -19,7 +18,7 @@ export default function Chat()
     }
 
     return (
-        <div className="absolute flex flex-col justify-start a z-50 h-screen right-0 w-1/3 bg-transparent">
+        <div className="absolute flex flex-col justify-start a z-50 h-[50vh] right-0 w-1/3 bg-transparent">
             <div className="flex flex-row justify-end m-2">
                 <button
                     className="font-another text-3xl focus:outline-none hover:h-12 hover:w-36 w-32 h-10 bg-[#e3bd73] rounded-md text-white"

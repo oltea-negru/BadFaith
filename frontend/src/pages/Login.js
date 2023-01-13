@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EnterButton from "../assets/svg/Enter.svg";
 import { useSelector, useDispatch, } from 'react-redux'
-import { setCredentials } from "../redux/slices/userSlice";
-import { player_Login } from "../api/examplePlayerMethods.js";
-import { login_status } from "../api/examplePlayerMethods.js";
+// import { setCredentials } from "../redux/slices/userSlice";
+// import { player_Login } from "../api/examplePlayerMethods.js";
+// import { login_status } from "../api/examplePlayerMethods.js";
 import Return from "../assets/svg/ReturnArrow.svg"
 import { loginPlayer } from '../redux/middleware/gameServerMiddleware';
 
@@ -18,37 +18,37 @@ export default function PlayerLogin()
     const [passwordInput, setPassword] = useState('');
     const { email, password } = useSelector(state => state.user)
 
-    async function handleLogin()
-    {
-        if (emailInput === '' || passwordInput === '') return
-        console.log('provided email: ' + emailInput);
-        console.log('provided password: ' + passwordInput);
-        const message = await (player_Login(emailInput, passwordInput))
-        console.log(message.msg)
-        if (message.msg === 'OK')
-        {
-            const status = await (login_status(emailInput, passwordInput))
-            console.log(status.msg)
-            if (status.msg === 'OK')
-            {
-                console.log("User LogedIn, Dispatching credentials")
-                dispatch(setCredentials({ email: emailInput, password: passwordInput }))
-                alert("Logged In successfully!");
-                navigateToLobby();
-            }
-            else
-            {
-                alert("Login failed!" + status.msg);
-            }
-        } else
-        {
-            alert(message.msg);
-        }
-        console.log("current User: " + email + " " + password)
-    }
+    // async function handleLogin()
+    // {
+    //     if (emailInput === '' || passwordInput === '') return
+    //     console.log('provided email: ' + emailInput);
+    //     console.log('provided password: ' + passwordInput);
+    //     const message = await (player_Login(emailInput, passwordInput))
+    //     console.log(message.msg)
+    //     if (message.msg === 'OK')
+    //     {
+    //         const status = await (login_status(emailInput, passwordInput))
+    //         console.log(status.msg)
+    //         if (status.msg === 'OK')
+    //         {
+    //             console.log("User LogedIn, Dispatching credentials")
+    //             dispatch(setCredentials({ email: emailInput, password: passwordInput }))
+    //             alert("Logged In successfully!");
+    //             navigateToLobby();
+    //         }
+    //         else
+    //         {
+    //             alert("Login failed!" + status.msg);
+    //         }
+    //     } else
+    //     {
+    //         alert(message.msg);
+    //     }
+    //     console.log("current User: " + email + " " + password)
+    // }
 
     useEffect(() => {
-        if(email!='' && password!='')
+        if(email!=='' && password!=='')
             navigate("/lobby")
     }, [email, password])
 
