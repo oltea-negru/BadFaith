@@ -5,12 +5,14 @@ import { EventGenMap } from "../components/eventMap";
 import { useEffect } from "react";
 import { updateLobby } from "../redux/slices/gameSlice";
 
-export function CurrentEvent() {
+export function CurrentEvent()
+{
     const { lobby } = useSelector(state => state.game)
     const dispatch = useDispatch()
-    
 
-    useEffect(() => {
+
+    useEffect(() =>
+    {
         const dummylobbyState = {
             "inEvent": inEvent,
             "id": "",
@@ -64,7 +66,7 @@ export function CurrentEvent() {
             console.log('Players', playerArray)
             return playerArray;
         }
-        const currEvent =  EventGenMap("GagOrder", {
+        const currEvent = EventGenMap("Martyr", {
             nickname: "LoremIpsum",
             icon: "Figure this out",
             original: "Enemy",
@@ -80,14 +82,15 @@ export function CurrentEvent() {
     let event = EventMap();
     console.log('Event', event)
     return (
-        <div className="">
-            <img src={Evidence} alt="Evidence Board" className="absolute right-[20%] top-[5%] h-1/2" />
+        <div className="right-[20%] top-0 h-1/2 absolute min-h-[400px] max-h-[650px] max-w-[600px] min-w-[560px] ">
+            <img src={Evidence} alt="Evidence Board" className="h-full" />
             {event}
         </div>
     );
 }
 
-export function EventWaiting() {
+export function EventWaiting()
+{
     const { lobby } = useSelector(state => state.game)
     return (
         <OutsideEvent />
