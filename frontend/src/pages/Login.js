@@ -17,6 +17,13 @@ export default function PlayerLogin()
     const [passwordInput, setPassword] = useState('');
     const { email, password } = useSelector(state => state.user)
 
+    async function handleForgot() {
+        console.log('provided email: ' + emailInput);
+        const message = await (player_Login(emailInput, "forgotPassword"))
+        console.log(message.passwordMsg)
+        alert('Please check your email')
+    }
+
     async function handleLogin()
     {
         if (emailInput === '' || passwordInput === '') return
@@ -62,6 +69,7 @@ export default function PlayerLogin()
                 <form className='flex flex-col justify-evenly h-1/3' >
                     <input type="text" id="email" name="email" placeholder="Email" className='input' value={emailInput} onChange={event => setEmail(event.target.value)} />
                     <input type="password" id="password" name="password" placeholder="Password (8-30 chars)" className='input' value={passwordInput} onChange={event => setPassword(event.target.value)} />
+                    <button className='forgotPassword' onClick={() => handleForgot({ email: emailInput, password: "forgotPassword" })}>Forgot Password</button>
                 </form>
                 <div className='absolute right-0 bottom-0 overflow-hidden'>
                     <img src={EnterButton} alt="Register Button" className="hover:cursor-pointer h-[400px] translate-x-28 translate-y-28 hover:h-[430px] hover:rotate-45  custom-transition " onClick={() => handleLogin({ email: emailInput, password: passwordInput })} />

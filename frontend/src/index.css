@@ -53,6 +53,11 @@
     --duration: 0.7s;
 }
 
+.forgotPassword{
+    @apply text-2xl text-center text-black bg-white border-black border-4 text-center rounded-lg px-9 font-another text-2xl;
+
+}
+
 .clickable:active {
     @apply shadow-lg shadow-black;
 }
