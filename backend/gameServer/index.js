@@ -112,7 +112,7 @@ async function getPlayer(lobbyCode, socket) {
 }
 
 async function getPlayerSync(playerID) {
-    const result = await gameStoreClient.getSyncHash(playerID)
+    const result = await gameStoreClient.getSyncPlayerHash(playerID)
     if (result.ok) {
         return result.hash
     } else {
@@ -134,23 +134,27 @@ io.on('connection', async (socket) => {
     socket.on('login', async (playerID, acknowledgement) => {
         let result;
         let inLobby;
-        const playerHash = await getPlayerSync(playerID)
-        if (playerHash == null) {
+        let playerHash = await getPlayerSync(playerID)
+        console.log('Player Hash', playerHash)
 
-        } else {
-            if (playerHash.socketID != null && playerHash.socketID != "") {
-                acknowledgement({ ok: false, msg: playerID + " is already logged in" })
-            }
+        if (playerHash == null) {
+            playerHash = {}
+        }
+        
+        if(playerHash.socketID != null && playerHash.socketID != "") {
+            acknowledgement({ok: false, msg: playerID + " is already logged in"})
+        }
+        else {
             playerHash.socketID = socket.id
-            if (playerHash.lobbyCode != null && playerHash.lobbyCode != "") {
-                result = await updateLobbyPlayerSocket(playerID, playerHash.lobbyCode, socket.id)
-                if (result.ok) {
-                    inLobby = await setPlayerSync(playerID, playerHash).inGame
+            if(playerHash.lobbyCode != null && playerHash.lobbyCode != "") {
+                result = await updateLobbyPlayerSocket(playerID,playerHash.lobbyCode,socket.id)
+                if(result.ok) {
+                    inLobby = (await setPlayerSync(playerID,playerHash)).inGame
                 }
-                updateAll(lobbyCode)
+                updateAll(playerHash.lobbyCode)
             } else {
-                inLobby = await setPlayerSync(playerHash, playerHash).inGame
-                updateAll(lobbyCode)
+                inLobby = (await setPlayerSync(playerID,playerHash)).inGame
+                // updateAll(lobbyCode)
             }
         }
 
@@ -236,9 +240,9 @@ io.on('connection', async (socket) => {
         socket.to(lobbyCode).emit('chat', { player, message });
     })
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
         console.log(`Socket ${socket.id} disconnected.`);
-        //TODO
+        await gameStoreClient.disconnectPlayerSocket(socket.id)
     });
 });
 

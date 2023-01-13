@@ -1,7 +1,8 @@
 import { io } from "socket.io-client";
+import { player_Login } from "../../api/examplePlayerMethods";
 import { AddMessage } from "../slices/chatSlice";
 import { updatePlayerID, updatePlayer, updateLobby, toggleReady, updateVote, updateLobbyCode } from "../slices/gameSlice";
-import { setLoading, setError } from "../slices/userSlice";
+import { setLoading, setError, setCredentials } from "../slices/userSlice";
 
 export const gsConnect = () => ({ type: 'GS_CONNECT' });
 export const gsConnecting = host => ({ type: 'GS_CONNECTING', host });
@@ -11,6 +12,9 @@ export const createLobby = hostDetails => ({ type: 'CREATE_LOBBY', hostDetails }
 export const joinLobby = (lobbyCode, playerDetails) => ({ type: 'JOIN_LOBBY', lobbyCode, playerDetails })
 export const votePlayer = (lobbyCode, target) => ({ type: 'VOTE', lobbyCode, target })
 export const readyUp = lobbyCode => ({ type: 'READY', lobbyCode })
+
+export const loginPlayer = (email, password) => ({ type: 'LOGIN', email, password})
+
 
 const serverHost = "localhost"
 const serverPort = "9000"
@@ -32,8 +36,6 @@ const gameServerMiddleware = () => {
         console.log('User State update received: ', userState)
         dispatch(updatePlayer(userState))
     }
-
-    
 
     return store => next => action => {
         switch (action.type) {
@@ -155,6 +157,27 @@ const gameServerMiddleware = () => {
                 console.log('Chat Socket Emit', action.message);
                 socket.emit('chat', action.message)
                 break;
+            case 'LOGIN':
+                if (action.email === '' || action.password === '') return
+                console.log('provided action.email: ' + action.email);
+                console.log('provided action.password: ' + action.password);
+                player_Login(action.email, action.password).then(response => {
+                    console.log('response', response)
+                    if(response.result){
+                        socket.emit('login', action.email, (serverResponse) => {
+                            console.log('Server Response', serverResponse)
+                            if(serverResponse.ok)
+                                store.dispatch(setCredentials({email: action.email, password: action.password}))
+                        })    
+                    }
+                    else{
+                        store.dispatch(setError(response.msg))
+                        setTimeout(() => {
+                            store.dispatch(setError(null))
+                        }, 3000)
+                    }
+                })
+                break
             default:
                 console.log('Next action:', action);
                 return next(action);
