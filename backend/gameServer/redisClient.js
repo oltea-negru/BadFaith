@@ -354,11 +354,12 @@ class HotStorageClient {
         await this.client.SETEX(playerID, DEFAULT_EXPIRATIION, hash)
     }
 
-    async syncPlayer(playerID, lobbyCode, socketID) {
+    async syncPlayer(playerID, sentHash) {
         const hash = await this.getSyncHash(playerID)
-        hash.socketID = socketID
-        hash.lobbyCode = lobbyCode
+        hash.socketID = sentHash.socketID
+        hash.lobbyCode = sentHash.BackgroundChecklobbyCode
         await this._setSyncHash(playerID, hash)
+        return { ok: true, inGame: (hash.lobbyCode == null || hash.lobbyCode == "") }
     }
 
     async getUserState(lobbyCode, socket) {

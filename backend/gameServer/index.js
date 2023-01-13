@@ -101,15 +101,63 @@ async function updatePlayerGoal(lobbyCode, playerDetails) {
     const result = await gameStoreClient.updatePlayer(lobbyCode, playerDetails)
 }
 
+async function updateLobbyPlayerSocket(lobbyCode, playerID, socket) {
+    const result = await gameStoreClient.updateLobbyPlayerSocket(lobbyCode,playerID,socket)
+    return result
+}
+
 async function getPlayer(lobbyCode, socket) {
     io.to(socket).emit('player', await gameStoreClient.getPlayer(lobbyCode, socket))
+    return result
+}
+
+async function getPlayerSync(playerID) {
+    const result = await gameStoreClient.getPlayerSync(playerID)
+    if (result.ok) {
+        return result.hash
+    } else {
+        return null
+    }
+}
+
+async function setPlayerSync(playerID, hash) {
+    const result = await gameStoreClient.syncPlayer(playerID, hash)
     return result
 }
 
 io.on('connection', async (socket) => {
 
     console.log(`Socket ${socket.id} connected.`)
+    // Check if playerID hash exists
 
+
+    socket.on('login', async (playerID, acknowledgement) => {
+        let result;
+        let inLobby;
+        const playerHash = await getPlayerSync(playerID)
+        if (playerHash == null)
+        if(playerHash.socketID != null && playerHash.socketID != "") {
+            acknowledgement({ok: false, msg: playerID + " is already logged in"})
+        }
+        playerHash.socketID = socket.id
+        if(playerHash.lobbyCode != null && playerHash.lobbyCode != "") {
+            result = await updateLobbyPlayerSocket(playerID,playerHash.lobbyCode,socket.id)
+            if(result.ok) {
+                inLobby = await setPlayerSync(playerID,playerHash).inGame
+            }
+            updateAll(lobbyCode)
+        } else {
+            inLobby = await setPlayerSync(playerHash,playerHash).inGame
+            updateAll(lobbyCode)
+        }
+        
+        acknowledgement({ok: true, inLobby})
+    })
+    /* if exists {
+            if socketID exists -> fuck no go away
+            else -> assign new socketID, progress to game -> lobby.players[playerID] -> update socketID
+    } else -> create hash, add socketID
+    */
     socket.on('createLobby', async (hostDetails, acknowledgement) => {
         const lobbyCode = await generateLobbyCode()
         hostDetails.socketID = socket.id
@@ -133,6 +181,7 @@ io.on('connection', async (socket) => {
         const isReady = await readyUp(lobbyCode, socket)
         if (isReady.progressState) {
             updateAll(lobbyCode)
+            acknowledgement(isReady)
         }
         else {
             acknowledgement(isReady)
