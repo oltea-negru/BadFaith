@@ -465,12 +465,12 @@ function PickPocketEvent()
         console.log("Toggled");
     }
     return (
-        <div className="overflow-hidden board">
+        <div className="overflow-hidden  board">
             <h1 className="eventTitle">
                 {lobby.currentEvent.event_name}
             </h1>
 
-            <strong className="smallInfo">{lobby.currentEvent.details}</strong>
+            <strong className="bigInfo">{lobby.currentEvent.details + ":"}</strong>
 
             <button
                 className="done hue-rotate-180"
@@ -487,19 +487,18 @@ function PickPocketEvent()
 
             <div
                 id="eventSlide"
-                className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
+                className="absolute bg-[#601822] h-full rounded-md  w-[90%] duration-1000 ease-out transition-all translate-y-full "
             >
-                <img src={WaitingList} alt="sdas" className="h-full" />
-
                 <div
                     id="SelectBox"
-                    className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
+                    className="h-full w-full p-10 flex flex-col justify-center"
                 >
                     {lobby.currentEvent.extra_players.map((player) => (
                         <button
-                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-xl hover:text-2xl hover:bg-rose-600 hover:text-white"
                             onClick={() =>
                             {
+                                showSelection();
                                 PickPocket(player);
                                 endEvent();
                             }}
@@ -507,24 +506,6 @@ function PickPocketEvent()
                             {player.nickname}
                         </button>
                     ))}
-
-                    <div
-                        id="SelectBox"
-                        className="flex-wrap absolute justify-center w-48 top-[11%] left-[35%] space-y-2"
-                    >
-                        {lobby.currentEvent.extra_players.map((player) => (
-                            <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                                onClick={() =>
-                                {
-                                    PickPocket(player);
-                                    endEvent(dispatch, lobbyCode);
-                                }}
-                            >
-                                {player.nickname}
-                            </button>
-                        ))}
-                    </div>
                 </div>
             </div>
 
@@ -585,19 +566,18 @@ function GagOrderEvent()
             </button>
             <div
                 id="eventSlide"
-                className="flex-col absolute text-center flex h-auto rounded w-full duration-1000 ease-out transition-all translate-y-full "
+                className="absolute bg-[#601822] h-full rounded-md  w-[87%] duration-1000 ease-out transition-all translate-y-full "
             >
-                <img src={WaitingList} alt="sdas" className="h-full" />
-
                 <div
                     id="SelectBox"
-                    className="flex-wrap absolute justify-center w-1/2 top-[11%] left-[25%] space-y-2"
+                    className="h-full w-full p-10 flex flex-col justify-center"
                 >
                     {lobby.currentEvent.extra_players.map((player) => (
                         <button
-                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-xl hover:text-2xl hover:bg-rose-600 hover:text-white"
                             onClick={() =>
                             {
+                                showSelection();
                                 gagPlayer(player);
                                 //EmitGag();
                                 endEvent();
@@ -661,19 +641,18 @@ function BlackMarkEvent()
             </button>
             <div
                 id="eventSlide"
-                className="flex-col absolute text-center flex h-auto rounded w-full duration-1000 ease-out transition-all translate-y-full "
+                className="absolute bg-[#601822] h-full rounded-md  w-[90%] duration-1000 ease-out transition-all translate-y-full "
             >
-                <img src={WaitingList} alt="sdas" className="h-full" />
-
                 <div
                     id="SelectBox"
-                    className="flex-wrap absolute justify-center w-1/2 top-[11%] left-[25%] space-y-2"
+                    className="h-full w-full p-10 flex flex-col justify-center"
                 >
                     {lobby.currentEvent.extra_players.map((player) => (
                         <button
-                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
+                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-xl hover:text-2xl hover:bg-rose-600 hover:text-white"
                             onClick={() =>
                             {
+                                showSelection();
                                 markPlayer(player);
                                 //EmitGag();
                                 endEvent();
@@ -682,26 +661,6 @@ function BlackMarkEvent()
                             {player.nickname}
                         </button>
                     ))}
-                </div>
-                <div className="overflow-y-hidden absolute bottom-0 h-[816px] w-[650px] right-[21.4vw]">
-                    <div
-                        id="eventSlide"
-                        className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out transition-all translate-y-full "
-                    >
-                        {lobby.currentEvent.extra_players.map((player) => (
-                            <button
-                                className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-2xl hover:text-[#ff0000]"
-                                onClick={() =>
-                                {
-                                    markPlayer(player);
-                                    //EmitMark();
-                                    endEvent(dispatch, lobbyCode);
-                                }}
-                            >
-                                {player.nickname}
-                            </button>
-                        ))}
-                    </div>
                 </div>
             </div>
 

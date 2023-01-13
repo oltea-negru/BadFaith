@@ -66,7 +66,7 @@ export function CurrentEvent()
             console.log('Players', playerArray)
             return playerArray;
         }
-        const currEvent = EventGenMap("BodyGuard", {
+        const currEvent = EventGenMap("BlackMark", {
             nickname: "LoremIpsum",
             icon: "Figure this out",
             original: "Enemy",
