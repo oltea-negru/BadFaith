@@ -9,13 +9,15 @@ export default function Chat()
     const [chatMessage, setMessage] = useState("");
     const [showChat, setShowChat] = useState(false);
     const { chat } = useSelector(state => state.chat);
-    
+
     const dispatch = useDispatch()
-    // useEffect(()=> {
-    //     dispatch(gsConnect())
-    // }, [])
-    
-    function UpdateChat(message) {
+    useEffect(() =>
+    {
+        dispatch(gsConnect())
+    }, [])
+
+    function UpdateChat(message)
+    {
         console.log('Chat submitted', message)
         dispatch(sendChat(message))
     }

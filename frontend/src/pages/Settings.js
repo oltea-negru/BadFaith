@@ -18,10 +18,13 @@ import Avatar4 from "../assets/avatars/avatar-4.svg";
 import Avatar5 from "../assets/avatars/avatar-5.svg";
 import Avatar6 from "../assets/avatars/avatar-6.svg";
 import Avatar7 from "../assets/avatars/avatar-7.svg";
+import Avatar8 from "../assets/avatars/avatar-8.svg";
+import Avatar9 from "../assets/avatars/avatar-9.svg";
 import EditAvatar from "../assets/svg/edit.svg";
 import RemoveAvatar from "../assets/svg/bin.svg";
 import SeePassword from "../assets/svg/eye-opened.svg";
 import HidePassword from "../assets/svg/eye-closed.svg";
+import Return from "../assets/svg/ReturnArrow.svg"
 
 function Settings()
 {
@@ -32,7 +35,7 @@ function Settings()
     );
 
     const [nicknameInput, setNickname] = useState(nickname);
-    const [passwordInput, passwordChange] = useState("");
+    const [passwordInput, passwordChange] = useState(password);
     // const [passwordChange, setNewPassword] = useState(null);
     const [showOptions, setShowOptions] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +46,7 @@ function Settings()
 
     console.log(showOptions);
 
-    const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
+    const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7, Avatar8, Avatar9]
 
     const avatarsChoice = [
         Avatar1,
@@ -53,6 +56,8 @@ function Settings()
         Avatar5,
         Avatar6,
         Avatar7,
+        Avatar8,
+        Avatar9,
     ].map((avatar, index) => (
         <img
             src={avatar}
@@ -62,7 +67,7 @@ function Settings()
                 setAvatarInput(index + 1)
             }}
             alt="Avatar"
-            className="h-32 hover:transition ease-out duration-500  rounded-lg hover:h-44  hover:cursor-pointer"
+            className="h-32 custom-transition rounded-lg hover:h-44  hover:cursor-pointer"
         />
     ));
 
@@ -116,24 +121,24 @@ function Settings()
             <img
                 src={SettingsExpanded}
                 alt="Settings"
-                className="w-2/5 h-screen min-h-[600px] min-w-[550px]"
+                className="w-3/5 h-screen max-w-[800px]"
             />
 
-            <div className="absolute flex-col text-white text-3xl font-another w-1/3 min-w-[300px] h-2/3 justify-between  mt-28 items-center flex ">
-                <div>
-                    <img src={avatars[avatarInput]} alt="Avatar" className="h-36 rounded-lg " />
-                    <div className="flex flex-row">
+            <div className="absolute flex-col text-white text-3xl font-another w-3/5 h-[70%] max-w-[600px] max-h-[600px] justify-between mt-[7%] items-center flex ">
+                <div className="">
+                    <img src={avatars[avatarInput]} alt="Avatar" className="h-36 rounded-lg border-4 border-white bg-white" />
+                    <div className="flex flex-row justify-around mt-1">
                         <img
                             src={EditAvatar}
                             alt="Edit Avatar"
                             onClick={() => setShowOptions(true)}
-                            className="w-10 avatarButton "
+                            className="w-10 bg-[#7ec4ba] invert p-1 rounded-md m-1 hover:shadow-sm hover:cursor-pointer hover:shadow-black"
                         />
                         <img
                             src={RemoveAvatar}
                             alt="Remove Avatar"
                             onClick={() => setAvatarInput(0)}
-                            className="avatarButton"
+                            className="w-10 bg-[#7ec4ba] invert p-1 rounded-md m-1 hover:shadow-sm hover:cursor-pointer hover:shadow-black"
                         />
                     </div>
                 </div>
@@ -221,7 +226,7 @@ function Settings()
 
                 <button
                     className="settingsButton
-                hover:shadow-sm hover:shadow-white focus:outline-none focus:ring-0 active:bg-red-300 active:shadow-lg transition duration-150 ease-in-out "
+                hover:shadow-sm hover:shadow-white focus:outline-none focus:ring-0 active:bg-red-300 active:shadow-lg custom-transition "
                     onClick={() =>
                     {
                         // dispatch(
@@ -239,7 +244,10 @@ function Settings()
                 </button>
 
             </div>
-            <button className='font-another bg-black p-2 rounded-lg active:text-4xl hover:text-4xl focus:outline-none absolute bottom-10 left-20 text-3xl text-white' onClick={() => navigateToLobby()}>Back</button>
+            <div className='absolute bottom-20 left-20 flex flex-col hover:cursor-pointer '>
+                <button className='focus:outline-none text-3xl  text-white '>Back</button>
+                <img src={Return} alt="Return Button" className="h-10 hover:h-12 custom-transition" onClick={() => navigateToLobby()} />
+            </div>
         </div>
     );
 }
