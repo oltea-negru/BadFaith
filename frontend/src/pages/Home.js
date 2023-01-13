@@ -8,7 +8,6 @@ import Logo from "../assets/svg/Logo.svg";
 import Settings from "../assets/svg/WelcomeComponent.svg";
 import Table from "../assets/svg/TableComponent.svg";
 
-
 export default function LoginRoom()
 {
   const [players, setPlayers] = useState([]);
@@ -28,7 +27,6 @@ export default function LoginRoom()
   {
     navigate("/register");
   }
-
 
   return <div className="bg-login_room bg-cover bg-center h-screen">
     <img onClick={playerLogin} src={Login} alt="Login player" className="hover:h-[90%]  clickable absolute right-[5%] bottom-0 h-[85%]  custom-transition" />

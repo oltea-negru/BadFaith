@@ -7,6 +7,7 @@ import { setCredentials } from "../redux/slices/userSlice";
 import { player_Register } from "../api/examplePlayerMethods.js";
 import Create from "../assets/svg/CreateKey.svg"
 import Return from "../assets/svg/ReturnArrow.svg"
+import { useEffect } from 'react';
 
 
 export default function PlayerRegister()
@@ -19,6 +20,8 @@ export default function PlayerRegister()
   const navigate = useNavigate();
   const { stats, nickname, email, password, avatar } = useSelector(state => state.user);
   const [showPassword, setShowPassword] = useState(false);
+
+  
 
   async function handleRegister()
   {
