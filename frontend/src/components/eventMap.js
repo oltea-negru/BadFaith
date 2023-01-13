@@ -132,7 +132,7 @@ function DeepStateEvent() {
                 className="done"
                 onClick={() => {
                     deepState();
-                    endEvent(dispatch, lobbyCode);
+                    
                 }}
             >
                 Done
@@ -170,7 +170,7 @@ function SplinterCellEvent() {
                 className="done"
                 onClick={() => {
                     splinter();
-                    endEvent(dispatch, lobbyCode);
+                    
                 }}
             >
                 Done
@@ -211,7 +211,7 @@ function BackroomDealEvent() {
         details.role = "Betray";
         console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
-        endEvent(dispatch, lobbyCode);
+        
     }
 
     function Remain() {
@@ -297,7 +297,7 @@ function MartyrEvent() {
                 className="done"
                 onClick={() => {
                     martyr();
-                    endEvent(dispatch, lobbyCode);
+                    
                 }}
             >
                 Done
@@ -409,7 +409,7 @@ function GagOrderEvent() {
                                 showSelection();
                                 gagPlayer(player);
                                 //EmitGag();
-                                endEvent(dispatch, lobbyCode);
+                                
                             }}
                         >
                             {player.nickname}
@@ -417,15 +417,6 @@ function GagOrderEvent() {
                     ))}
                 </div>
             </div>
-
-            <button
-                className="done"
-                onClick={() => {
-                    endEvent(dispatch, lobbyCode);
-                }}
-            >
-                Done
-            </button>
         </div>
     );
 }
@@ -487,8 +478,6 @@ function BlackMarkEvent() {
                             onClick={() => {
                                 showSelection();
                                 markPlayer(player);
-                                //EmitGag();
-                                endEvent(dispatch, lobbyCode);
                             }}
                         >
                             {player.nickname}
@@ -497,14 +486,7 @@ function BlackMarkEvent() {
                 </div>
             </div>
 
-            <button
-                className="done"
-                onClick={() => {
-                    endEvent(dispatch, lobbyCode);
-                }}
-            >
-                Done
-            </button>
+           
         </div>
     );
 }
@@ -559,7 +541,6 @@ function CoupEvent() {
                 className="done"
                 onClick={() => {
                     coup();
-                    endEvent(dispatch, lobbyCode);
                 }}
             >
                 Done
@@ -624,7 +605,6 @@ function BlackmailedEvent() {
                 className="done"
                 onClick={() => {
                     blackmail();
-                    endEvent(dispatch, lobbyCode);
                 }}
             >
                 Done
@@ -684,7 +664,6 @@ function BodyGuardEvent() {
                 className="done"
                 onClick={() => {
                     bodyguard();
-                    endEvent(dispatch, lobbyCode);
                 }}
             >
                 Done

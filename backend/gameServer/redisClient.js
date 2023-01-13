@@ -115,7 +115,7 @@ class HotStorageClient {
 
     //Attempts to add player to lobby
     async joinLobby(lobbyCode, hostDetails) {
-        console.log('PlayerJoining', hostDetails)
+        // console.log('PlayerJoining', hostDetails)
         const lobbyDoc = await this._getLobby(lobbyCode)
         if (lobbyDoc == null) {
             return {
@@ -141,7 +141,7 @@ class HotStorageClient {
         lobbyDoc.players[hostDetails.playerID].socketID = hostDetails.socketID
         lobbyDoc.socketToPlayers[hostDetails.socketID] = hostDetails.playerID
         lobbyDoc.playerToSockets[hostDetails.playerID] = hostDetails.socketID
-        console.log("Lobby " + lobbyCode + ": adding " + hostDetails.playerID + " with " + hostDetails.socketID)
+        // console.log("Lobby " + lobbyCode + ": adding " + hostDetails.playerID + " with " + hostDetails.socketID)
         return (await this.updateLobby(lobbyCode, lobbyDoc))
     }
 
@@ -226,8 +226,8 @@ class HotStorageClient {
         switch (lobby.state) {
             case 1: // Joining to Starting
                 // check that number of 'readys' is equal to number of
-                console.log("No. players", Object.keys(lobby.players).length)
-                if (Object.keys(lobby.players).length < 4) {
+                // console.log("No. players", Object.keys(lobby.players).length)
+                if (Object.keys(lobby.players).length < 5) {
                     return {
                         ok: false,
                         msg: "Not enough players"
@@ -239,7 +239,7 @@ class HotStorageClient {
                         msg: "Not enough players ready"
                     }
                 }
-                console.log("Lobby " + lobbyCode + ": progressing to start game phase")
+                // console.log("Lobby " + lobbyCode + ": progressing to start game phase")
                 lobby.state = 2
                 lobby.players = SetAllegiances(lobby)
                 lobby.events = GenerateEvents(lobby)
@@ -263,7 +263,7 @@ class HotStorageClient {
                 }
                 console.log("Lobby " + lobbyCode + ": progressing to in between events")
                 await this.resetReady(lobby)
-                console.log('Check func worked', lobby)
+                // console.log('Check func worked', lobby)
                 lobby.state = 3
                 await this.updateLobby(lobbyCode, lobby)
                 return {
@@ -280,7 +280,7 @@ class HotStorageClient {
                 }
             case 4: // Between events
                 if (lobby.events.length == 0) { // no more events, progress to discussion
-                    console.log("Lobby " + lobbyCode + ": progressing to discussion phase")
+                    // console.log("Lobby " + lobbyCode + ": progressing to discussion phase")
                     lobby.state = 6
                     await this.updateLobby(lobbyCode, lobby)
                     return {
@@ -288,7 +288,7 @@ class HotStorageClient {
                         msg: "Progressed to discussion"
                     }
                 } else { // moving to next event
-                    console.log("Lobby " + lobbyCode + ": progressing to next event")
+                    // console.log("Lobby " + lobbyCode + ": progressing to next event")
                     if (Object.keys(lobby.currentEvent).length != 0) lobby.eventHistory.push(lobby.currentEvent);
                     lobby.currentEvent = lobby.events.shift()
                     await this.resetReady(lobby)
@@ -301,7 +301,7 @@ class HotStorageClient {
                 }
             case 5: // In event to inbetween
                 //conditions needed
-                console.log("Lobby " + lobbyCode + ": progressing to in between events")
+                // console.log("Lobby " + lobbyCode + ": progressing to in between events")
                 await this.resetReady(lobby)
                 lobby.state = 4
                 await this.updateLobby(lobbyCode, lobby)
@@ -310,24 +310,24 @@ class HotStorageClient {
                     msg: "Current event completed, progressing to between events"
                 }
             case 6: // Discussion to voting
-                console.log("Lobby " + lobbyCode + ": progressing to voting phase")
+                // console.log("Lobby " + lobbyCode + ": progressing to voting phase")
                 await this.resetReady(lobby)
                 lobby.state = 7
-                this.updateLobby(lobbyCode, lobby)
+                await this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Discussion phase complete, progressing to voting phase"
                 }
             case 7: // Voting to results
                 const voteCount = Object.entries(lobby.votes).reduce((voteCount, player) => voteCount + player[1], 0)
-                console.log('Vote count', voteCount)
+                // console.log('Vote count', voteCount)
                 if (lobby.voteLimit != voteCount) {
                     return {
                         ok: false,
                         msg: "Not enough players voted"
                     }
                 }
-                console.log("Lobby " + lobbyCode + ": progressing to results phase")
+                // console.log("Lobby " + lobbyCode + ": progressing to results phase")
                 await this.resetReady(lobby)
                 lobby.state = 8
                 await this.updateLobby(lobbyCode, lobby)
@@ -336,7 +336,7 @@ class HotStorageClient {
                     msg: "Voting phase complete, progressing to results phase"
                 }
             case 8: // Results to Ending Game
-                console.log("Lobby " + lobbyCode + ": progressing to end phase")
+                // console.log("Lobby " + lobbyCode + ": progressing to end phase")
                 await this.resetReady(lobby)
                 lobby.state = 9
                 await this.updateLobby(lobbyCode, lobby)
@@ -387,28 +387,7 @@ class HotStorageClient {
     async getUserState(lobbyCode, socket) {
         const lobby = await this._getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[socket]
-        console.log(lobby.eventHistory)
-        // const eventPlayerID = lobby.socketToPlayers[lobby.currentEvent.player.socketID]
-        delete lobby.events
-        // delete lobby.votes
-        // delete lobby.voteLimit
-        // if (eventPlayerID == playerID) {
         return lobby
-        // } else {
-        //     delete lobby.currentEvent.details
-        //     delete lobby.currentEvent.extra_players
-        //     delete lobby.currentEvent.event_function
-        //     delete lobby.currentEvent.event_name
-
-        //     Object.keys(lobby.players).forEach(player => { //Players should not know the details more than what is needed outside the event
-        //         delete lobby.players[player].socketID
-        //         delete lobby.players[player].allegiance
-        //         delete lobby.players[player].role
-        //         delete lobby.players[player].target
-        //         delete lobby.players[player].ready
-        //     })
-        //     return lobby
-        // }
     }
 
     async getSockets(lobbyCode) {
@@ -419,6 +398,7 @@ class HotStorageClient {
     async getPlayer(lobbyCode, socket) {
         const lobby = await this._getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[socket]
+        // console.log("Player",lobby.players[playerID])
         return {
             ok: true,
             player: lobby.players[playerID]
@@ -426,13 +406,16 @@ class HotStorageClient {
     }
 
     async updatePlayer(lobbyCode, playerDetails) {
-        const lobby = await this._getLobby(lobbyCode)
-        console.log("SocketMap", lobby.socketToPlayers)
-        console.log('UpdatePlayer', playerDetails)
+        const lobby = {...await this._getLobby(lobbyCode)}
+        // console.log("SocketMap", lobby.socketToPlayers)
+        // console.log('UpdatePlayer', playerDetails)
         const socket = playerDetails.socketID
+        // console.log("UpdateFromSocket",socket)
         const playerID = lobby.socketToPlayers[socket]
+        // console.log("UpdateToPlayer", playerID)
         lobby.players[playerID] = playerDetails
-        await this.updateLobby(lobbyCode, lobby)
+        // console.log("PlayerChanged", lobby.players[playerID])
+        return await this.updateLobby(lobbyCode, lobby)
     }
 
     async updateLobbyPlayerSocket(lobbyCode, playerID, socket) {
@@ -476,8 +459,10 @@ class HotStorageClient {
     //fetch individual lobby json
     async _getLobby(lobbyCode) {
         if (lobbyCode == null) return null
-        const lobby = await this.client.get(lobbyCode)
-        return JSON.parse(lobby)
+        const lobby = JSON.parse(await this.client.get(lobbyCode))
+        if(lobby != null && lobby.state > 3) console.log("Lobby",lobby.players)
+        
+        return lobby
     }
 
     async setLobbyEvents(lobbyCode, eventArray) {
@@ -527,8 +512,8 @@ class HotStorageClient {
     }
 
     async addVote(lobbyCode, target) {
-        console.log('VoteLobbyCode', lobbyCode)
-        console.log('VoteTarget', target)
+        // console.log('VoteLobbyCode', lobbyCode)
+        // console.log('VoteTarget', target)
         const username = (await this.getUsername(lobbyCode, target.socketID)).username
         const lobby = await this._getLobby(lobbyCode)
         if (!lobby.players[username]) {
@@ -565,7 +550,9 @@ class HotStorageClient {
     async updateLobby(lobbyCode, lobbyDoc) {
         const lobby = await this._getLobby(lobbyCode)
         if (lobby == null) return { ok: false, msg: "Lobby does not exist" };
+        // console.log("UpdatedLobby",lobbyDoc)
         await this.client.SETEX(lobbyCode, DEFAULT_EXPIRATION, JSON.stringify(lobbyDoc))
+        // console.log("RecalledLobby",await this._getLobby(lobbyCode))
         return {
             ok: true,
             msg: "Lobby updated"

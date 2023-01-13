@@ -3,7 +3,20 @@ import { createSlice } from '@reduxjs/toolkit'
 
 export const userSlice = createSlice({
     name: 'user',
-    initialState,
+    initialState: {
+        nickname: '',
+        email: '',
+        password: '',
+        friends: '',
+        avatar: 0,
+        stats: {
+            achievements: [],
+            wins: 0,
+            totalGames: 0
+        },
+        loading: false,
+        error: null
+    },
     reducers: {
         setSettings: (state, action) =>
         {
