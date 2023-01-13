@@ -72,12 +72,14 @@ async function addVote(lobbyCode, target) {
 }
 
 async function emitGameState(lobbyCode, socket) {
-    io.to(socket).emit('state', await gameStoreClient.getUserState(lobbyCode, socket.id))
+    const payload = await gameStoreClient._getLobby(lobbyCode)
+    // console.log("Payload",payload)
+    io.to(socket).emit('state', payload)
 }
 
 
 async function emitUserState(lobbyCode, socket) {
-    console.log('Sending Socket', socket)
+    // console.log('Sending Socket', socket)
     const userState = await gameStoreClient.getPlayer(lobbyCode, socket)
     if (userState.ok) io.to(socket).emit('userState', userState.player)
 }
@@ -95,8 +97,9 @@ async function updateAll(lobbyCode) {
 }
 
 async function updatePlayerGoal(lobbyCode, playerDetails) {
-    console.log('UpdatePlayerGoal', playerDetails)
+    // console.log('UpdatePlayerGoal', playerDetails)
     const result = await gameStoreClient.updatePlayer(lobbyCode, playerDetails)
+    return result
 }
 
 async function updateLobbyPlayerSocket(lobbyCode, playerID, socket) {
@@ -133,7 +136,7 @@ io.on('connection', async (socket) => {
         let result;
         let inLobby;
         let playerHash = await getPlayerSync(playerID)
-        console.log('Player Hash', playerHash)
+        // console.log('Player Hash', playerHash)
 
         if (playerHash == null) {
             playerHash = {}
@@ -199,7 +202,7 @@ io.on('connection', async (socket) => {
 
     socket.on('action', async (lobbyCode, type, actionDetails, acknowledgement) => {
         let result;
-        console.log('Action', lobbyCode)
+        // console.log('Action', lobbyCode)
         switch (type) {
             case 'vote':
                 result = await addVote(lobbyCode, actionDetails)
@@ -215,16 +218,18 @@ io.on('connection', async (socket) => {
                     "ready": ,
                 }
                 */
-                console.log('UpdateDetails', actionDetails)
+                // console.log('UpdateDetails', actionDetails)
                 result = await updatePlayerGoal(lobbyCode, actionDetails)
+                result = await gameStoreClient.progressGameState(lobbyCode)
                 break;
             case 'progress':
                 result = await gameStoreClient.progressGameState(lobbyCode)
             default:
                 break;
         }
-        acknowledgement(result)
+        
         await updateAll(lobbyCode)
+        acknowledgement(result)
     })
 
     socket.on('vote', async (lobbyCode, target, acknowledgement) => {
@@ -232,7 +237,7 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('chat', async message => {
-        console.log('Chat event')
+        // console.log('Chat event')
         const lobbyCode = (await gameStoreClient.getSyncPlayerHash((await gameStoreClient.getSyncSocketHash(socket.id)).playerID)).hash.lobbyCode
         const player = (await gameStoreClient.getNickname(lobbyCode, socket.id)).nickname
 
