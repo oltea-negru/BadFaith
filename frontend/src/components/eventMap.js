@@ -95,7 +95,7 @@ function DeepStateEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function deepState() {
-        let details = {};
+        let details = {...player};
         console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
@@ -132,7 +132,7 @@ function DeepStateEvent() {
                 className="done"
                 onClick={() => {
                     deepState();
-                    
+
                 }}
             >
                 Done
@@ -145,7 +145,7 @@ function SplinterCellEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function splinter() {
-        let details = {};
+        let details = {...player};
         console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
@@ -170,7 +170,7 @@ function SplinterCellEvent() {
                 className="done"
                 onClick={() => {
                     splinter();
-                    
+
                 }}
             >
                 Done
@@ -193,7 +193,7 @@ function BackroomDealEvent() {
     })
     function Betray() {
         // Swap
-        let details = {};
+        let details = {...player};
         console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
@@ -211,7 +211,7 @@ function BackroomDealEvent() {
         details.role = "Betray";
         console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
-        
+
     }
 
     function Remain() {
@@ -265,7 +265,7 @@ function MartyrEvent() {
         }
     })
     function martyr() {
-        let details = {};
+        let details = {...player};
         console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
@@ -297,7 +297,7 @@ function MartyrEvent() {
                 className="done"
                 onClick={() => {
                     martyr();
-                    
+
                 }}
             >
                 Done
@@ -409,7 +409,7 @@ function GagOrderEvent() {
                                 showSelection();
                                 gagPlayer(player);
                                 //EmitGag();
-                                
+
                             }}
                         >
                             {player.nickname}
@@ -486,7 +486,7 @@ function BlackMarkEvent() {
                 </div>
             </div>
 
-           
+
         </div>
     );
 }
@@ -495,23 +495,14 @@ function CoupEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function coup() {
-        let details = {};
-        console.log('Player', player);
-        Object.keys(player).forEach((key) => {
-            details[key] = player[key];
-        });
-        function getUserName() {
-            const players = lobby.players;
-            Object.keys(players).forEach((player) => {
-                if (
-                    lobby.currentEvent.extra_players[0].nickname ===
-                    players[player].nickname
-                ) {
-                    return player;
-                }
-            });
+        let details = {...player};
+        let target = lobby.currentEvent.extra_players[0].socketID
+        function getUserName(target) {
+            for (const [key, value] of Object.entries(lobby.players)) {
+                if (value.socketID === target) return key
+            }
         }
-        details.target = getUserName();
+        details.target = getUserName(target);
         details.role = "Coup";
         console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
@@ -563,23 +554,14 @@ function BlackmailedEvent() {
         }
     })
     function blackmail() {
-        let details = {};
-        console.log('Player', player);
-        Object.keys(player).forEach((key) => {
-            details[key] = player[key];
-        });
-        function getUserName() {
-            const players = lobby.players;
-            Object.keys(players).forEach((player) => {
-                if (
-                    lobby.currentEvent.extra_players[0].nickname ===
-                    players[player].nickname
-                ) {
-                    return player;
-                }
-            });
+        let details = {...player};
+        let target = lobby.currentEvent.extra_players[0].socketID
+        function getUserName(target) {
+            for (const [key, value] of Object.entries(lobby.players)) {
+                if (value.socketID === target) return key
+            }
         }
-        details.target = getUserName();
+        details.target = getUserName(target);
         details.role = "Blackmail";
         console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
@@ -618,23 +600,14 @@ function BodyGuardEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function bodyguard() {
-        let details = {};
-        console.log('Player', player);
-        Object.keys(player).forEach((key) => {
-            details[key] = player[key];
-        });
-        function getUserName() {
-            const players = lobby.players;
-            Object.keys(players).forEach((player) => {
-                if (
-                    lobby.currentEvent.extra_players[0].nickname ===
-                    players[player].nickname
-                ) {
-                    return player;
-                }
-            });
+        let details = {...player};
+        let target = lobby.currentEvent.extra_players[0].socketID
+        function getUserName(target) {
+            for (const [key, value] of Object.entries(lobby.players)) {
+                if (value.socketID === target) return key
+            }
         }
-        details.target = getUserName();
+        details.target = getUserName(target);
         details.role = "Guard";
         console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);

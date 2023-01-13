@@ -261,7 +261,7 @@ class HotStorageClient {
                         }
                     }
                 }
-                console.log("Lobby " + lobbyCode + ": progressing to in between events")
+                // console.log("Lobby " + lobbyCode + ": progressing to in between events")
                 await this.resetReady(lobby)
                 // console.log('Check func worked', lobby)
                 lobby.state = 3
@@ -473,7 +473,7 @@ class HotStorageClient {
     async _getLobby(lobbyCode) {
         if (lobbyCode == null) return null
         const lobby = JSON.parse(await this.client.get(lobbyCode))
-        if(lobby != null && lobby.state > 3) console.log("Lobby",lobby.players)
+        // if(lobby != null && lobby.state > 3) console.log("Lobby",lobby.players)
         
         return lobby
     }
@@ -638,6 +638,8 @@ function GenerateEvents(lobby_state) {
     let events = [];
     getPlayerArray(lobby_state.players).map(player => {
         const eventName = RandomUniqueEvent(events);
+        console.log("Events",events)
+        console.log("NewEvent",eventName)
         const event = EventGenMap(eventName, player, lobby_state.players);
         events.push(event);
     });
