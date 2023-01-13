@@ -45,19 +45,19 @@
 }
 
 .eventTitle {
-    @apply text-4xl text-white bg-[#856831] w-fit py-1 px-3 rounded-md;
+    @apply text-5xl text-white bg-[#856831] w-fit py-1 px-3 rounded-md;
 }
 
 .smallInfo {
-    @apply bg-white w-fit py-1 px-2 rounded-md font-semibold;
+    @apply bg-white w-fit py-1 px-2 rounded-md font-semibold mr-5;
 }
 
 .bigInfo {
-    @apply bg-white text-xl w-fit py-1 px-2 rounded-md font-semibold;
+    @apply bg-white text-2xl w-fit py-1 px-2 rounded-md font-semibold mr-5;
 }
 
 .done {
-    @apply bg-[#601822] w-fit py-1 px-3 rounded-md custom-transition text-white;
+    @apply bg-[#601822] text-xl w-fit py-1 px-3 rounded-md custom-transition text-white;
 }
 
 .done:hover {
