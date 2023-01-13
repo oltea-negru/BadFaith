@@ -280,7 +280,7 @@ class HotStorageClient {
                     }
                 } else { // moving to next event
                     console.log("Lobby " + lobbyCode + ": progressing to next event")
-                    if (lobby.currentEvent != null) lobby.eventHistory.push(lobby.currentEvent);
+                    if (Object.keys(lobby.currentEvent).length != 0 ) lobby.eventHistory.push(lobby.currentEvent);
                     lobby.currentEvent = lobby.events.shift()
                     await this.resetReady(lobby)
                     lobby.state = 5
