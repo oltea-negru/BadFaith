@@ -72,7 +72,10 @@ const gameServerMiddleware = () => {
                 })
 
                 socket.on('disconnect', (reason) => {
-                    //TODO Game socket disconnect
+                    alert('Server crashed, refresh page')
+                    // socket = new io(`${serverHost}:${serverPort}`, {
+                    //     transports: ['websocket']
+                    // })
                 })
 
                 socket.open()
@@ -170,11 +173,27 @@ const gameServerMiddleware = () => {
                 player_Login(action.email, action.password).then(response => {
                     console.log('response', response)
                     if(response.result){
-                        socket.emit('login', action.email, (serverResponse) => {
-                            console.log('Server Response', serverResponse)
-                            if(serverResponse.ok)
-                                store.dispatch(setCredentials({email: action.email, password: action.password}))
-                        })    
+                        try
+                        {
+                            socket.emit('login', action.email, (serverResponse) => {
+                                console.log('Server Response', serverResponse)
+                                if(serverResponse.ok)
+                                    store.dispatch(setCredentials({email: action.email, password: action.password}))
+                                else{
+                                    store.dispatch(setError(response.msg))
+                                    setTimeout(() => {
+                                        store.dispatch(setError(null))
+                                    }, 3000)
+                                }
+                            })
+                        }
+                        catch(error){
+                            store.dispatch(setError('Server connection error, try again in a bit'))
+                            setTimeout(() => {
+                                store.dispatch(setError(null))
+                            }, 3000)
+                        }
+
                     }
                     else{
                         store.dispatch(setError(response.msg))

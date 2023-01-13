@@ -1,6 +1,5 @@
 const { createClient } = require('redis')
 const { createAdapter } = require('@socket.io/redis-adapter');
-const { getUnpackedSettings } = require('http2');
 const HotStorageClient = require('./redisClient').HotStorageClient;
 
 const gameStoreClient = new HotStorageClient()

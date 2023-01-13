@@ -16,36 +16,7 @@ export default function PlayerLogin()
 
     const [emailInput, setEmail] = useState('');
     const [passwordInput, setPassword] = useState('');
-    const { email, password } = useSelector(state => state.user)
-
-    // async function handleLogin()
-    // {
-    //     if (emailInput === '' || passwordInput === '') return
-    //     console.log('provided email: ' + emailInput);
-    //     console.log('provided password: ' + passwordInput);
-    //     const message = await (player_Login(emailInput, passwordInput))
-    //     console.log(message.msg)
-    //     if (message.msg === 'OK')
-    //     {
-    //         const status = await (login_status(emailInput, passwordInput))
-    //         console.log(status.msg)
-    //         if (status.msg === 'OK')
-    //         {
-    //             console.log("User LogedIn, Dispatching credentials")
-    //             dispatch(setCredentials({ email: emailInput, password: passwordInput }))
-    //             alert("Logged In successfully!");
-    //             navigateToLobby();
-    //         }
-    //         else
-    //         {
-    //             alert("Login failed!" + status.msg);
-    //         }
-    //     } else
-    //     {
-    //         alert(message.msg);
-    //     }
-    //     console.log("current User: " + email + " " + password)
-    // }
+    const { email, password, error } = useSelector(state => state.user)
 
     useEffect(() => {
         if(email!=='' && password!=='')
