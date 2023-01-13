@@ -12,7 +12,7 @@ export default function WaitingRoom() {
     function readPlayers() {
         const players = []
         if (lobby) {
-            console.log(lobby.players)
+            // console.log(lobby.players)
             for (const key in lobby.players) {
                 players.push(lobby.players[key])
             }
@@ -22,7 +22,7 @@ export default function WaitingRoom() {
                 players.push(lobby.players[key])
             }
         }
-        console.log(players)
+        // console.log(players)
         return players
     }
     // async function getPlayers()
@@ -44,7 +44,7 @@ export default function WaitingRoom() {
     //     getPlayers();
     //     console.log(players.length);
     // }, []);
-    console.log(readPlayers(lobby.players))
+    // console.log(readPlayers(lobby.players))
 
     return (
         <div className="bg-waiting_lobby bg-cover h-screen">

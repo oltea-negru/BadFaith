@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
 import GoldFrame from '../assets/svg/GoldFrameComponent.svg'
 import Avatar0 from "../assets/avatars/placeholder.svg";
 import Avatar1 from "../assets/avatars/avatar-1.svg";
@@ -13,19 +14,24 @@ import Confetti from 'react-confetti'
 
 function Endgame()
 {
-
+    const {lobby} = useSelector(state => state.game) 
     const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
-    const [confetti, setConfetti] = React.useState(false)
 
-    function playerInfo(name, avatar)
+    useEffect(() => {
+        Object.entries(lobby.players).map(playerEntry => console.log(playerEntry[0], playerEntry[1]))
+    }, [])
+
+    function playerInfo(playerID, player)
     {
         return <div className='my-3 h-fit mx-3 text-white flex float-left flex-row justify-evenly'>
-            <div className='flex flex-col mx-3  justify-between'><img src={avatars[avatar]} alt='avatar' className='rounded-full h-32' />
-                <p className='text-3xl mt-3 bg-[#782424] rounded-md p-2 text-white'>{name}</p>
+            <div className='flex flex-col mx-3  justify-between'><img src={avatars[player.avatar]} alt='avatar' className='rounded-full h-32' />
+                <p className='text-3xl mt-3 bg-[#782424] rounded-md p-2 text-white'>{player.nickname}</p>
             </div>
             <div className='text-2xl flex flex-col justify-center'>
-                <p>Votes: 0</p>
-                <p>condition?</p>
+                <p>Votes: {lobby.votes[playerID]}</p>
+                <p>Role: {player.role}</p>
+                <p>Allegiance: {player.allegiance}</p>
+                <p>Original: {player.original}</p>
             </div>
         </div>
     }
@@ -38,16 +44,16 @@ function Endgame()
                 <div className='flex flex-col p-10 w-2/3 max-w-[800px] min-w-[600px] z-0 justify-around text-center'>
                     <p className='text-white text-6xl'>WINNERS</p>
                     <div className='flex flex-row justify-evenly'>
-                        {dummyPlayers.map((player, index) =>
+                        {Object.entries(lobby).map(player =>
                         {
-                            if (index < 4) return <div className='flex flex-col mx-4  justify-between'><img src={avatars[player.avatar]} alt='avatar' className='rounded-full h-20' /><p className='text-white text-2xl'>{player.nickname}</p></div>
+                            return <div className='flex flex-col mx-4  justify-between'><img src={avatars[player[1].avatar]} alt='avatar' className='rounded-full h-20' /><p className='text-white text-2xl'>{player.nickname}</p></div>
                         })}
                     </div>
 
                 </div>
             </div>
             <div className='text-center h-1/2 w-[90%] mx-auto p-10 flex flex-wrap justify-center'>
-                {dummyPlayers.map((player, index) => { if (index > 0) return playerInfo(player.nickname, player.avatar) })}
+                {Object.entries(lobby.players).map(playerEntry => playerInfo(playerEntry[0], playerEntry[1]))}
             </div>
         </div>
     )

@@ -526,7 +526,7 @@ function PickPocketEvent() {
                 <button
                     className="bg-red-900 p-1 w-20 text-white rounded-lg"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -691,7 +691,7 @@ function BlackMarkEvent() {
                 <button
                     className="bg-red-900 p-1 w-20 text-white rounded-lg"
                     onClick={() => {
-                        endEvent();
+                        endEvent(dispatch, lobbyCode);
                     }}
                 >
                     Done
@@ -905,7 +905,7 @@ function eventAction(dispatch, lobbyCode, type, playerChanges) {
     dispatch(sendAction(lobbyCode, type, playerChanges))
 }
 
-function endEvent(dispatch, lobbyCode,) {
+function endEvent(dispatch, lobbyCode) {
     dispatch(sendAction(lobbyCode, 'progress'))
 }
 

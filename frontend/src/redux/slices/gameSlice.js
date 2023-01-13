@@ -38,11 +38,11 @@ export const gameSlice = createSlice({
         updatePlayer: (state, action) => {
             state.player = action.payload
         },
-        toggleReady: (state, isReady) => {
-            state.player.isReady = isReady
+        toggleReady: (state, action) => {
+            state.player.isReady = action.payload
         },
-        updateVote: (state, vote) => {
-            state.player.vote = vote
+        updateVote: (state, action) => {
+            state.player.vote = action.payload
         },
         updateLobbyCode: (state, action) => {
             state.lobbyCode = action.payload

@@ -88,7 +88,7 @@ const gameServerMiddleware = () => {
                         //TODO Setup loading and error modals
                     }
                     else {
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
@@ -105,7 +105,7 @@ const gameServerMiddleware = () => {
                         store.dispatch(updatePlayerID(action.playerDetails.playerID))
                     }
                     else {
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
@@ -114,17 +114,16 @@ const gameServerMiddleware = () => {
                 break;
             case 'VOTE':
                 console.log('Vote Placed', action.target);
-                socket.emit('vote', action.target, (response) => {
-                    if (response.ok) {
-                        store.dispatch(updateVote(action.target))
-                        //TODO Use updateVote to set vote to "Voting..." while request is happening. When vote is empty, enable vote.
-                    }
-                    else {
+                socket.emit('vote', action.lobbyCode, action.target, (response) => {
+                    if (!response.ok) {
                         store.dispatch(updateVote(""))
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
+                    }
+                    else {
+                        store.dispatch(updateVote(action.target))
                     }
                 })
                 break;
@@ -134,7 +133,7 @@ const gameServerMiddleware = () => {
                     if (response.ok)
                         store.dispatch(toggleReady(response.isReady))
                     else {
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
@@ -145,7 +144,7 @@ const gameServerMiddleware = () => {
                 console.log('Action', action.lobbyCode, action.actionType, action.actionDetails);
                 socket.emit('action', action.lobbyCode, action.actionType, action.actionDetails, (response) => {
                     if (!response.ok) {
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)

@@ -60,13 +60,15 @@ async function joinLobby(lobbyCode, playerDetails) {
 }
 
 async function readyUp(lobbyCode, socket) {
-    // console.log('Debug: Socket', socket.id)
     const result = await gameStoreClient.toggleReady(lobbyCode, socket.id)
     return result
 }
 
 async function addVote(lobbyCode, target) {
-    await gameStoreClient.addVote(lobbyCode, target)
+    const response = await gameStoreClient.addVote(lobbyCode, target)
+    if(response.msg == "Progressed")
+        updateAll(lobbyCode)
+    return response
 }
 
 async function emitGameState(lobbyCode, socket) {
@@ -81,6 +83,7 @@ async function emitUserState(lobbyCode, socket) {
 }
 
 async function updateAll(lobbyCode) {
+    //TODO  Refactor to not retrieve lobby each time?
     const sockets = await gameStoreClient.getSockets(lobbyCode)
     console.log('Sockets', sockets)
     for (let i = 0; i < sockets.length; i++) {
@@ -130,7 +133,6 @@ io.on('connection', async (socket) => {
         const isReady = await readyUp(lobbyCode, socket)
         if (isReady.progressState) {
             updateAll(lobbyCode)
-            acknowledgement(isReady)
         }
         else {
             acknowledgement(isReady)
