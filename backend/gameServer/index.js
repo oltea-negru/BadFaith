@@ -237,9 +237,9 @@ io.on('connection', async (socket) => {
         const player = (await gameStoreClient.getNickname(lobbyCode, socket.id)).nickname
 
         if(lobbyCode)
-            socket.to(lobbyCode).emit('chat', { player, message })
+            io.to(lobbyCode).emit('chat', { player, message })
         else
-            socket.broadcast.emit('chat', {player: "GLOBAL"+player, message})
+            io.broadcast.emit('chat', {player: "GLOBAL"+player, message})
     })
 
     socket.on('disconnect', async () => {
