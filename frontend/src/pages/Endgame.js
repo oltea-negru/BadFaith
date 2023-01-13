@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import GoldFrame from '../assets/svg/GoldFrameComponent.svg'
 import Avatar0 from "../assets/avatars/placeholder.svg";
 import Avatar1 from "../assets/avatars/avatar-1.svg";
@@ -11,11 +11,13 @@ import Avatar6 from "../assets/avatars/avatar-6.svg";
 import Avatar7 from "../assets/avatars/avatar-7.svg";
 
 import Confetti from 'react-confetti'
+import { leaveRoom } from '../redux/middleware/gameServerMiddleware';
 
 function Endgame()
 {
-    const {lobby} = useSelector(state => state.game) 
+    const {lobby, playerID} = useSelector(state => state.game) 
     const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
+    const dispatch = useDispatch()
 
     useEffect(() => {
         Object.entries(lobby.players).map(playerEntry => console.log(playerEntry[0], playerEntry[1]))
@@ -55,7 +57,7 @@ function Endgame()
             <div className='text-center h-1/2 w-[90%] mx-auto p-10 flex flex-wrap justify-center'>
                 {Object.entries(lobby.players).map(playerEntry => playerInfo(playerEntry[0], playerEntry[1]))}
             </div>
-            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => { }}>Leave Game</button>
+            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => {dispatch(leaveRoom(playerID))}}>Leave Game</button>
         </div>
     )
 }

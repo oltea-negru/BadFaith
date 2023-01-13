@@ -2,11 +2,11 @@ import { useDispatch, useSelector } from "react-redux";
 import WaitingList from "../assets/svg/WaitingBoardComponent.svg";
 import EventHistory from "../components/EventHistory";
 import PlayerWaiting from "../components/player_waiting";
-import { readyUp } from "../redux/middleware/gameServerMiddleware";
+import { leaveRoom, readyUp } from "../redux/middleware/gameServerMiddleware";
 import Chat from "./ChatTest";
 
 export default function WaitingRoom() {
-    const { player, lobbyCode, lobby } = useSelector(state => state.game)
+    const { player, lobbyCode, lobby, playerID } = useSelector(state => state.game)
     const dispatch = useDispatch()
     const colors = ['#813b45', '#7f6a8b', '#6f98aa', '#FF8042', '#7c6434', '#e3bd73', '#5a2b32', '#8c9c83'];
 
@@ -76,7 +76,7 @@ export default function WaitingRoom() {
                 {readPlayers().map((player, index) => <PlayerWaiting text={player.nickname} color={colors[index]} index={index + 1} />)}
             </div>
 
-            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => { }}>Leave Game</button>
+            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => {dispatch(leaveRoom(playerID))}}>Leave Game</button>
 
         </div>
 

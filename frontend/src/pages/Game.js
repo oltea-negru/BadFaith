@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 export default function Game({ lobby_state }) {
 
-    const { lobby } = useSelector(state => state.game);
+    const { lobby, lobbyCode } = useSelector(state => state.game);
     const { email } = useSelector(state => state.user);
     // if (used_state == null) 
     // const used_state = dummylobbyState
@@ -25,6 +25,12 @@ export default function Game({ lobby_state }) {
         if(email=='')
             navigate('/')
     }, [email])
+
+    useEffect(() => {
+        if(lobbyCode=='')
+            navigate('/lobby')
+    }, [lobbyCode])
+    
 
     const setFunction = (used_state) => {
         switch (used_state.state) {

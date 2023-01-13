@@ -13,6 +13,7 @@ export const createLobby = hostDetails => ({ type: 'CREATE_LOBBY', hostDetails }
 export const joinLobby = (lobbyCode, playerDetails) => ({ type: 'JOIN_LOBBY', lobbyCode, playerDetails })
 export const votePlayer = (lobbyCode, target) => ({ type: 'VOTE', lobbyCode, target })
 export const readyUp = lobbyCode => ({ type: 'READY', lobbyCode })
+export const leaveRoom = playerID => ({ type: 'LEAVE', playerID })
 
 export const loginPlayer = (email, password) => ({ type: 'LOGIN', email, password})
 
@@ -151,6 +152,13 @@ const gameServerMiddleware = () => {
                     }
                 })
                 break;
+            case 'LEAVE':
+                console.log('Leaving room')
+                socket.emit('leave', action.playerID, (response) => {
+                    if (response.ok)
+                        store.dispatch(updateLobbyCode(''))
+                })
+                break
             case 'ACTION':
                 console.log('Action', action.lobbyCode, action.actionType, action.actionDetails);
                 socket.emit('action', action.lobbyCode, action.actionType, action.actionDetails, (response) => {

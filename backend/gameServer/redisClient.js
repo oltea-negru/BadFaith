@@ -375,6 +375,19 @@ class HotStorageClient {
         await this.client.del(socketID)
     }
 
+    async disconnectPlayerRoom(playerID) {
+        let playerHash = (await this.getSyncPlayerHash(playerID)).hash
+        const lobbyCode = playerHash.lobbyCode
+        playerHash.lobbyCode = ''
+        const lobby = await this._getLobby(lobbyCode)
+        delete lobby.players[playerID]
+        const socketID = lobby.playerToSockets[playerID]
+        delete lobby.playerToSockets[playerID]
+        delete lobby.socketToPlayers[socketID]
+        await this._setSyncHash(playerID, playerHash)
+        await this.updateLobby(lobbyCode, lobby)
+    }
+
 
     async syncPlayer(playerID, sentHash) {
         const hash = (await this.getSyncPlayerHash(playerID)).hash || {}

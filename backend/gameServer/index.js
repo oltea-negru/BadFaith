@@ -55,6 +55,10 @@ async function createLobby(lobbyCode, hostDetails) {
 }
 
 async function joinLobby(lobbyCode, playerDetails) {
+    await setPlayerSync(playerDetails.playerID, {
+        socketID: playerDetails.socketID,
+        lobbyCode
+    })
     return await gameStoreClient.joinLobby(lobbyCode, playerDetails)
 }
 
@@ -229,6 +233,13 @@ io.on('connection', async (socket) => {
         
         await updateAll(lobbyCode)
         acknowledgement(result)
+    })
+
+    socket.on('leave', async (playerID, acknowledgement) => {
+        lobbyCode = (await gameStoreClient.getSyncPlayerHash(playerID)).hash.lobbyCode
+        await gameStoreClient.disconnectPlayerRoom(playerID)
+        updateAll(lobbyCode)
+        acknowledgement({ok: true})
     })
 
     socket.on('vote', async (lobbyCode, target, acknowledgement) => {
