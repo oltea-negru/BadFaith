@@ -1,4 +1,4 @@
-import { useSelector} from 'react-redux'
+import { useDispatch, useSelector} from 'react-redux'
 import {useEffect} from 'react';
 import { login_remove } from "./api/examplePlayerMethods.js";
 import Settings from "./pages/Settings";
@@ -17,23 +17,23 @@ import
 	Route,
 	Routes,
 } from "react-router-dom";
+import { gsConnect } from './redux/middleware/gameServerMiddleware.js';
 
 
 function App()
 {
-	const { email, password } = useSelector(state => state.user)
+	const dispatch = useDispatch()
+	const { email, password, error } = useSelector(state => state.user)
+
 	useEffect (() => {
-		const beforeUnloadListener = async (event) => {
-			event.preventDefault();
-			await login_remove(email, password)
-			return event.returnValue = "Are you sure you want to exit?";
-		};
-		window.addEventListener('beforeunload', beforeUnloadListener);
-	
-		return () => {
-		  window.removeEventListener('beforeunload', beforeUnloadListener)
+		dispatch(gsConnect())
+	}, []);
+
+	useEffect(() => {
+		if(error){
+			alert(error)
 		}
-	  }, [email, password]);
+	}, [error])
 
 
 	return (

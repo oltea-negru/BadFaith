@@ -10,48 +10,56 @@ import Avatar4 from "../assets/avatars/avatar-4.svg";
 import Avatar5 from "../assets/avatars/avatar-5.svg";
 import Avatar6 from "../assets/avatars/avatar-6.svg";
 import Avatar7 from "../assets/avatars/avatar-7.svg";
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { votePlayer } from '../redux/middleware/gameServerMiddleware';
 
 
 export default function Voting()
 {
-  const { lobby } = useSelector(state => state.game)
+  const {lobbyCode, lobby, player} = useSelector(state => state.game)
   const [votedPlayer, setVotedPlayer] = React.useState(null);
-  const [haveIVoted, setHaveIVoted] = React.useState(false);
   const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
-  function readPlayers()
-  {
+  const dispatch = useDispatch()
+
+  function readPlayers() {
     const players = []
     for (const key in lobby.players)
     {
       players.push(lobby.players[key])
     }
+    console.log('Players', players)
     return players
   }
 
-  function playerFrame(name, avatar)
+  useEffect(() => {
+    setVotedPlayer(player.vote)
+  }, [player.vote])
+
+  function playerFrame(player)
   {
-    return votedPlayer === name ?
-      <div onClick={() => { if (haveIVoted === false) setVotedPlayer(null) }} className='w-[20%] flex flex-col justify-center mx-4 hover:cursor-pointer animate-pulse transform duration-300 ease-in-out'>
+    return votedPlayer === player.nickname ?
+      <div className='w-[20%] flex flex-col justify-center mx-4 hover:cursor-pointer animate-pulse transform duration-300 ease-in-out'>
         <div className='grid place-items-center'>
           <img src={Frame} alt='Frame' className='w-fit' />
-          <img src={avatars[avatar]} alt='Avatar' className='w-[50%] rounded-full absolute' />
+          <img src={avatars[player.avatar]} alt='Avatar' className='w-[50%] rounded-full absolute' />
         </div>
         <div className='relative grid place-items-center'>
           <img src={NameBoard} alt='NameBoard' />
-          <p className='absolute text-white text-lg'> {name}</p>
+          <p className='absolute text-white text-lg'> {player.nickname}</p>
         </div>
       </div >
       :
-      <div onClick={() => { if (haveIVoted === false) { setVotedPlayer(name); setHaveIVoted(true); } }} className='w-[15%] flex flex-col justify-center mx-4 hover:w-[17%] hover:cursor-pointer transform duration-300 ease-in-out'>
+      <div onClick={() => { if (!votedPlayer) { 
+        dispatch(votePlayer(lobbyCode, player)) 
+      } }} className='w-[15%] flex flex-col justify-center mx-4 hover:w-[17%] hover:cursor-pointer transform duration-300 ease-in-out'>
         <div className='grid place-items-center'>
           <img src={Frame} alt='Frame' className='w-fit' />
-          <img src={avatars[avatar]} alt='Avatar' className='w-[50%] rounded-full absolute' />
+          <img src={avatars[player.avatar]} alt='Avatar' className='w-[50%] rounded-full absolute' />
         </div>
         <div className='relative grid place-items-center'>
           <img src={NameBoard} alt='NameBoard' />
-          <p className='absolute text-white text-lg'> {name}</p>
+          <p className='absolute text-white text-lg'> {player.nickname}</p>
         </div>
       </div >
   }
@@ -59,7 +67,7 @@ export default function Voting()
   return (
     <div className='bg-voting bg-cover h-screen flex flex-col justify-between overflow-hidden '>
       <div className='h-3/5 text-center flex flex-row justify-evenly align-middle'>
-        {readPlayers().map((player) => playerFrame(player.nickname, player.avatar))}
+        {readPlayers().map((player) => playerFrame(player))}
       </div>
 
       <div className='bg-rope bg-cover bg-bottom w-screen h-3/5'></div>

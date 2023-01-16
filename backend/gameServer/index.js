@@ -1,6 +1,5 @@
 const { createClient } = require('redis')
 const { createAdapter } = require('@socket.io/redis-adapter');
-const { getUnpackedSettings } = require('http2');
 const HotStorageClient = require('./redisClient').HotStorageClient;
 
 const gameStoreClient = new HotStorageClient()
@@ -56,46 +55,59 @@ async function createLobby(lobbyCode, hostDetails) {
 }
 
 async function joinLobby(lobbyCode, playerDetails) {
+    await setPlayerSync(playerDetails.playerID, {
+        socketID: playerDetails.socketID,
+        lobbyCode
+    })
     return await gameStoreClient.joinLobby(lobbyCode, playerDetails)
 }
 
 async function readyUp(lobbyCode, socket) {
-    // console.log('Debug: Socket', socket.id)
     const result = await gameStoreClient.toggleReady(lobbyCode, socket.id)
     return result
 }
 
 async function addVote(lobbyCode, target) {
-    await gameStoreClient.addVote(lobbyCode, target)
+    const response = await gameStoreClient.addVote(lobbyCode, target)
+    if (response.msg == "Progressed")
+        updateAll(lobbyCode)
+    return response
 }
 
 async function emitGameState(lobbyCode, socket) {
-    io.to(socket).emit('state', await gameStoreClient.getUserState(lobbyCode, socket.id))
+    const payload = await gameStoreClient._getLobby(lobbyCode)
+    // console.log("Payload",payload)
+    io.to(socket).emit('state', payload)
 }
 
 
 async function emitUserState(lobbyCode, socket) {
-    console.log('Sending Socket', socket)
+    // console.log('Sending Socket', socket)
     const userState = await gameStoreClient.getPlayer(lobbyCode, socket)
     if (userState.ok) io.to(socket).emit('userState', userState.player)
 }
 
 async function updateAll(lobbyCode) {
+    //TODO  Refactor to not retrieve lobby each time?
     const sockets = await gameStoreClient.getSockets(lobbyCode)
-    console.log('Sockets', sockets)
     for (let i = 0; i < sockets.length; i++) {
         await emitGameState(lobbyCode, sockets[i])
     }
     for (let i = 0; i < sockets.length; i++) {
-
         await emitUserState(lobbyCode, sockets[i])
     }
 
 }
 
 async function updatePlayerGoal(lobbyCode, playerDetails) {
-    console.log('UpdatePlayerGoal',playerDetails)
+    // console.log('UpdatePlayerGoal', playerDetails)
     const result = await gameStoreClient.updatePlayer(lobbyCode, playerDetails)
+    return result
+}
+
+async function updateLobbyPlayerSocket(lobbyCode, playerID, socket) {
+    const result = await gameStoreClient.updateLobbyPlayerSocket(lobbyCode, playerID, socket)
+    return result
 }
 
 async function getPlayer(lobbyCode, socket) {
@@ -103,10 +115,60 @@ async function getPlayer(lobbyCode, socket) {
     return result
 }
 
+async function getPlayerSync(playerID) {
+    const result = await gameStoreClient.getSyncPlayerHash(playerID)
+    if (result.ok) {
+        return result.hash
+    } else {
+        return null
+    }
+}
+
+async function setPlayerSync(playerID, hash) {
+    const result = await gameStoreClient.syncPlayer(playerID, hash)
+    return result
+}
+
 io.on('connection', async (socket) => {
 
     console.log(`Socket ${socket.id} connected.`)
+    // Check if playerID hash exists
 
+
+    socket.on('login', async (playerID, acknowledgement) => {
+        let result;
+        let inLobby;
+        let playerHash = await getPlayerSync(playerID)
+        // console.log('Player Hash', playerHash)
+
+        if (playerHash == null) {
+            playerHash = {}
+        }
+        
+        if(playerHash.socketID != null && playerHash.socketID != "") {
+            io.to(playerHash.socketID).emit('kick')
+        }
+        else {
+            playerHash.socketID = socket.id
+            if(playerHash.lobbyCode != null && playerHash.lobbyCode != "") {
+                result = await updateLobbyPlayerSocket(playerHash.lobbyCode,playerID,socket.id)
+                if(result.ok) {
+                    inLobby = (await setPlayerSync(playerID,playerHash)).inGame
+                }
+                updateAll(playerHash.lobbyCode)
+            } else {
+                inLobby = (await setPlayerSync(playerID,playerHash)).inGame
+                // updateAll(lobbyCode)
+            }
+        }
+
+        acknowledgement({ ok: true, inLobby })
+    })
+    /* if exists {
+            if socketID exists -> fuck no go away
+            else -> assign new socketID, progress to game -> lobby.players[playerID] -> update socketID
+    } else -> create hash, add socketID
+    */
     socket.on('createLobby', async (hostDetails, acknowledgement) => {
         const lobbyCode = await generateLobbyCode()
         hostDetails.socketID = socket.id
@@ -120,10 +182,14 @@ io.on('connection', async (socket) => {
     socket.on('joinLobby', async (lobbyCode, playerDetails, acknowledgement) => {
         playerDetails.socketID = socket.id
         const result = await joinLobby(lobbyCode, playerDetails)
-        socket.join(lobbyCode)
-        updateAll(lobbyCode)
-        const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
-        acknowledgement(callbackObj)
+        if (result.ok) {
+            socket.join(lobbyCode)
+            updateAll(lobbyCode)
+            const callbackObj = result.ok ? { ...result, lobbyCode } : { ...result }
+            acknowledgement(callbackObj)
+        }
+        else acknowledgement(result)
+
     })
 
     socket.on('readyUp', async (lobbyCode, acknowledgement) => {
@@ -139,7 +205,7 @@ io.on('connection', async (socket) => {
 
     socket.on('action', async (lobbyCode, type, actionDetails, acknowledgement) => {
         let result;
-        console.log('Action',lobbyCode)
+        // console.log('Action', lobbyCode)
         switch (type) {
             case 'vote':
                 result = await addVote(lobbyCode, actionDetails)
@@ -155,16 +221,25 @@ io.on('connection', async (socket) => {
                     "ready": ,
                 }
                 */
-                console.log('UpdateDetails',actionDetails)
+                // console.log('UpdateDetails', actionDetails)
                 result = await updatePlayerGoal(lobbyCode, actionDetails)
+                result = await gameStoreClient.progressGameState(lobbyCode)
                 break;
             case 'progress':
                 result = await gameStoreClient.progressGameState(lobbyCode)
             default:
                 break;
         }
-        acknowledgement(result)
+        
         await updateAll(lobbyCode)
+        acknowledgement(result)
+    })
+
+    socket.on('leave', async (playerID, acknowledgement) => {
+        lobbyCode = (await gameStoreClient.getSyncPlayerHash(playerID)).hash.lobbyCode
+        await gameStoreClient.disconnectPlayerRoom(playerID)
+        updateAll(lobbyCode)
+        acknowledgement({ok: true})
     })
 
     socket.on('vote', async (lobbyCode, target, acknowledgement) => {
@@ -172,15 +247,19 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('chat', async message => {
-        console.log('Chat event')
-        const lobbyCode = Array.from(socket.rooms.keys())[1]
+        // console.log('Chat event')
+        const lobbyCode = (await gameStoreClient.getSyncPlayerHash((await gameStoreClient.getSyncSocketHash(socket.id)).playerID)).hash.lobbyCode
         const player = (await gameStoreClient.getNickname(lobbyCode, socket.id)).nickname
-        socket.to(lobbyCode).emit('chat', { player, message });
+
+        if(lobbyCode)
+            io.to(lobbyCode).emit('chat', { player, message })
+        else
+            io.broadcast.emit('chat', {player: "GLOBAL"+player, message})
     })
 
-    socket.on('disconnect', () => {
+    socket.on('disconnect', async () => {
         console.log(`Socket ${socket.id} disconnected.`);
-        //TODO
+        await gameStoreClient.disconnectPlayerSocket(socket.id)
     });
 });
 

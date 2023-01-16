@@ -1,9 +1,11 @@
 import { io } from "socket.io-client";
+import { player_Login } from "../../api/examplePlayerMethods";
 import { AddMessage } from "../slices/chatSlice";
 import { updatePlayerID, updatePlayer, updateLobby, toggleReady, updateVote, updateLobbyCode } from "../slices/gameSlice";
-import { setLoading, setError } from "../slices/userSlice";
+import { setLoading, setError, setCredentials, resetUser  } from "../slices/userSlice";
 
 export const gsConnect = () => ({ type: 'GS_CONNECT' });
+export const gsDisconnect = () => ({ type: 'GS_DISCONNECT' });
 export const gsConnecting = host => ({ type: 'GS_CONNECTING', host });
 export const sendChat = message => ({ type: 'CHAT', message })
 export const sendAction = (lobbyCode, actionType, actionDetails) => ({ type: 'ACTION', lobbyCode, actionType, actionDetails })
@@ -11,6 +13,10 @@ export const createLobby = hostDetails => ({ type: 'CREATE_LOBBY', hostDetails }
 export const joinLobby = (lobbyCode, playerDetails) => ({ type: 'JOIN_LOBBY', lobbyCode, playerDetails })
 export const votePlayer = (lobbyCode, target) => ({ type: 'VOTE', lobbyCode, target })
 export const readyUp = lobbyCode => ({ type: 'READY', lobbyCode })
+export const leaveRoom = playerID => ({ type: 'LEAVE', playerID })
+
+export const loginPlayer = (email, password) => ({ type: 'LOGIN', email, password})
+
 
 const serverHost = "localhost"
 const serverPort = "9000"
@@ -33,8 +39,6 @@ const gameServerMiddleware = () => {
         dispatch(updatePlayer(userState))
     }
 
-    
-
     return store => next => action => {
         switch (action.type) {
             case 'GS_CONNECT':
@@ -52,6 +56,10 @@ const gameServerMiddleware = () => {
                     console.log('Connected');
                 });
 
+                socket.on('kick', () => {
+                    store.dispatch(gsDisconnect())
+                })
+
                 socket.on('chat', message => {
                     onChat(store.dispatch, message)
                 })
@@ -65,7 +73,10 @@ const gameServerMiddleware = () => {
                 })
 
                 socket.on('disconnect', (reason) => {
-                    //TODO Game socket disconnect
+                    alert('Server crashed, refresh page')
+                    // socket = new io(`${serverHost}:${serverPort}`, {
+                    //     transports: ['websocket']
+                    // })
                 })
 
                 socket.open()
@@ -77,6 +88,7 @@ const gameServerMiddleware = () => {
                 }
                 socket = null;
                 console.log('Game Socket closed');
+                store.dispatch(resetUser())
                 break;
             case 'CREATE_LOBBY':
                 console.log('Create lobby', action.hostDetails);
@@ -88,7 +100,7 @@ const gameServerMiddleware = () => {
                         //TODO Setup loading and error modals
                     }
                     else {
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
@@ -105,7 +117,7 @@ const gameServerMiddleware = () => {
                         store.dispatch(updatePlayerID(action.playerDetails.playerID))
                     }
                     else {
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
@@ -114,17 +126,16 @@ const gameServerMiddleware = () => {
                 break;
             case 'VOTE':
                 console.log('Vote Placed', action.target);
-                socket.emit('vote', action.target, (response) => {
-                    if (response.ok) {
-                        store.dispatch(updateVote(action.target))
-                        //TODO Use updateVote to set vote to "Voting..." while request is happening. When vote is empty, enable vote.
-                    }
-                    else {
+                socket.emit('vote', action.lobbyCode, action.target, (response) => {
+                    if (!response.ok) {
                         store.dispatch(updateVote(""))
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
+                    }
+                    else {
+                        store.dispatch(updateVote(action.target))
                     }
                 })
                 break;
@@ -134,18 +145,25 @@ const gameServerMiddleware = () => {
                     if (response.ok)
                         store.dispatch(toggleReady(response.isReady))
                     else {
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
                     }
                 })
                 break;
+            case 'LEAVE':
+                console.log('Leaving room')
+                socket.emit('leave', action.playerID, (response) => {
+                    if (response.ok)
+                        store.dispatch(updateLobbyCode(''))
+                })
+                break
             case 'ACTION':
                 console.log('Action', action.lobbyCode, action.actionType, action.actionDetails);
                 socket.emit('action', action.lobbyCode, action.actionType, action.actionDetails, (response) => {
                     if (!response.ok) {
-                        store.dispatch(setError(response.message))
+                        store.dispatch(setError(response.msg))
                         setTimeout(() => {
                             store.dispatch(setError(null))
                         }, 3000)
@@ -156,6 +174,43 @@ const gameServerMiddleware = () => {
                 console.log('Chat Socket Emit', action.message);
                 socket.emit('chat', action.message)
                 break;
+            case 'LOGIN':
+                if (action.email === '' || action.password === '') return
+                console.log('provided action.email: ' + action.email);
+                console.log('provided action.password: ' + action.password);
+                player_Login(action.email, action.password).then(response => {
+                    console.log('response', response)
+                    if(response.result){
+                        try
+                        {
+                            socket.emit('login', action.email, (serverResponse) => {
+                                console.log('Server Response', serverResponse)
+                                if(serverResponse.ok)
+                                    store.dispatch(setCredentials({email: action.email, password: action.password}))
+                                else{
+                                    store.dispatch(setError(response.msg))
+                                    setTimeout(() => {
+                                        store.dispatch(setError(null))
+                                    }, 3000)
+                                }
+                            })
+                        }
+                        catch(error){
+                            store.dispatch(setError('Server connection error, try again in a bit'))
+                            setTimeout(() => {
+                                store.dispatch(setError(null))
+                            }, 3000)
+                        }
+
+                    }
+                    else{
+                        store.dispatch(setError(response.msg))
+                        setTimeout(() => {
+                            store.dispatch(setError(null))
+                        }, 3000)
+                    }
+                })
+                break
             default:
                 console.log('Next action:', action);
                 return next(action);

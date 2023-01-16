@@ -44,6 +44,11 @@ function Settings()
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if(email=='')
+            navigate('/')
+    }, [email])
+
     console.log(showOptions);
 
     const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7, Avatar8, Avatar9]
@@ -182,7 +187,7 @@ function Settings()
                         {showPassword ? (
                             <input
                                 className="settingsInput text-black"
-                                type="password"
+                                type="text"
                                 id="password"
                                 name="password"
                                 value={passwordInput}
@@ -195,7 +200,7 @@ function Settings()
                         ) : (
                             <input
                                 className="settingsInput text-black"
-                                type="text"
+                                type="password"
                                 id="password"
                                 name="password"
                                 value={passwordInput}
