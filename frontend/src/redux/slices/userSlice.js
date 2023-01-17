@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
@@ -57,10 +58,13 @@ export const userSlice = createSlice({
         },
         setError: (state, action) => {
             state.error = action.payload
+        },
+        resetUser: (state,) => {
+            state.email = ''
         }
     }
 })
 
-export const { setCredentials, incrementWin, incrementGame, setState, setSettings, setLoading, setError } = userSlice.actions
+export const { setCredentials, incrementWin, incrementGame, setState, setSettings, setLoading, setError, resetUser } = userSlice.actions
 
 export default userSlice.reducer

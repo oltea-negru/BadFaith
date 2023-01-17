@@ -1,130 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import WaitingList from "../assets/svg/EventBoardComponent.svg";
 import OpenDoor from "../assets/svg/EnterEventDoorComponent.svg";
 import Avatar from "../assets/avatars/avatar-1.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { readyUp, sendAction } from "../redux/middleware/gameServerMiddleware";
+import { sendAction } from "../redux/middleware/gameServerMiddleware";
 
-const parser = new DOMParser();
-const PrivateCall = [
-    "There is a private phone call for this player.",
-    <br />,
-    "They will be with back shortly.",
-];
-
-const Events = {
-    OldAllies: {
-        BlindName: "Old Allies",
-        EventTitle: "Old Allies",
-        BlindInfo:
-            "Two players are revelead to have appeared as the same team at the start",
-        Details:
-            "Two players are revelead to have appeared as the same team at the start",
-    },
-    OldEnemies: {
-        BlindName: "Old Enemies",
-        EventTitle: "Old Enemies",
-        BlindInfo:
-            "Two players are revelead to have appeared on opposite teams at the start",
-        Details:
-            "Two players are revelead to have appeared on opposite teams at the start",
-    },
-    DeepState: {
-        BlindName: "Private Call",
-        EventTitle: "Deep State",
-        BlindInfo: PrivateCall,
-        Details: "Deep State",
-    },
-    SplinterCell: {
-        BlindName: "Private Call",
-        EventTitle: "Splinter Cell",
-        BlindInfo: PrivateCall,
-        Details: "Splinter Cell",
-    },
-    BackroomDeal: {
-        BlindName: "Backroom Deal",
-        EventTitle: "Backroom Deal",
-        BlindInfo: [
-            "Their loyalty is being put to the test.",
-            <br />,
-            "Is it strong enough?",
-        ],
-        Details: [
-            "You have the option to switch teams, but if you do so you cannot vote.",
-            "Do you accept?",
-        ],
-    },
-    Martyr: {
-        BlindName: "Private Call",
-        EventTitle: "Martyr",
-        BlindInfo: PrivateCall,
-        Details:
-            "You have been chosen as a Martyr, get yourself voted and you will be rewarded.",
-    },
-    BackgroundCheck: {
-        BlindName: "Background Check",
-        EventTitle: "Background Check",
-        BlindInfo: "We have done a little digging. Here is what we know...",
-    },
-    PickPocket: {
-        BlindName: "Pick Pocket",
-        EventTitle: "Pick Pocket",
-        BlindInfo: "Select a player to swap roles with",
-        Details: "Select a player to swap roles with",
-    },
-    GagOrder: {
-        BlindName: "Gag Order",
-        EventTitle: "Gag Order",
-        BlindInfo:
-            "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
-        Details:
-            "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
-    },
-    BlackMark: {
-        BlindName: "Black Mark",
-        EventTitle: "Black Mark",
-        BlindInfo: "Choose a player to add an extra vote against",
-        Details: "Choose a player to add an extra vote against",
-    },
-    Coup: {
-        BlindName: "Private Call",
-        BlindInfo: PrivateCall,
-        EventTitle: "Coup d'etat",
-        Details: "Coup d'etat",
-    },
-    Blackmailed: {
-        BlindName: "Blackmailed",
-        EventTitle: "Blackmailed",
-        BlindInfo: [
-            "Another player has some dirt on you that cannot come to light.",
-            "You will only win if they do.",
-        ],
-        Details: [
-            "Another player has some dirt on you that cannot come to light.",
-            "You will only win if they do.",
-        ],
-    },
-    BodyGuard: {
-        BlindName: "Bodyguard",
-        EventTitle: "Bodyguard",
-        BlindInfo: [
-            "You have been employed to protect another.",
-            "They cannot be voted out.",
-        ],
-    },
-};
-
-function OldEnemiesEvent()
-{
+function OldEnemiesEvent() {
     const dispatch = useDispatch();
-    const { player, lobby, lobbyCode } = useSelector((state) => state.game);
+    const { lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if (string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     return (
         <div className="board">
             <h1 className="eventTitle">
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {lobby.currentEvent.details}
+                {details}
             </strong>
             <p className="bigInfo">
                 <strong className="text-red-500">
@@ -142,8 +41,7 @@ function OldEnemiesEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     endEvent(dispatch, lobbyCode);
                 }}
             >
@@ -153,15 +51,22 @@ function OldEnemiesEvent()
     );
 }
 
-function OldAlliesEvent()
-{
+function OldAlliesEvent() {
     const dispatch = useDispatch();
-    const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    // console.log(lobby.currentEvent.extra_players);
+    const { lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if (string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
     return (
         <div className="board">
             <h1 className="eventTitle">{lobby.currentEvent.event_name}</h1>
-            <strong className="smallInfo">{lobby.currentEvent.details}</strong>
+            <strong className="smallInfo">{details}</strong>
             <p className="bigInfo">
                 <strong className=" text-red-500 ">
                     {lobby.currentEvent.extra_players[0].nickname + " "}
@@ -176,8 +81,7 @@ function OldAlliesEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     endEvent(dispatch, lobbyCode);
                 }}
             >
@@ -187,26 +91,26 @@ function OldAlliesEvent()
     );
 }
 
-function DeepStateEvent()
-{
+function DeepStateEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function deepState()
-    {
-        let details = {};
-        Object.keys(player).forEach((key) =>
-        {
+    function deepState() {
+        let details = {...player};
+        console.log('Player', player);
+        Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
-        switch (details.allegiance)
-        {
+        switch (details.allegiance) {
             case "Ally":
                 details.allegiance = "Enemy";
                 break;
             case "Enemy":
                 details.allegiance = "Ally";
                 break;
+            default:
+                break;
         }
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
 
@@ -226,10 +130,9 @@ function DeepStateEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     deepState();
-                    endEvent(dispatch, lobbyCode);
+
                 }}
             >
                 Done
@@ -238,19 +141,18 @@ function DeepStateEvent()
     );
 }
 
-function SplinterCellEvent()
-{
+function SplinterCellEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function splinter()
-    {
-        let details = {};
-        Object.keys(player).forEach((key) =>
-        {
+    function splinter() {
+        let details = {...player};
+        console.log('Player', player);
+        Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
         details.allegiance = "Splinter";
         console.log("SendingUpdateDetails", details);
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -266,10 +168,9 @@ function SplinterCellEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     splinter();
-                    endEvent();
+
                 }}
             >
                 Done
@@ -278,33 +179,42 @@ function SplinterCellEvent()
     );
 }
 
-function BackroomDealEvent()
-{
+function BackroomDealEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function Betray()
-    {
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if (string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
+    function Betray() {
         // Swap
-        let details = {};
-        Object.keys(player).forEach((key) =>
-        {
+        let details = {...player};
+        console.log('Player', player);
+        Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
-        switch (details.allegiance)
-        {
+        switch (details.allegiance) {
             case "Ally":
                 details.allegiance = "Enemy";
                 break;
             case "Enemy":
                 details.allegiance = "Ally";
                 break;
+            default:
+                break;
         }
         details.role = "Betray";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
+
     }
 
-    function Remain()
-    {
+    function Remain() {
         endEvent(dispatch, lobbyCode);
     }
 
@@ -314,7 +224,7 @@ function BackroomDealEvent()
                 {lobby.currentEvent.event_name}
             </h1>
 
-            <p className="bigInfo">{lobby.currentEvent.details}</p>
+            <p className="bigInfo">{details}</p>
 
             <p className="bigInfo">
                 Your Team: <strong className="text-red-500">
@@ -323,8 +233,7 @@ function BackroomDealEvent()
             <div className="flex">
                 <button
                     className="done hover:bg-green-300 hover:text-black mr-3"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         Remain();
                     }}
                 >
@@ -332,8 +241,7 @@ function BackroomDealEvent()
                 </button>
                 <button
                     className="done hover:bg-red-300 hover:text-black"
-                    onClick={() =>
-                    {
+                    onClick={() => {
                         Betray();
                     }}
                 >
@@ -344,19 +252,27 @@ function BackroomDealEvent()
     );
 }
 
-function MartyrEvent()
-{
+function MartyrEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function martyr()
-    {
-        let details = {};
-        Object.keys(player).forEach((key) =>
-        {
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if (string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
+    function martyr() {
+        let details = {...player};
+        console.log('Player', player);
+        Object.keys(player).forEach((key) => {
             details[key] = player[key];
         });
         details.allegiance = "Splinter";
         details.role = "Martyr";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -365,7 +281,7 @@ function MartyrEvent()
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {lobby.currentEvent.details}
+                {details}
             </strong>
             <div className="bigInfo">
                 If you win,{" "}
@@ -379,10 +295,9 @@ function MartyrEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     martyr();
-                    endEvent(dispatch, lobbyCode);
+
                 }}
             >
                 Done
@@ -392,10 +307,9 @@ function MartyrEvent()
     );
 }
 
-function BackgroundCheckEvent()
-{
+function BackgroundCheckEvent() {
     const dispatch = useDispatch();
-    const { player, lobby, lobbyCode } = useSelector((state) => state.game);
+    const { lobby, lobbyCode } = useSelector((state) => state.game);
     return (
         <div className="board">
             <h1 className="eventTitle">
@@ -421,8 +335,7 @@ function BackgroundCheckEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     endEvent(dispatch, lobbyCode);
                 }}
             >
@@ -433,114 +346,32 @@ function BackgroundCheckEvent()
     );
 }
 
-function PickPocketEvent()
-{
+
+function GagOrderEvent() {
     const dispatch = useDispatch();
-    const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function PickPocket(target)
-    {
-        console.log("Target", target);
-        var details1 = player;
-        var details2 = {};
-        Object.key(lobby.players).forEach((player) =>
-        {
-            if (player.nickname == target.nickname)
-            {
-                details2 = player;
-            }
-        });
-        details1.role = lobby.players[target].role;
-        details1.allegiance = lobby.players[target].allegiance;
-        details1.target = lobby.players[target].target;
-        details2.role = player.role;
-        details2.allegiance = player.allegiance;
-        details2.target = player.target;
-        eventAction(dispatch, lobbyCode, "update", details1);
-        eventAction(dispatch, lobbyCode, "update", details2);
-    }
-    function showSelection()
-    {
+    const { lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if (string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
     }
-    return (
-        <div className="overflow-hidden  board">
-            <h1 className="eventTitle">
-                {lobby.currentEvent.event_name}
-            </h1>
-
-            <strong className="bigInfo">{lobby.currentEvent.details + ":"}</strong>
-
-            <button
-                className="done hue-rotate-180"
-                id="chatButton"
-                onClick={() =>
-                {
-                    // UpdateChat(chatMessage)
-                    // setMessage('');
-                    showSelection();
-                }}
-            >
-                Choose Target
-            </button>
-
-            <div
-                id="eventSlide"
-                className="absolute bg-[#601822] h-full rounded-md  w-[90%] duration-1000 ease-out transition-all translate-y-full "
-            >
-                <div
-                    id="SelectBox"
-                    className="h-full w-full p-10 flex flex-col justify-center"
-                >
-                    {lobby.currentEvent.extra_players.map((player) => (
-                        <button
-                            className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-xl hover:text-2xl hover:bg-rose-600 hover:text-white"
-                            onClick={() =>
-                            {
-                                showSelection();
-                                PickPocket(player);
-                                endEvent();
-                            }}
-                        >
-                            {player.nickname}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <button
-                className="done"
-                onClick={() =>
-                {
-                    endEvent();
-                }}
-            >
-                Done
-            </button>
-        </div>
-    );
-}
-
-function GagOrderEvent()
-{
-    const dispatch = useDispatch();
-    const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function showSelection()
-    {
-        const chat = document.querySelector("#eventSlide");
-        chat.classList.toggle("translate-y-full");
-        console.log("Toggled");
-    }
-    function gagPlayer(target)
-    {
+    function gagPlayer(target) {
         console.log("Target", target);
         let details;
-        Object.keys(target).forEach((key) =>
-        {
+        Object.keys(target).forEach((key) => {
             details[key] = target[key];
         });
         details.role = "NoVote";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -549,14 +380,13 @@ function GagOrderEvent()
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {lobby.currentEvent.details}
+                {details}
             </strong>
 
             <button
                 className="done hue-rotate-180"
                 id="chatButton"
-                onClick={() =>
-                {
+                onClick={() => {
                     // UpdateChat(chatMessage)
                     // setMessage('');
                     showSelection();
@@ -575,12 +405,11 @@ function GagOrderEvent()
                     {lobby.currentEvent.extra_players.map((player) => (
                         <button
                             className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-xl hover:text-2xl hover:bg-rose-600 hover:text-white"
-                            onClick={() =>
-                            {
+                            onClick={() => {
                                 showSelection();
                                 gagPlayer(player);
                                 //EmitGag();
-                                endEvent();
+
                             }}
                         >
                             {player.nickname}
@@ -588,32 +417,29 @@ function GagOrderEvent()
                     ))}
                 </div>
             </div>
-
-            <button
-                className="done"
-                onClick={() =>
-                {
-                    endEvent();
-                }}
-            >
-                Done
-            </button>
         </div>
     );
 }
 
-function BlackMarkEvent()
-{
+function BlackMarkEvent() {
     const dispatch = useDispatch();
-    const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function markPlayer(target)
-    {
+    const { lobby, lobbyCode } = useSelector((state) => state.game);
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if (string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
+        }
+    })
+    function markPlayer(target) {
         console.log("Target", target);
         var details = target;
+        console.log(details)
         eventAction(dispatch, lobbyCode, "vote", details);
     }
-    function showSelection()
-    {
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
@@ -624,14 +450,13 @@ function BlackMarkEvent()
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {lobby.currentEvent.details}
+                {details}
             </strong>
 
             <button
                 className="done hue-rotate-180"
                 id="chatButton"
-                onClick={() =>
-                {
+                onClick={() => {
                     // UpdateChat(chatMessage)
                     // setMessage('');
                     showSelection();
@@ -650,12 +475,9 @@ function BlackMarkEvent()
                     {lobby.currentEvent.extra_players.map((player) => (
                         <button
                             className="font-another p-1 bg-white justify-center m-auto w-48 rounded-2xl text-xl hover:text-2xl hover:bg-rose-600 hover:text-white"
-                            onClick={() =>
-                            {
+                            onClick={() => {
                                 showSelection();
                                 markPlayer(player);
-                                //EmitGag();
-                                endEvent();
                             }}
                         >
                             {player.nickname}
@@ -664,46 +486,25 @@ function BlackMarkEvent()
                 </div>
             </div>
 
-            <button
-                className="done"
-                onClick={() =>
-                {
-                    endEvent();
-                }}
-            >
-                Done
-            </button>
+
         </div>
     );
 }
 
-function CoupEvent()
-{
+function CoupEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function coup()
-    {
-        let details = {};
-        Object.keys(player).forEach((key) =>
-        {
-            details[key] = player[key];
-        });
-        function getUserName()
-        {
-            const players = lobby.players;
-            Object.keys(players).forEach((player) =>
-            {
-                if (
-                    lobby.currentEvent.extra_players[0].nickname ==
-                    players[player].nickname
-                )
-                {
-                    return player;
-                }
-            });
+    function coup() {
+        let details = {...player};
+        let target = lobby.currentEvent.extra_players[0].socketID
+        function getUserName(target) {
+            for (const [key, value] of Object.entries(lobby.players)) {
+                if (value.socketID === target) return key
+            }
         }
-        details.target = getUserName();
+        details.target = getUserName(target);
         details.role = "Coup";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
 
@@ -729,10 +530,8 @@ function CoupEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     coup();
-                    endEvent(dispatch, lobbyCode);
                 }}
             >
                 Done
@@ -742,33 +541,29 @@ function CoupEvent()
     );
 }
 
-function BlackmailedEvent()
-{
+function BlackmailedEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function blackmail()
-    {
-        let details = {};
-        Object.keys(player).forEach((key) =>
-        {
-            details[key] = player[key];
-        });
-        function getUserName()
-        {
-            const players = lobby.players;
-            Object.keys(players).forEach((player) =>
-            {
-                if (
-                    lobby.currentEvent.extra_players[0].nickname ==
-                    players[player].nickname
-                )
-                {
-                    return player;
-                }
-            });
+    const input = lobby.currentEvent.details
+    let details = []
+    input.forEach(string => {
+        if (string === '<br />') {
+            details.push(<br />)
+        } else {
+            details.push(string)
         }
-        details.target = getUserName();
+    })
+    function blackmail() {
+        let details = {...player};
+        let target = lobby.currentEvent.extra_players[0].socketID
+        function getUserName(target) {
+            for (const [key, value] of Object.entries(lobby.players)) {
+                if (value.socketID === target) return key
+            }
+        }
+        details.target = getUserName(target);
         details.role = "Blackmail";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -777,7 +572,7 @@ function BlackmailedEvent()
                 {lobby.currentEvent.event_name}
             </h1>
             <strong className="smallInfo">
-                {lobby.currentEvent.details}
+                {details}
             </strong>
 
 
@@ -790,10 +585,8 @@ function BlackmailedEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     blackmail();
-                    endEvent(dispatch, lobbyCode);
                 }}
             >
                 Done
@@ -803,33 +596,20 @@ function BlackmailedEvent()
     );
 }
 
-function BodyGuardEvent()
-{
+function BodyGuardEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
-    function bodyguard()
-    {
-        let details = {};
-        Object.keys(player).forEach((key) =>
-        {
-            details[key] = player[key];
-        });
-        function getUserName()
-        {
-            const players = lobby.players;
-            Object.keys(players).forEach((player) =>
-            {
-                if (
-                    lobby.currentEvent.extra_players[0].nickname ==
-                    players[player].nickname
-                )
-                {
-                    return player;
-                }
-            });
+    function bodyguard() {
+        let details = {...player};
+        let target = lobby.currentEvent.extra_players[0].socketID
+        function getUserName(target) {
+            for (const [key, value] of Object.entries(lobby.players)) {
+                if (value.socketID === target) return key
+            }
         }
-        details.target = getUserName();
+        details.target = getUserName(target);
         details.role = "Guard";
+        console.log(details)
         eventAction(dispatch, lobbyCode, "update", details);
     }
     return (
@@ -855,10 +635,8 @@ function BodyGuardEvent()
 
             <button
                 className="done"
-                onClick={() =>
-                {
+                onClick={() => {
                     bodyguard();
-                    endEvent(dispatch, lobbyCode);
                 }}
             >
                 Done
@@ -867,11 +645,9 @@ function BodyGuardEvent()
     );
 }
 
-export default function EventMap()
-{
+export default function EventMap() {
     const { lobby } = useSelector((state) => state.game);
-    switch (lobby.currentEvent.event_function)
-    {
+    switch (lobby.currentEvent.event_function) {
         case "OldEnemies":
             return <OldEnemiesEvent />;
         case "OldAllies":
@@ -886,9 +662,6 @@ export default function EventMap()
             return <MartyrEvent />;
         case "BackgroundCheck":
             return <BackgroundCheckEvent />;
-        case "PickPocket":
-            // here
-            return <PickPocketEvent />;
         case "GagOrder":
             return <GagOrderEvent />;
         case "BlackMark":
@@ -904,116 +677,27 @@ export default function EventMap()
     }
 }
 
-function eventAction(dispatch, lobbyCode, type, playerChanges)
-{
+function eventAction(dispatch, lobbyCode, type, playerChanges) {
     dispatch(sendAction(lobbyCode, type, playerChanges));
 }
 
-function endEvent(dispatch, lobbyCode)
-{
-    dispatch(sendAction(lobbyCode, "progress"));
+function endEvent(dispatch, lobbyCode) {
+    dispatch(sendAction(lobbyCode, 'progress'))
 }
 
-function excludePlayer(player)
-{
-    return function (p)
-    {
-        return p.nickname != player.nickname;
-    };
-}
-
-function OriginalAllies(player)
-{
-    return function (p)
-    {
-        return p.original === player.original;
-    };
-}
-
-function OriginalEnemies(player)
-{
-    return function (p)
-    {
-        return p.original != player.original;
-    };
-}
-
-export function EventGenMap(eventName, player, players)
-{
-    const event = Events[eventName]; //fetch event strings
-
-    const valid = players.filter(excludePlayer(player));
-    let extra_players;
-    switch (eventName)
-    {
-        case "OldAllies": //Started game on the same team
-            extra_players = getSameStartTeam(valid);
-            break;
-        case "OldEnemies": //Started the game as enemies
-            extra_players = getOppStartTeams(valid);
-            break;
-        case "DeepState": // Swap team- Hidden event
-            break;
-        case "SplinterCell": // Turns player to standalone - Hidden event
-            break;
-        case "BackroomDeal": // Can choose to betray team, cannot vote if so
-            break;
-        case "Martyr": //Will die for the cause - Hidden event
-            break;
-        case "BackgroundCheck": // Current appeared allegience
-            extra_players = SinglePlayer(valid);
-            break;
-        case "PickPocket": // Swap allegiences with player of choice, if possible
-            extra_players = valid;
-            break;
-        case "GagOrder": //Prevent a player of choice from voting
-            extra_players = valid;
-            break;
-        case "BlackMark": //Give an extra vote to player of choice
-            extra_players = valid;
-            break;
-        case "Coup": //Given player must be elminated to win - Hidden event
-            extra_players = SinglePlayer(valid);
-            break;
-        case "Blackmailed": //Given player must win in order to win
-            extra_players = SinglePlayer(valid);
-            break;
-        case "BodyGuard": //Given player cannot be voted out in order to win
-            extra_players = SinglePlayer(valid);
-            break;
-        default:
-            break;
-    }
-
-    //arrange data into expected format for events
-    let eventObject = {
-        player: player,
-        extra_players: extra_players,
-        blind_name: event.BlindName,
-        event_name: event.EventTitle,
-        blind_info: event.BlindInfo,
-        details: event.Details,
-        event_function: eventName,
-    };
-    return eventObject;
-}
-
-function GenerateEvents({ lobby_state })
-{
-    let events = [];
-    lobby_state.players.forEach((player) =>
-    {
-        const eventName = RandomUniqueEvent(events);
-        const event = EventGenMap(eventName, player, lobby_state.players);
-        events.push(event);
-    });
-}
-
-export function OutsideEvent()
-{
+export function OutsideEvent() {
     const { lobby } = useSelector((state) => state.game);
-    function showSelection()
-    {
+    const input = lobby.currentEvent.blind_info
+    let blindInfo = []
+    input.forEach(string => {
+        if (string === '<br />') {
+            blindInfo.push(<br />)
+        } else {
+            blindInfo.push(string)
+        }
+    })
+    console.log('BlindInfo', blindInfo)
+    function showSelection() {
         const chat = document.querySelector("#eventSlide");
         chat.classList.toggle("translate-y-full");
         console.log("Toggled");
@@ -1037,7 +721,7 @@ export function OutsideEvent()
                     onClick={() => showSelection()}
                 />
             </div>
-            <div className="absolute bottom-0 h-[816px] w-[650px] right-[100px] overflow-y-hidden ">
+            <div className="absolute bottom-0 h-[822px] w-[650px] right-[40%] overflow-y-hidden ">
                 <div
                     id="eventSlide"
                     className="flex-col absolute flex h-auto rounded w-[650px] duration-1000 ease-out bottom-0 transition-all translate-y-full "
@@ -1045,7 +729,7 @@ export function OutsideEvent()
                     <img src={WaitingList} alt="sdas" className="h-full" />
                     <div className="w-[430px] m-auto max-w-[430px]">
                         <strong className="absolute top-[20%] text-center text-3xl h-[300px] font-another max-w-[430px] text-white">
-                            {lobby.currentEvent.blind_info}
+                            {blindInfo}
                         </strong>
                     </div>
                 </div>
@@ -1054,42 +738,3 @@ export function OutsideEvent()
     );
 }
 
-function getSameStartTeam(players)
-{
-    console.log(players);
-    const p1 = players[Math.floor(Math.random() * players.length)]; //select valid players
-    console.log(p1);
-    const valid = players.filter(excludePlayer(p1));
-    console.log(valid);
-    const validSecond = valid.filter(OriginalAllies(p1));
-    console.log(validSecond);
-    const p2 = validSecond[Math.floor(Math.random() * validSecond.length)];
-    return [p1, p2];
-}
-
-function getOppStartTeams(players)
-{
-    const p1 = players[Math.floor(Math.random() * players.length)]; //select valid players
-    const validSecond = players.filter((p) =>
-    {
-        return p.original != p1.original;
-    });
-    const p2 = validSecond[Math.floor(Math.random() * validSecond.length)];
-    return [p1, p2];
-}
-
-function SinglePlayer(players)
-{
-    return [players[Math.floor(Math.random() * players.length)]]; //select valid players
-}
-
-function RandomUniqueEvent(events)
-{
-    let keys = Object.keys(Events);
-    let event = Events[keys[Math.floor(Math.random() * keys.length)]];
-    while (events.includes(event))
-    {
-        event = Events[keys[Math.floor(Math.random() * keys.length)]];
-    }
-    return event;
-}

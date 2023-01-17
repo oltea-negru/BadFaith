@@ -6,7 +6,7 @@ bluebird.promisifyAll(redis);
 
 const redisHost = process.env.REDIS_HOST || 'localhost'
 const redisPort = process.env.REDIS_PORT || '6379'
-DEFAULT_EXPIRATIION = 3600
+DEFAULT_EXPIRATION = 3600
 
 const PrivateCall = ["There is a private phone call for this player.", '<br />', "They will be with back shortly."]
 
@@ -14,26 +14,26 @@ const Events = {
     OldAllies: {
         BlindName: "Old Allies",
         EventTitle: "Old Allies",
-        BlindInfo: "Two players are revelead to have appeared as the same team at the start",
-        Details: "Two players are revelead to have appeared as the same team at the start"
+        BlindInfo: ["Two players are revelead to have appeared as the same team at the start"],
+        Details: ["Two players are revelead to have appeared as the same team at the start"]
     },
     OldEnemies: {
         BlindName: "Old Enemies",
         EventTitle: "Old Enemies",
-        BlindInfo: "Two players are revelead to have appeared on opposite teams at the start",
-        Details: "Two players are revelead to have appeared on opposite teams at the start",
+        BlindInfo: ["Two players are revelead to have appeared on opposite teams at the start"],
+        Details: ["Two players are revelead to have appeared on opposite teams at the start"],
     },
     DeepState: {
         BlindName: "Private Call",
         EventTitle: "Deep State",
         BlindInfo: PrivateCall,
-        Details: "Deep State",
+        Details: ["Deep State"],
     },
     SplinterCell: {
         BlindName: "Private Call",
         EventTitle: "Splinter Cell",
         BlindInfo: PrivateCall,
-        Details: "Splinter Cell"
+        Details: ["Splinter Cell"]
     },
     BackroomDeal: {
         BlindName: "Backroom Deal",
@@ -45,36 +45,31 @@ const Events = {
         BlindName: "Private Call",
         EventTitle: "Martyr",
         BlindInfo: PrivateCall,
-        Details: "You have been chosen as a Martyr, get yourself voted and you will be rewarded."
+        Details: ["You have been chosen as a Martyr, get yourself voted and you will be rewarded."]
     },
     BackgroundCheck: {
         BlindName: "Background Check",
         EventTitle: "Background Check",
-        BlindInfo: "We have done a little digging. Here is what we know..."
-    },
-    PickPocket: {
-        BlindName: "Pick Pocket",
-        EventTitle: "Pick Pocket",
-        BlindInfo: "Select a player to swap roles with",
-        Details: "Select a player to swap roles with"
+        BlindInfo: ["We have done a little digging. Here is what we know..."],
+        Details: ["We have done a little digging. Here is what we know..."]
     },
     GagOrder: {
         BlindName: "Gag Order",
         EventTitle: "Gag Order",
-        BlindInfo: "Someone is being a little too loud. Use this opportunity to prevent them from voting.",
-        Details: "Someone is being a little too loud. Use this opportunity to prevent them from voting."
+        BlindInfo: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."],
+        Details: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."]
     },
     BlackMark: {
         BlindName: "Black Mark",
         EventTitle: "Black Mark",
-        BlindInfo: "Choose a player to add an extra vote against",
-        Details: "Choose a player to add an extra vote against"
+        BlindInfo: ["Choose a player to add an extra vote against"],
+        Details: ["Choose a player to add an extra vote against"]
     },
     Coup: {
         BlindName: "Private Call",
         BlindInfo: PrivateCall,
-        EventTitle: "Coup d'etat",
-        Details: "Coup d'etat"
+        EventTitle: ["Coup d'etat"],
+        Details: ["Coup d'etat"]
 
     },
     Blackmailed: {
@@ -86,7 +81,8 @@ const Events = {
     BodyGuard: {
         BlindName: "Bodyguard",
         EventTitle: "Bodyguard",
-        BlindInfo: ["You have been employed to protect another.", '<br />', "They cannot be voted out."]
+        BlindInfo: ["You have been employed to protect another.", '<br />', "They cannot be voted out."],
+        Details: ["You have been employed to protect another.", '<br />', "They cannot be voted out."]
     }
 }
 
@@ -105,7 +101,7 @@ class HotStorageClient {
         lobbyDoc.state = 1
         const lobbyExists = await this._getLobby(lobbyCode)
         if (lobbyExists == null) {
-            this.client.SETEX(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
+            await this.client.SETEX(lobbyCode, DEFAULT_EXPIRATION, JSON.stringify(lobbyDoc))
             return {
                 ok: true,
                 msg: "Lobby created: " + lobbyCode
@@ -119,7 +115,7 @@ class HotStorageClient {
 
     //Attempts to add player to lobby
     async joinLobby(lobbyCode, hostDetails) {
-        console.log('PlayerJoining', hostDetails)
+        // console.log('PlayerJoining', hostDetails)
         const lobbyDoc = await this._getLobby(lobbyCode)
         if (lobbyDoc == null) {
             return {
@@ -127,18 +123,26 @@ class HotStorageClient {
                 msg: "Lobby does not exist"
             }
         }
+        if (Object.keys(lobbyDoc.players).length == 9) return { ok: false, msg: "Game is full" }
+        if (lobbyDoc.state != 1) return { ok: false, msg: "Game has already started" }
         await this.setActivePlayer(hostDetails.playerID, hostDetails.socketID, lobbyCode)
         if (!lobbyDoc.players[hostDetails.playerID]) { //if player is not in the game already
             lobbyDoc.players[hostDetails.playerID] = schema.player
-            lobbyDoc.players[hostDetails.playerID].nickname = hostDetails.nickname
+            if (hostDetails.nickname == "") {
+                const playerIDSplit = hostDetails.playerID.split("@")
+                lobbyDoc.players[hostDetails.playerID].nickname = playerIDSplit[0]
+            } else {
+                lobbyDoc.players[hostDetails.playerID].nickname = hostDetails.nickname
+            }
+
             lobbyDoc.voteLimit++;
         }
 
         lobbyDoc.players[hostDetails.playerID].socketID = hostDetails.socketID
         lobbyDoc.socketToPlayers[hostDetails.socketID] = hostDetails.playerID
         lobbyDoc.playerToSockets[hostDetails.playerID] = hostDetails.socketID
-        console.log("Lobby " + lobbyCode + ": adding " + hostDetails.playerID + " with " + hostDetails.socketID)
-        return this.updateLobby(lobbyCode, lobbyDoc)
+        // console.log("Lobby " + lobbyCode + ": adding " + hostDetails.playerID + " with " + hostDetails.socketID)
+        return (await this.updateLobby(lobbyCode, lobbyDoc))
     }
 
     //Check that the lobby exists 
@@ -162,17 +166,22 @@ class HotStorageClient {
         lobbyDoc.players[playerID].ready = !lobbyDoc.players[playerID].ready
         const readyResult = await this.updateLobby(lobbyCode, lobbyDoc)
         const progressResult = await this.progressGameState(lobbyCode)
-        if (progressResult?.ok)
+        if (progressResult?.ok) {
             return {
                 progressState: true
             }
-        if (readyResult.ok)
+        }
+
+        if (readyResult.ok) {
             return {
                 ok: true,
                 isReady: lobbyDoc.players[playerID].ready
             }
-        else
+        }
+
+        else {
             return readyResult
+        }
     }
 
     async getReadyCounter(lobbyCode) {
@@ -200,6 +209,13 @@ class HotStorageClient {
         }
     }
 
+    async resetReady(lobby) {
+        lobby.readyUp = 0
+        for (const player of Object.values(lobby.players)) {
+            player.ready = false
+        }
+    }
+
     // TODO Remove inbetweeen state -> add seamless event to event progression
     async progressGameState(lobbyCode) {
         const lobby = await this._getLobby(lobbyCode)
@@ -209,14 +225,21 @@ class HotStorageClient {
         };
         switch (lobby.state) {
             case 1: // Joining to Starting
-                // check that number of 'readys' is equal to number of 
+                // check that number of 'readys' is equal to number of
+                // console.log("No. players", Object.keys(lobby.players).length)
+                if (Object.keys(lobby.players).length < 5) {
+                    return {
+                        ok: false,
+                        msg: "Not enough players"
+                    }
+                }
                 if (lobby.readyUp != Object.keys(lobby.players).length) {
                     return {
                         ok: false,
                         msg: "Not enough players ready"
                     }
                 }
-                console.log("Lobby " + lobbyCode + ": progressing to start game phase")
+                // console.log("Lobby " + lobbyCode + ": progressing to start game phase")
                 lobby.state = 2
                 lobby.players = SetAllegiances(lobby)
                 lobby.events = GenerateEvents(lobby)
@@ -238,7 +261,9 @@ class HotStorageClient {
                         }
                     }
                 }
-                console.log("Lobby " + lobbyCode + ": progressing to in between events")
+                // console.log("Lobby " + lobbyCode + ": progressing to in between events")
+                await this.resetReady(lobby)
+                // console.log('Check func worked', lobby)
                 lobby.state = 3
                 await this.updateLobby(lobbyCode, lobby)
                 return {
@@ -246,15 +271,16 @@ class HotStorageClient {
                     msg: "Lobby events and players initialised, progressing to between events"
                 }
             case 3: // Enemies see each other
+                await this.resetReady(lobby)
                 lobby.state = 4
-                this.updateLobby(lobbyCode, lobby)
+                await this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Enemey meetup "
                 }
             case 4: // Between events
                 if (lobby.events.length == 0) { // no more events, progress to discussion
-                    console.log("Lobby " + lobbyCode + ": progressing to discussion phase")
+                    // console.log("Lobby " + lobbyCode + ": progressing to discussion phase")
                     lobby.state = 6
                     await this.updateLobby(lobbyCode, lobby)
                     return {
@@ -262,9 +288,10 @@ class HotStorageClient {
                         msg: "Progressed to discussion"
                     }
                 } else { // moving to next event
-                    console.log("Lobby " + lobbyCode + ": progressing to next event")
-                    if (lobby.currentEvent != null) lobby.eventHistory.push(lobby.currentEvent);
+                    // console.log("Lobby " + lobbyCode + ": progressing to next event")
+                    if (Object.keys(lobby.currentEvent).length != 0) lobby.eventHistory.push(lobby.currentEvent);
                     lobby.currentEvent = lobby.events.shift()
+                    await this.resetReady(lobby)
                     lobby.state = 5
                     await this.updateLobby(lobbyCode, lobby)
                     return {
@@ -274,39 +301,45 @@ class HotStorageClient {
                 }
             case 5: // In event to inbetween
                 //conditions needed
-                console.log("Lobby " + lobbyCode + ": progressing to in between events")
+                // console.log("Lobby " + lobbyCode + ": progressing to in between events")
+                await this.resetReady(lobby)
                 lobby.state = 4
-                this.updateLobby(lobbyCode, lobby)
+                await this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Current event completed, progressing to between events"
                 }
             case 6: // Discussion to voting
-                console.log("Lobby " + lobbyCode + ": progressing to voting phase")
+                // console.log("Lobby " + lobbyCode + ": progressing to voting phase")
+                await this.resetReady(lobby)
                 lobby.state = 7
-                this.updateLobby(lobbyCode, lobby)
+                await this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Discussion phase complete, progressing to voting phase"
                 }
             case 7: // Voting to results
-                if (lobby.voteLimit != Object.keys(lobby.votes).length) {
+                const voteCount = Object.entries(lobby.votes).reduce((voteCount, player) => voteCount + player[1], 0)
+                // console.log('Vote count', voteCount)
+                if (lobby.voteLimit != voteCount) {
                     return {
                         ok: false,
                         msg: "Not enough players voted"
                     }
                 }
-                console.log("Lobby " + lobbyCode + ": progressing to results phase")
+                // console.log("Lobby " + lobbyCode + ": progressing to results phase")
+                await this.resetReady(lobby)
                 lobby.state = 8
-                this.updateLobby(lobbyCode, lobby)
+                await this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Voting phase complete, progressing to results phase"
                 }
             case 8: // Results to Ending Game
-                console.log("Lobby " + lobbyCode + ": progressing to end phase")
+                // console.log("Lobby " + lobbyCode + ": progressing to end phase")
+                await this.resetReady(lobby)
                 lobby.state = 9
-                this.updateLobby(lobbyCode, lobby)
+                await this.updateLobby(lobbyCode, lobby)
                 return {
                     ok: true,
                     msg: "Results phase complete, progressing to end phase"
@@ -316,48 +349,58 @@ class HotStorageClient {
         }
     }
 
-    async getSyncHash(playerID) {
-        if(playerID == null ) return null
+    async getSyncPlayerHash(playerID) {
+        if (playerID == null) return { ok: false, hash: null }
         const sync = await this.client.get(playerID)
-        return JSON.parse(sync)
+        return { ok: true, hash: JSON.parse(sync) }
     }
 
-    async _setSyncHash(playerID,hash) {
-        await this.client.SETEX(playerID, DEFAULT_EXPIRATIION, hash)
+    async getSyncSocketHash(socketID) {
+        if (socketID == null) return { ok: false, playerID: null }
+        const playerID = await this.client.get(socketID)
+        return { ok: true, playerID }
     }
 
-    async syncPlayer(playerID,lobbyCode,socketID) {
-        const hash = await this.getSyncHash(playerID)
-        hash.socketID = socketID
-        hash.lobbyCode = lobbyCode
-        await this._setSyncHash(playerID,hash)
+    async _setSyncHash(playerID, hash) {
+        await this.client.SETEX(playerID, DEFAULT_EXPIRATION, JSON.stringify(hash))
+        await this.client.SETEX(hash.socketID, DEFAULT_EXPIRATION, playerID)
+    }
+
+    async disconnectPlayerSocket(socketID) {
+        const playerID = (await this.getSyncSocketHash(socketID)).playerID
+        if (!playerID) return
+        let playerHash = (await this.getSyncPlayerHash(playerID)).hash
+        playerHash.socketID = ''
+        await this._setSyncHash(playerID, playerHash)
+        await this.client.del(socketID)
+    }
+
+    async disconnectPlayerRoom(playerID) {
+        let playerHash = (await this.getSyncPlayerHash(playerID)).hash
+        const lobbyCode = playerHash.lobbyCode
+        playerHash.lobbyCode = ''
+        const lobby = await this._getLobby(lobbyCode)
+        delete lobby.players[playerID]
+        const socketID = lobby.playerToSockets[playerID]
+        delete lobby.playerToSockets[playerID]
+        delete lobby.socketToPlayers[socketID]
+        await this._setSyncHash(playerID, playerHash)
+        await this.updateLobby(lobbyCode, lobby)
+    }
+
+
+    async syncPlayer(playerID, sentHash) {
+        const hash = (await this.getSyncPlayerHash(playerID)).hash || {}
+        hash.socketID = sentHash.socketID
+        hash.lobbyCode = sentHash.BackgroundChecklobbyCode
+        await this._setSyncHash(playerID, hash)
+        return { ok: true, inGame: (hash.lobbyCode == null || hash.lobbyCode == "") }
     }
 
     async getUserState(lobbyCode, socket) {
         const lobby = await this._getLobby(lobbyCode)
         const playerID = lobby.socketToPlayers[socket]
-        // console.log(lobby.currentEvent.player)
-        // const eventPlayerID = lobby.socketToPlayers[lobby.currentEvent.player.socketID]
-        delete lobby.events
-        delete lobby.votes
-        delete lobby.voteLimit
-        // if (eventPlayerID == playerID) {
-            return lobby
-        // } else {
-        //     delete lobby.currentEvent.details
-        //     delete lobby.currentEvent.extra_players
-        //     delete lobby.currentEvent.event_function
-        //     delete lobby.currentEvent.event_name
-
-        //     Object.keys(lobby.players).forEach(player => { //Players should not know the details more than what is needed outside the event
-        //         delete lobby.players[player].socketID
-        //         delete lobby.players[player].allegiance
-        //         delete lobby.players[player].role
-        //         delete lobby.players[player].target
-        //         delete lobby.players[player].ready
-        //     })
-        //     return lobby
-        // }
+        return lobby
     }
 
     async getSockets(lobbyCode) {
@@ -367,10 +410,8 @@ class HotStorageClient {
 
     async getPlayer(lobbyCode, socket) {
         const lobby = await this._getLobby(lobbyCode)
-        console.log('Socket',socket)
-        // console.log('Lobby',lobby)
         const playerID = lobby.socketToPlayers[socket]
-        console.log('Player',playerID)
+        // console.log("Player",lobby.players[playerID])
         return {
             ok: true,
             player: lobby.players[playerID]
@@ -378,15 +419,37 @@ class HotStorageClient {
     }
 
     async updatePlayer(lobbyCode, playerDetails) {
-        const lobby = await this._getLobby(lobbyCode)
-        console.log("SocketMap",lobby.socketToPlayers)
-        console.log('UpdatePlayer',playerDetails)
+        const lobby = {...await this._getLobby(lobbyCode)}
+        // console.log("SocketMap", lobby.socketToPlayers)
+        // console.log('UpdatePlayer', playerDetails)
         const socket = playerDetails.socketID
+        // console.log("UpdateFromSocket",socket)
         const playerID = lobby.socketToPlayers[socket]
+        // console.log("UpdateToPlayer", playerID)
         lobby.players[playerID] = playerDetails
-        await this.updateLobby(lobbyCode, lobby)
+        // console.log("PlayerChanged", lobby.players[playerID])
+        return await this.updateLobby(lobbyCode, lobby)
     }
 
+    async updateLobbyPlayerSocket(lobbyCode, playerID, socket) {
+        if (lobbyCode == null || playerID == null || socket == null) {
+            return {
+                ok: false,
+                msg: "Missing paramerters",
+                lobbyCode: lobbyCode != null,
+                playerID: playerID != null,
+                socket: socket != null
+            }
+        }
+        const lobby = await this._getLobby(lobbyCode)
+        lobby.players[playerID].socketID = socket
+        const oldSocket = lobby.playerToSockets[playerID]
+        delete lobby.socketToPlayers[oldSocket]
+        lobby.socketToPlayers[socket] = playerID
+        lobby.playerToSockets[playerID] = socket
+        await this.updateLobby(lobbyCode, lobby)
+        return { ok: true, msg: "Updated " + playerID + "'s socket to " + socket }
+    }
     async getUsername(lobbyCode, socket) {
         const lobby = await this._getLobby(lobbyCode)
         var playerID = lobby.socketToPlayers[socket]
@@ -399,7 +462,7 @@ class HotStorageClient {
     async getNickname(lobbyCode, socket) {
         var lobbyDoc = await this._getLobby(lobbyCode)
         var playerID = lobbyDoc.socketToPlayers[socket]
-        const nickname = lobbyDoc.players[playerID]
+        const nickname = lobbyDoc.players[playerID].nickname
         return {
             ok: true,
             nickname: nickname
@@ -408,9 +471,11 @@ class HotStorageClient {
 
     //fetch individual lobby json
     async _getLobby(lobbyCode) {
-        if(lobbyCode == null ) return null
-        const lobby = await this.client.get(lobbyCode)
-        return JSON.parse(lobby)
+        if (lobbyCode == null) return null
+        const lobby = JSON.parse(await this.client.get(lobbyCode))
+        // if(lobby != null && lobby.state > 3) console.log("Lobby",lobby.players)
+        
+        return lobby
     }
 
     async setLobbyEvents(lobbyCode, eventArray) {
@@ -437,11 +502,13 @@ class HotStorageClient {
     }
 
     async setActivePlayer(playerID, socket, lobbyCode) {
-        const players = await this.getActivePlayers()
-        players[playerID] = {
+        const players = await this.getActivePlayers() || {}
+        const hash = {
             lobbyCode: lobbyCode,
-            socket: socket
+            socketID: socket
         }
+        players[playerID] = hash
+        await this._setSyncHash(playerID, hash)
         await this.client.set("players", JSON.stringify(players))
     }
 
@@ -458,10 +525,10 @@ class HotStorageClient {
     }
 
     async addVote(lobbyCode, target) {
-        console.log('VoteLobbyCode',lobbyCode)
-        console.log('VoteTarget',target)
-        const username = this.getUsername(lobbyCode,target.socketID)
-        const lobby = await this.client.get(lobbyCode)
+        // console.log('VoteLobbyCode', lobbyCode)
+        // console.log('VoteTarget', target)
+        const username = (await this.getUsername(lobbyCode, target.socketID)).username
+        const lobby = await this._getLobby(lobbyCode)
         if (!lobby.players[username]) {
             return {
                 ok: false,
@@ -474,11 +541,11 @@ class HotStorageClient {
             lobby.votes[username] = 1
         }
         await this.updateLobby(lobbyCode, lobby)
+        const isProgressed = (await this.progressGameState(lobbyCode))?.ok
         return {
             ok: true,
-            msg: "Vote added"
+            msg: isProgressed ? "Progressed" : "Vote added"
         }
-
     }
 
     //fetch lobbies redis object UNUSED
@@ -496,7 +563,9 @@ class HotStorageClient {
     async updateLobby(lobbyCode, lobbyDoc) {
         const lobby = await this._getLobby(lobbyCode)
         if (lobby == null) return { ok: false, msg: "Lobby does not exist" };
-        this.client.SETEX(lobbyCode, DEFAULT_EXPIRATIION, JSON.stringify(lobbyDoc))
+        // console.log("UpdatedLobby",lobbyDoc)
+        await this.client.SETEX(lobbyCode, DEFAULT_EXPIRATION, JSON.stringify(lobbyDoc))
+        // console.log("RecalledLobby",await this._getLobby(lobbyCode))
         return {
             ok: true,
             msg: "Lobby updated"
@@ -569,6 +638,8 @@ function GenerateEvents(lobby_state) {
     let events = [];
     getPlayerArray(lobby_state.players).map(player => {
         const eventName = RandomUniqueEvent(events);
+        console.log("Events",events)
+        console.log("NewEvent",eventName)
         const event = EventGenMap(eventName, player, lobby_state.players);
         events.push(event);
     });
@@ -605,9 +676,6 @@ function EventGenMap(eventName, player, players) {
             break;
         case "BackgroundCheck": // Current appeared allegience
             extra_players = SinglePlayer(valid);
-            break;
-        case "PickPocket": // Swap allegiences with player of choice, if possible
-            extra_players = valid;
             break;
         case "GagOrder": //Prevent a player of choice from voting
             extra_players = valid;
@@ -662,15 +730,15 @@ function SinglePlayer(players) {
     return [players[Math.floor((Math.random() * players.length))]]; //select valid players
 }
 
-
 function RandomUniqueEvent(events) {
     let keys = Object.keys(Events);
     let key = keys[Math.floor((Math.random() * keys.length))];
     while (events.includes(Events[key])) {
-        key =keys[Math.floor((Math.random() * keys.length))];
+        key = keys[Math.floor((Math.random() * keys.length))];
     }
     return key;
 }
+
 function getPlayerArray(players) {
     let playerArray = [];
     Object.keys(players).forEach(player => {
@@ -679,30 +747,28 @@ function getPlayerArray(players) {
     return playerArray;
 }
 
-function OriginalAllies(player)
-{
-    return function (p)
-    {
+function OriginalAllies(player) {
+    return function (p) {
         return p.original === player.original;
     };
 }
 
 function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
-  
+    let currentIndex = array.length, randomIndex;
+
     // While there remain elements to shuffle.
     while (currentIndex != 0) {
-  
-      // Pick a remaining element.
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
+
+        // Pick a remaining element.
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
     }
-  
+
     return array;
-  }
+}
 
 module.exports.HotStorageClient = HotStorageClient;

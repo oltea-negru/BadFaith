@@ -28,6 +28,11 @@ function Lobby()
         dispatch(gsConnect())
     }, [])
 
+    useEffect(() => {
+        if(email=='')
+            navigate('/')
+    }, [email])
+
     useEffect(() =>
     {
         if (lobbyCode != "")

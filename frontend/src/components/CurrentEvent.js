@@ -1,116 +1,33 @@
 import EventMap, { OutsideEvent } from "./eventMap";
 import Evidence from "../assets/svg/EvidenceBoard.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { EventGenMap } from "../components/eventMap";
-import { useEffect } from "react";
-import { updateLobby } from "../redux/slices/gameSlice";
+import EventHistory from "./EventHistory";
+import { leaveRoom } from "../redux/middleware/gameServerMiddleware";
 
-export function CurrentEvent()
-{
-    const { lobby, player } = useSelector((state) => state.game);
-    const dispatch = useDispatch();
-
-    useEffect(() =>
-    {
-        const dummylobbyState = {
-            inEvent: inEvent,
-            id: "",
-            players: {
-                DummyID: {
-                    nickname: "LoremIpsum",
-                    icon: "Figure this out",
-                    original: "Enemy",
-                    allegiance: "Enemy",
-                },
-                Lorem: {
-                    nickname: "Sean Connery",
-                    icon: "Figure this out",
-                    original: "Enemy",
-                    allegiance: "Ally",
-                },
-                Ipsum: {
-                    nickname: "Travolta",
-                    icon: "Figure this out",
-                    original: "Ally",
-                    allegiance: "Enemy",
-                    target: "",
-                },
-                Delta: {
-                    nickname: "Geronimo",
-                    original: "Ally",
-                    allegiance: "Ally",
-                },
-                Beta: {
-                    nickname: "Jester",
-                    original: "Enemy",
-                    allegiance: "Enemy",
-                },
-            },
-            remainingPlayers: ["Lorem", "Snorlax"],
-            invited: [],
-            host: "",
-            code: "",
-            events: [],
-            state: 5,
-            eventHistory: [],
-            currentEvent: {},
-        };
-        function getPlayerArray()
-        {
-            let playerArray = [];
-            Object.keys(dummylobbyState.players).forEach((player) =>
-            {
-                playerArray.push(dummylobbyState.players[player]);
-            });
-            console.log("Players", playerArray);
-            return playerArray;
-        }
-        const currEvent = EventGenMap(
-            "BlackMark",
-            {
-                nickname: "LoremIpsum",
-                icon: "Figure this out",
-                original: "Enemy",
-                allegiance: "Enemy",
-            },
-            getPlayerArray()
-        );
-        dummylobbyState.currentEvent = currEvent;
-        // console.log('Curr', currEvent)
-        console.log(dummylobbyState.currentEvent.blind_info);
-        dispatch(updateLobby(dummylobbyState));
-    }, []);
+export function CurrentEvent() {
+    const { playerID } = useSelector((state) => state.game);
+    const dispatch = useDispatch()
 
     let event = EventMap();
     console.log("Event", event);
     return (
         <>
-            <div className="absolute top-2 left-2 w-fit bg-[#856831] py-2 px-6 rounded-md">
-                <strong className="font-another text-white font-thin text-xl">
-                    {player.allegiance} : {player.nickname}
-                </strong>
-            </div>
             <div className="right-[20%] top-0 h-1/2 absolute min-h-[400px] max-h-[650px] max-w-[600px] min-w-[560px] ">
                 <img src={Evidence} alt="Evidence Board" className="h-full" />
                 {event}
             </div>
-            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => { }}>Leave Game</button>
+            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => {dispatch(leaveRoom(playerID))}}>Leave Game</button>
         </>
     );
 }
 
-export function EventWaiting()
-{
-    const { lobby, player } = useSelector((state) => state.game);
+export function EventWaiting() {
+    const { playerID } = useSelector((state) => state.game);
+    const dispatch = useDispatch()
     return <>
-        <div className="absolute top-2 left-2 w-fit bg-[#856831] py-2 px-6 rounded-md">
-            <strong className="font-another text-white font-thin text-xl">
-                {player.allegiance} : {player.nickname}
-            </strong>
-        </div>
-        <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => { }}>Leave Game</button>
+        <EventHistory />
+        <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => {dispatch(leaveRoom(playerID))}}>Leave Game</button>
         <OutsideEvent />;
     </>
 }
 
-const inEvent = true;
