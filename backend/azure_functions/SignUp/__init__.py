@@ -66,7 +66,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
 
     if "email" in playerToAdd:
-        user["id"] = playerToAdd["email"]
+        user["id"] = playerToAdd["email"].lower()
         
         if "password" in playerToAdd:
             pwd = playerToAdd["password"]

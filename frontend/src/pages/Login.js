@@ -18,10 +18,48 @@ export default function PlayerLogin()
     const [passwordInput, setPassword] = useState('');
     const { email, password, error } = useSelector(state => state.user)
 
+<<<<<<< HEAD
+    async function handleForgot() {
+        console.log('provided email: ' + emailInput);
+        const message = await (player_Login(emailInput, "forgotPassword"))
+        console.log(message.passwordMsg)
+        alert('Please check your email')
+    }
+
+    async function handleLogin()
+    {
+        if (emailInput === '' || passwordInput === '') return
+        console.log('provided email: ' + emailInput);
+        console.log('provided password: ' + passwordInput);
+        const message = await (player_Login(emailInput, passwordInput))
+        console.log(message.msg)
+        if (message.msg === 'OK')
+        {
+            const status = await (login_status(emailInput, passwordInput))
+            console.log(status.msg)
+            if (status.msg === 'OK')
+            {
+                console.log("User LogedIn, Dispatching credentials")
+                dispatch(setCredentials({ email: emailInput, password: passwordInput, avatar: message.avatarInt}))
+                alert("Logged In successfully!");
+                navigateToLobby();
+            }
+            else
+            {
+                alert("Login failed!" + status.msg);
+            }
+        } else
+        {
+            alert(message.msg);
+        }
+        console.log("current User: " + email + " " + password)
+    }
+=======
     useEffect(() => {
         if(email!=='' && password!=='')
             navigate("/lobby")
     }, [email, password])
+>>>>>>> 67c7b1d37379f46aaf632e6d4ce5da2e011b8cf9
 
     function navigateToLobby()
     {
@@ -39,6 +77,7 @@ export default function PlayerLogin()
                 <form className='flex flex-col justify-evenly h-1/3' >
                     <input type="text" id="email" name="email" placeholder="Email" className='input' value={emailInput} onChange={event => setEmail(event.target.value)} />
                     <input type="password" id="password" name="password" placeholder="Password (8-30 chars)" className='input' value={passwordInput} onChange={event => setPassword(event.target.value)} />
+                    <button className='forgotPassword' onClick={() => handleForgot({ email: emailInput, password: "forgotPassword" })}>Forgot Password</button>
                 </form>
                 <div className='absolute right-0 bottom-0 overflow-hidden'>
                     <img src={EnterButton} alt="Register Button" className="hover:cursor-pointer h-[400px] translate-x-28 translate-y-28 hover:h-[430px] hover:rotate-45  custom-transition " onClick={() => dispatch(loginPlayer( emailInput, passwordInput ))} />
