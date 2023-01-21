@@ -53,12 +53,12 @@ const Events = {
         BlindInfo: ["We have done a little digging. Here is what we know..."],
         Details: ["We have done a little digging. Here is what we know..."]
     },
-    GagOrder: {
-        BlindName: "Gag Order",
-        EventTitle: "Gag Order",
-        BlindInfo: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."],
-        Details: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."]
-    },
+    // GagOrder: {
+    //     BlindName: "Gag Order",
+    //     EventTitle: "Gag Order",
+    //     BlindInfo: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."],
+    //     Details: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."]
+    // },
     BlackMark: {
         BlindName: "Black Mark",
         EventTitle: "Black Mark",
