@@ -427,6 +427,9 @@ class HotStorageClient {
         const playerID = lobby.socketToPlayers[socket]
         // console.log("UpdateToPlayer", playerID)
         lobby.players[playerID] = playerDetails
+        if(playerDetails.role === "NoVote") {
+            lobby.voteLimit--;
+        }
         // console.log("PlayerChanged", lobby.players[playerID])
         return await this.updateLobby(lobbyCode, lobby)
     }

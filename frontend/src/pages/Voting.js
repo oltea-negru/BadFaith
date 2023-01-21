@@ -14,9 +14,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { votePlayer } from '../redux/middleware/gameServerMiddleware';
 
 
-export default function Voting()
-{
-  const {lobbyCode, lobby, player} = useSelector(state => state.game)
+export default function Voting() {
+  const { lobbyCode, lobby, player } = useSelector(state => state.game)
   const [votedPlayer, setVotedPlayer] = React.useState(null);
   const avatars = [Avatar0, Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7]
 
@@ -24,8 +23,7 @@ export default function Voting()
 
   function readPlayers() {
     const players = []
-    for (const key in lobby.players)
-    {
+    for (const key in lobby.players) {
       players.push(lobby.players[key])
     }
     console.log('Players', players)
@@ -36,8 +34,7 @@ export default function Voting()
     setVotedPlayer(player.vote)
   }, [player.vote])
 
-  function playerFrame(player)
-  {
+  function playerFrame(player) {
     return votedPlayer === player.nickname ?
       <div className='w-[20%] flex flex-col justify-center mx-4 hover:cursor-pointer animate-pulse transform duration-300 ease-in-out'>
         <div className='grid place-items-center'>
@@ -50,9 +47,11 @@ export default function Voting()
         </div>
       </div >
       :
-      <div onClick={() => { if (!votedPlayer) { 
-        dispatch(votePlayer(lobbyCode, player)) 
-      } }} className='w-[15%] flex flex-col justify-center mx-4 hover:w-[17%] hover:cursor-pointer transform duration-300 ease-in-out'>
+      <div onClick={() => {
+        if (!votedPlayer) {
+          dispatch(votePlayer(lobbyCode, player))
+        }
+      }} className='w-[15%] flex flex-col justify-center mx-4 hover:w-[17%] hover:cursor-pointer transform duration-300 ease-in-out'>
         <div className='grid place-items-center'>
           <img src={Frame} alt='Frame' className='w-fit' />
           <img src={avatars[player.avatar]} alt='Avatar' className='w-[50%] rounded-full absolute' />
@@ -64,12 +63,18 @@ export default function Voting()
       </div >
   }
 
+
   return (
     <div className='bg-voting bg-cover h-screen flex flex-col justify-between overflow-hidden '>
-      <div className='h-3/5 text-center flex flex-row justify-evenly align-middle'>
-        {readPlayers().map((player) => playerFrame(player))}
-      </div>
-
+      {player.role === "NoVote" ?
+        <div className='h-3/5 text-center flex flex-row justify-evenly align-middle'>
+          You have been gagged! you will not be voting.
+        </div>
+        :
+        <div className='h-3/5 text-center flex flex-row justify-evenly align-middle'>
+          {readPlayers().map((player) => playerFrame(player))}
+        </div>
+      }
       <div className='bg-rope bg-cover bg-bottom w-screen h-3/5'></div>
     </div>
   )
