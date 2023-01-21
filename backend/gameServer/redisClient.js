@@ -661,10 +661,10 @@ function EventGenMap(eventName, player, players) {
     let extra_players;
     switch (eventName) {
         case "OldAllies": //Started game on the same team
-            extra_players = getSameStartTeam(valid);
+            extra_players = getSameStartTeam(playerArray);
             break;
         case "OldEnemies": //Started the game as enemies
-            extra_players = getOppStartTeams(valid);
+            extra_players = getOppStartTeams(playerArray);
             break;
         case "DeepState": // Swap team- Hidden event
             break;
