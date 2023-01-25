@@ -94,8 +94,14 @@ function OldAlliesEvent() {
 function DeepStateEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
+    var newTeam
+    if (lobby.currentEvent.player.allegiance === "Enemy") {
+        newTeam = "Ally"
+    } else {
+        newTeam = "Enemy"
+    }
     function deepState() {
-        let details = {...player};
+        let details = { ...player };
         console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
@@ -123,7 +129,7 @@ function DeepStateEvent() {
             <p className="bigInfo">
                 Your Team:
                 <strong className="bigInfo text-red-500">
-                    {lobby.currentEvent.player.allegiance}
+                    {newTeam}
                 </strong>
                 .
             </p>
@@ -132,7 +138,6 @@ function DeepStateEvent() {
                 className="done"
                 onClick={() => {
                     deepState();
-
                 }}
             >
                 Done
@@ -145,7 +150,7 @@ function SplinterCellEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function splinter() {
-        let details = {...player};
+        let details = { ...player };
         console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
@@ -193,7 +198,7 @@ function BackroomDealEvent() {
     })
     function Betray() {
         // Swap
-        let details = {...player};
+        let details = { ...player };
         console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
@@ -265,7 +270,7 @@ function MartyrEvent() {
         }
     })
     function martyr() {
-        let details = {...player};
+        let details = { ...player };
         console.log('Player', player);
         Object.keys(player).forEach((key) => {
             details[key] = player[key];
@@ -495,7 +500,7 @@ function CoupEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function coup() {
-        let details = {...player};
+        let details = { ...player };
         let target = lobby.currentEvent.extra_players[0].socketID
         function getUserName(target) {
             for (const [key, value] of Object.entries(lobby.players)) {
@@ -554,7 +559,7 @@ function BlackmailedEvent() {
         }
     })
     function blackmail() {
-        let details = {...player};
+        let details = { ...player };
         let target = lobby.currentEvent.extra_players[0].socketID
         function getUserName(target) {
             for (const [key, value] of Object.entries(lobby.players)) {
@@ -600,7 +605,7 @@ function BodyGuardEvent() {
     const dispatch = useDispatch();
     const { player, lobby, lobbyCode } = useSelector((state) => state.game);
     function bodyguard() {
-        let details = {...player};
+        let details = { ...player };
         let target = lobby.currentEvent.extra_players[0].socketID
         function getUserName(target) {
             for (const [key, value] of Object.entries(lobby.players)) {

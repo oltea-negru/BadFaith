@@ -16,7 +16,7 @@ export function CurrentEvent() {
                 <img src={Evidence} alt="Evidence Board" className="h-full" />
                 {event}
             </div>
-            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => {dispatch(leaveRoom(playerID))}}>Leave Game</button>
+            <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => { dispatch(leaveRoom(playerID)) }}>Leave Game</button>
         </>
     );
 }
@@ -25,8 +25,9 @@ export function EventWaiting() {
     const { playerID } = useSelector((state) => state.game);
     const dispatch = useDispatch()
     return <>
+        <Chat />
         <EventHistory />
-        <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => {dispatch(leaveRoom(playerID))}}>Leave Game</button>
+        <button className="absolute bottom-2 left-[48%] w-fit py-2 px-4 z-50 text-white font-another bg-[#96363094] rounded-md hover:cursor-pointer focus:outline-none active:px-16 duration-500 ease-in-out" onClick={() => { dispatch(leaveRoom(playerID)) }}>Leave Game</button>
         <OutsideEvent />;
     </>
 }

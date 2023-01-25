@@ -53,12 +53,12 @@ const Events = {
         BlindInfo: ["We have done a little digging. Here is what we know..."],
         Details: ["We have done a little digging. Here is what we know..."]
     },
-    GagOrder: {
-        BlindName: "Gag Order",
-        EventTitle: "Gag Order",
-        BlindInfo: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."],
-        Details: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."]
-    },
+    // GagOrder: {
+    //     BlindName: "Gag Order",
+    //     EventTitle: "Gag Order",
+    //     BlindInfo: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."],
+    //     Details: ["Someone is being a little too loud. Use this opportunity to prevent them from voting."]
+    // },
     BlackMark: {
         BlindName: "Black Mark",
         EventTitle: "Black Mark",
@@ -419,7 +419,7 @@ class HotStorageClient {
     }
 
     async updatePlayer(lobbyCode, playerDetails) {
-        const lobby = {...await this._getLobby(lobbyCode)}
+        const lobby = { ...await this._getLobby(lobbyCode) }
         // console.log("SocketMap", lobby.socketToPlayers)
         // console.log('UpdatePlayer', playerDetails)
         const socket = playerDetails.socketID
@@ -427,6 +427,9 @@ class HotStorageClient {
         const playerID = lobby.socketToPlayers[socket]
         // console.log("UpdateToPlayer", playerID)
         lobby.players[playerID] = playerDetails
+        if (playerDetails.role === "NoVote") {
+            lobby.voteLimit--;
+        }
         // console.log("PlayerChanged", lobby.players[playerID])
         return await this.updateLobby(lobbyCode, lobby)
     }
@@ -474,7 +477,7 @@ class HotStorageClient {
         if (lobbyCode == null) return null
         const lobby = JSON.parse(await this.client.get(lobbyCode))
         // if(lobby != null && lobby.state > 3) console.log("Lobby",lobby.players)
-        
+
         return lobby
     }
 
@@ -635,11 +638,16 @@ function SetAllegiances(lobby_state) {
 }
 
 function GenerateEvents(lobby_state) {
+    let EventSet = new Set()
+    while (EventSet.size != getPlayerArray(lobby_state.players).length) {
+        EventSet.add(RandomEvent())
+    }
+    const eventNames = Array.from(EventSet)
     let events = [];
     getPlayerArray(lobby_state.players).map(player => {
-        const eventName = RandomUniqueEvent(events);
-        console.log("Events",events)
-        console.log("NewEvent",eventName)
+        const eventName = eventNames.shift()
+        console.log("Events", events)
+        console.log("NewEvent", eventName)
         const event = EventGenMap(eventName, player, lobby_state.players);
         events.push(event);
     });
@@ -661,10 +669,10 @@ function EventGenMap(eventName, player, players) {
     let extra_players;
     switch (eventName) {
         case "OldAllies": //Started game on the same team
-            extra_players = getSameStartTeam(valid);
+            extra_players = getSameStartTeam(playerArray);
             break;
         case "OldEnemies": //Started the game as enemies
-            extra_players = getOppStartTeams(valid);
+            extra_players = getOppStartTeams(playerArray);
             break;
         case "DeepState": // Swap team- Hidden event
             break;
@@ -730,12 +738,9 @@ function SinglePlayer(players) {
     return [players[Math.floor((Math.random() * players.length))]]; //select valid players
 }
 
-function RandomUniqueEvent(events) {
+function RandomEvent() {
     let keys = Object.keys(Events);
     let key = keys[Math.floor((Math.random() * keys.length))];
-    while (events.includes(Events[key])) {
-        key = keys[Math.floor((Math.random() * keys.length))];
-    }
     return key;
 }
 
