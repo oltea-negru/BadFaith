@@ -543,6 +543,9 @@ class HotStorageClient {
         } else {
             lobby.votes[username] = 1
         }
+        if (lobby.state != 7) {
+            lobby.voteLimit++
+        }
         await this.updateLobby(lobbyCode, lobby)
         const isProgressed = (await this.progressGameState(lobbyCode))?.ok
         return {
