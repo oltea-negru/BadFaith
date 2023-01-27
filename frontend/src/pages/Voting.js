@@ -12,6 +12,7 @@ import Avatar6 from "../assets/avatars/avatar-6.svg";
 import Avatar7 from "../assets/avatars/avatar-7.svg";
 import { useDispatch, useSelector } from 'react-redux'
 import { votePlayer } from '../redux/middleware/gameServerMiddleware';
+import Chat from './ChatTest';
 
 
 export default function Voting() {
@@ -66,6 +67,7 @@ export default function Voting() {
 
   return (
     <div className='bg-voting bg-cover h-screen flex flex-col justify-between overflow-hidden '>
+      <Chat />
       {player.role === "NoVote" ?
         <div className='h-3/5 text-center flex flex-row justify-evenly align-middle'>
           You have been gagged! you will not be voting.
