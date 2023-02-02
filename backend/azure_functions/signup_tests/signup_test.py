@@ -24,8 +24,8 @@ class TestFunction(unittest.TestCase):
         # Json for testing email
         # Checking for a inavlid email
         input1 = {
-            'email' : "LAMA@gmail.com",
-            "password" : "gmailcom"
+            'email' : "compmodule@gmail.com",
+            "password" : "gmail@com"
         }
 
         # Checking for a short password
