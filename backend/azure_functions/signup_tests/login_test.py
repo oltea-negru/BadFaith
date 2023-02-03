@@ -64,12 +64,12 @@ class TestFunction(unittest.TestCase):
             }
 
         input6 = {
-            'email' : "padithya2001@gmail.com",
-            'password' : "forgotPassword"
+            'email' : "stephencurry@gmail.com",
+            'password' : "gmail@com"
         }
         resp = requests.get(
-            'http://localhost:7071/api/Login',
-# 'https://badfaith2.azurewebsites.net/api/login',
+            # 'http://localhost:7071/api/Login',
+'https://badfaith2.azurewebsites.net/api/login',
             json=input6
             )
         
@@ -90,4 +90,4 @@ class TestFunction(unittest.TestCase):
         # self.assertEqual(resp.json()["msg"], "No password provided")
 
         #input6
-        self.assertEqual(resp.json()["passwordMsg"], "theString")
+        self.assertEqual(resp.json()["msg"], "OK")
