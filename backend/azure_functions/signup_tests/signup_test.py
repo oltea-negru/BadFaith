@@ -24,8 +24,8 @@ class TestFunction(unittest.TestCase):
         # Json for testing email
         # Checking for a inavlid email
         input1 = {
-            'email' : "LAMA@gmail.com",
-            "password" : "gmailcom"
+            'email' : "LewisHamilton@gmail.com",
+            "password" : "mambaKobe"
         }
 
         # Checking for a short password
@@ -58,8 +58,8 @@ class TestFunction(unittest.TestCase):
 
         
         resp = requests.get (
-               'https://badfaith2.azurewebsites.net/api/signup',
-            #    'http://localhost:7071/api/SignUp'   ,                   
+            #    'https://badfaith2.azurewebsites.net/api/signup',
+               'http://localhost:7071/api/SignUp'   ,                   
                                                                         
                 json = input1
          )
